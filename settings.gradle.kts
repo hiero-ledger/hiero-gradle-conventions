@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-plugins { id("com.gradle.develocity") version "3.18.1" }
+plugins { id("com.gradle.develocity") version "3.18.2" }
 
 rootProject.name = "hiero-gradle-conventions"
 
