@@ -67,6 +67,7 @@ publishing.publications.withType<MavenPublication>().configureEach {
                 .reader()
         )
 
+        name.set(project.name)
         url = "https://hiero.org/"
         inceptionYear = "2024"
 
