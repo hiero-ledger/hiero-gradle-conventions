@@ -75,9 +75,9 @@ publishing.publications.withType<MavenPublication>().configureEach {
             providers
                 .fileContents(layout.projectDirectory.file("../description.txt"))
                 .asText
-                .orElse(provider { project.description })
+                .orElse(provider(project::getDescription))
                 .map { it.replace("\n", " ").trim() }
-                .orNull
+                .orElse("")
 
         organization {
             name = "Hiero - a Linux Foundation Decentralized Trust project"
