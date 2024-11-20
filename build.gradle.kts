@@ -106,10 +106,8 @@ val publishSigningEnabled =
 
 if (publishSigningEnabled) {
     signing {
-        useInMemoryPgpKeys(
-            providers.environmentVariable("SIGNING_KEY").get(),
-            providers.environmentVariable("SIGNING_PASSPHRASE").get()
-        )
+        sign(publishing.publications)
+        useGpgCmd()
     }
 }
 
