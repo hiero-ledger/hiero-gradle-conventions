@@ -35,10 +35,6 @@ if (publishSigningEnabled) {
     signing {
         sign(publishing.publications)
         useGpgCmd()
-        useInMemoryPgpKeys(
-            providers.environmentVariable("SIGNING_KEY").get(),
-            providers.environmentVariable("SIGNING_PASSPHRASE").get()
-        )
     }
 }
 
