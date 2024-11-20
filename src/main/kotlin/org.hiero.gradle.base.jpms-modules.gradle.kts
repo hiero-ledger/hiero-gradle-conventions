@@ -143,7 +143,7 @@ extraJavaModuleInfo {
     module("io.perfmark:perfmark-api", "io.perfmark")
     module("javax.inject:javax.inject", "javax.inject")
     module("commons-codec:commons-codec", "org.apache.commons.codec")
-    module("com.esaulpaugh:headlong", "headlong")
+    module("com.esaulpaugh:headlong", "com.esaulpaugh.headlong")
     module("org.connid:framework", "org.connid.framework")
     module("org.connid:framework-internal", "org.connid.framework.internal") {
         exportAllPackages()
