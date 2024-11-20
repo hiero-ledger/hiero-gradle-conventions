@@ -20,6 +20,7 @@ plugins {
     id("java")
     id("maven-publish")
     id("signing")
+    id("io.freefair.maven-central.validate-poms")
 }
 
 java {
@@ -116,3 +117,7 @@ publishing.publications.withType<MavenPublication>().configureEach {
         }
     }
 }
+
+tasks.named("qualityCheck") { dependsOn(tasks.validatePomFiles) }
+
+tasks.named("qualityGate") { dependsOn(tasks.validatePomFiles) }
