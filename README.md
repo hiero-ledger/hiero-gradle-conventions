@@ -1,4 +1,4 @@
-# Hedera Gradle Conventions
+# Hiero Gradle Conventions
 
 Gradle convention plugins used by Hiero projects.
 
