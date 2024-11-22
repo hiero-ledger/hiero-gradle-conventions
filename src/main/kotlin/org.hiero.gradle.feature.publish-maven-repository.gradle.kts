@@ -21,6 +21,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("io.freefair.maven-central.validate-poms")
+    id("org.hiero.gradle.base.lifecycle")
 }
 
 java {
@@ -41,7 +42,7 @@ if (publishSigningEnabled) {
 publishing.publications.withType<MavenPublication>().configureEach {
     versionMapping {
         // Everything published takes the versions from the resolution result.
-        // These are the versions we define in 'hedera-dependency-versions'
+        // These are the versions we define in 'hiero-dependency-versions'
         // and use consistently in all modules.
         allVariants { fromResolutionResult() }
     }
@@ -104,6 +105,7 @@ publishing.publications.withType<MavenPublication>().configureEach {
         developers {
             devGroups.forEach { mail, team ->
                 developer {
+                    id = team as String
                     name = team as String
                     email = mail as String
                     organization = "Hiero - a Linux Foundation Decentralized Trust project"
