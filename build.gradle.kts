@@ -31,7 +31,7 @@ java { toolchain.languageVersion = JavaLanguageVersion.of(17) }
 
 dependencies {
     implementation("com.adarshr:gradle-test-logger-plugin:4.0.0")
-    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:2.4.2")
+    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:2.5.0")
     implementation("com.diffplug.spotless:spotless-plugin-gradle:6.25.0")
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
     implementation("com.gradle:develocity-gradle-plugin:3.18.1")
