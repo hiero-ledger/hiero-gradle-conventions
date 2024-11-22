@@ -51,6 +51,7 @@ publishing.publications.withType<MavenPublication>().configureEach {
         url = "https://hiero.org/"
         inceptionYear = "2024"
         description = project.description
+        name = project.name
         organization {
             name = "Hiero - a Linux Foundation Decentralized Trust project"
             url = "https://hiero.org/"
@@ -77,6 +78,7 @@ publishing.publications.withType<MavenPublication>().configureEach {
 
         developers {
             developer {
+                id = "Release Engineering Team"
                 name = "Release Engineering Team"
                 email = "release-engineering@hiero.org"
                 organization = "Hiero - a Linux Foundation Decentralized Trust project"
