@@ -51,8 +51,8 @@ configure<JavaModulesExtension> {
             plugin("org.hiero.gradle.base.jpms-modules")
         }
     }
-    if (layout.rootDirectory.dir("hedera-dependency-versions").asFile.isDirectory) {
+    if (layout.rootDirectory.dir("hiero-dependency-versions").asFile.isDirectory) {
         // "BOM" with versions of 3rd party dependencies
-        versions("hedera-dependency-versions")
+        versions("hiero-dependency-versions")
     }
 }

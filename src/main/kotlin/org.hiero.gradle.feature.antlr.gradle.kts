@@ -25,7 +25,7 @@ configurations {
     // classpath of our runtime.
     // https://github.com/gradle/gradle/issues/820
     api { setExtendsFrom(extendsFrom.filterNot { it == antlr.get() }) }
-    // Get ANTLR version from 'hedera-dependency-versions'
+    // Get ANTLR version from 'hiero-dependency-versions'
     antlr { extendsFrom(configurations["internal"]) }
 }
 

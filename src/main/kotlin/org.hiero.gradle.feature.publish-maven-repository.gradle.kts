@@ -42,7 +42,7 @@ if (publishSigningEnabled) {
 publishing.publications.withType<MavenPublication>().configureEach {
     versionMapping {
         // Everything published takes the versions from the resolution result.
-        // These are the versions we define in 'hedera-dependency-versions'
+        // These are the versions we define in 'hiero-dependency-versions'
         // and use consistently in all modules.
         allVariants { fromResolutionResult() }
     }

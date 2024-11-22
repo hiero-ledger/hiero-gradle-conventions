@@ -49,7 +49,6 @@ abstract class GitClone : DefaultTask() {
 
     init {
         offline.set(startParameter.isOffline)
-        localCloneDirectory.set(layout.buildDirectory.dir("hedera-protobufs"))
         // If a 'branch' is configured, the task is never up-to-date as it may change
         outputs.upToDateWhen { !branch.isPresent }
     }

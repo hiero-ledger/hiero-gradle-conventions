@@ -32,7 +32,7 @@ class GradleProject {
     val problemsReport = file("build/reports/problems/problems-report.html")
     private val gradlePropertiesFile = file("gradle.properties")
     private val settingsFile = file("settings.gradle.kts")
-    private val dependencyVersions = file("hedera-dependency-versions/build.gradle.kts")
+    private val dependencyVersions = file("hiero-dependency-versions/build.gradle.kts")
     private val aggregation = file("gradle/aggregation/build.gradle.kts")
     private val versionFile = file("version.txt")
     private val jdkVersionFile = file("gradle/jdk-version.txt")

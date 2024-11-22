@@ -313,7 +313,7 @@ jvmDependencyConflicts.consistentResolution {
         providesVersions(project.path)
     } else {
         providesVersions(":aggregation")
-        platform(":hedera-dependency-versions")
+        platform(":hiero-dependency-versions")
     }
 }
 

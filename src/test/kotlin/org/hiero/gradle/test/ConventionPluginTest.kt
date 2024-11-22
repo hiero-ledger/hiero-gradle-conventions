@@ -25,10 +25,10 @@ import org.junit.jupiter.params.provider.MethodSource
 
 /**
  * This tests makes sure that each plugin can be used individually of the other plugins. When
- * applied in a project context, a plugin sometimes works without declaring the plugins it
- * depends on in its own plugins {} block. This can happen if the required plugins are
- * coincidentally applied before in the project. This test makes sure that each plugin goes
- * through the Gradle configuration phase if it is applied on its own.
+ * applied in a project context, a plugin sometimes works without declaring the plugins it depends
+ * on in its own plugins {} block. This can happen if the required plugins are coincidentally
+ * applied before in the project. This test makes sure that each plugin goes through the Gradle
+ * configuration phase if it is applied on its own.
  */
 class ConventionPluginTest {
 
