@@ -18,7 +18,7 @@ package org.hiero.gradle.test.fixtures
 
 import java.io.File
 import java.lang.management.ManagementFactory
-import java.nio.file.Files
+import java.util.UUID
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 
@@ -28,7 +28,8 @@ import org.gradle.testkit.runner.GradleRunner
  */
 class GradleProject {
 
-    private val projectDir = Files.createTempDirectory("gradle-build").toFile()
+    private val projectDir = File("build/test-projects/${UUID.randomUUID()}")
+
     val problemsReport = file("build/reports/problems/problems-report.html")
     private val gradlePropertiesFile = file("gradle.properties")
     private val settingsFile = file("settings.gradle.kts")
@@ -65,9 +66,6 @@ class GradleProject {
             .trimIndent()
 
     fun withMinimalStructure(): GradleProject {
-        git("init")
-        git("checkout", "-b", "origin/main")
-
         gradlePropertiesFile.writeText(
             """
             org.gradle.configuration-cache=true
@@ -79,7 +77,9 @@ class GradleProject {
         settingsFile(
             """
             plugins { id("org.hiero.gradle.build") }
+            
             rootProject.name = "test-project"
+            
             javaModules { directory("product") }
         """
                 .trimIndent()
@@ -96,24 +96,17 @@ class GradleProject {
         jdkVersionFile.writeText("17.0.12")
         developersProperties.writeText("test=test@hiero.org")
         descriptionTxt.writeText("A module to test hiero-gradle-conventions")
-        moduleInfo.writeText("module org.hiero.product.module.a {}")
+        moduleInfoFile("module org.hiero.product.module.a {}")
         javaSourceFile(
             """
             package org.hiero.product.module.a;
             
-            class ModuleA {
-            }
+            class ModuleA {}
         """
                 .trimIndent()
         )
 
-        git("add", "--all")
-        git("commit", "-m", "initial")
         return this
-    }
-
-    private fun git(vararg args: String) {
-        Runtime.getRuntime().exec(arrayOf("git", *args), emptyArray(), projectDir).waitFor()
     }
 
     fun settingsFile(content: String) = settingsFile.also { it.writeFormatted(content) }

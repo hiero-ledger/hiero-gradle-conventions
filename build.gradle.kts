@@ -119,6 +119,8 @@ testing {
             implementation("org.junit.jupiter:junit-jupiter-params")
             implementation("org.assertj:assertj-core:3.26.3")
         }
+        // If success, delete all test projects
+        targets.all { testTask { doLast { File("build/test-projects").deleteRecursively() } } }
     }
 }
 
