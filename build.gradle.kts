@@ -8,7 +8,7 @@ plugins {
 
 version = "0.1.0"
 
-group = "org.hiero"
+group = "org.hiero.gradle"
 
 description = "Gradle convention plugins used by Hiero projects"
 
