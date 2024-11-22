@@ -17,6 +17,7 @@
 plugins {
     id("java")
     id("com.google.protobuf")
+    id("org.hiero.gradle.base.jpms-modules")
 }
 
 // Configure Protobuf Plugin to download protoc executable rather than using local installed version

@@ -21,6 +21,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("io.freefair.maven-central.validate-poms")
+    id("org.hiero.gradle.base.lifecycle")
 }
 
 java {
@@ -104,6 +105,7 @@ publishing.publications.withType<MavenPublication>().configureEach {
         developers {
             devGroups.forEach { mail, team ->
                 developer {
+                    id = team as String
                     name = team as String
                     email = mail as String
                     organization = "Hiero - a Linux Foundation Decentralized Trust project"

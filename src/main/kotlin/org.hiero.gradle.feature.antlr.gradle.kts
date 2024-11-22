@@ -17,6 +17,7 @@
 plugins {
     id("java")
     id("antlr")
+    id("org.hiero.gradle.base.jpms-modules")
 }
 
 configurations {
@@ -31,6 +32,8 @@ configurations {
 dependencies { antlr("org.antlr:antlr4") }
 
 // See: https://github.com/gradle/gradle/issues/25885
+java { withSourcesJar() }
+
 tasks.named("sourcesJar") { dependsOn(tasks.generateGrammarSource) }
 
 tasks.withType<com.autonomousapps.tasks.CodeSourceExploderTask>().configureEach {
