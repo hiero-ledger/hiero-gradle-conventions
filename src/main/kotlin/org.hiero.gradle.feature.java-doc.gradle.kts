@@ -7,6 +7,11 @@ plugins {
 tasks.withType<Javadoc>().configureEach {
     options {
         this as StandardJavadocDocletOptions
+        tags(
+            "apiNote:a:API Note:",
+            "implSpec:a:Implementation Requirements:",
+            "implNote:a:Implementation Note:"
+        )
         options.windowTitle = "Hiero"
         options.memberLevel = JavadocMemberLevel.PACKAGE
         addStringOption("Xdoclint:all,-missing", "-Xwerror")
