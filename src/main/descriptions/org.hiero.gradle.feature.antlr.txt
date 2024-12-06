@@ -1,0 +1,1 @@
+Conventions for 'antlr' that add missing task dependencies when integrating with other plugins

@@ -1,0 +1,1 @@
+Conventions for 'com.gradle.plugin-publish' to publish to the Gradle Plugin Portal

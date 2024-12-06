@@ -1,0 +1,1 @@
+Adds 'os.name' and 'os.arch' as inputs to the 'test' task

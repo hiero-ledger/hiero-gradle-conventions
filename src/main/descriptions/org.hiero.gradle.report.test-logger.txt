@@ -1,0 +1,1 @@
+Conventions for 'com.adarshr.test-logger' to improve test logging on the console
