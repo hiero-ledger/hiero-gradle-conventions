@@ -48,7 +48,6 @@ tasks.register("showVersion") {
 tasks.register("versionAsPrefixedCommit") {
     group = "versioning"
 
-    @Suppress("UnstableApiUsage")
     inputs.property(
         "commit",
         providers

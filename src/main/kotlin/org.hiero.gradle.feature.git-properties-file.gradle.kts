@@ -3,7 +3,6 @@ plugins { id("java") }
 
 tasks.register<WriteProperties>("writeGitProperties") {
     property("git.build.version", project.version)
-    @Suppress("UnstableApiUsage")
     property(
         "git.commit.id",
         providers
@@ -12,7 +11,6 @@ tasks.register<WriteProperties>("writeGitProperties") {
             .asText
             .map { it.trim() }
     )
-    @Suppress("UnstableApiUsage")
     property(
         "git.commit.id.abbrev",
         providers

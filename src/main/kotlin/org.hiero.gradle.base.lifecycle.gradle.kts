@@ -2,7 +2,6 @@
 plugins { id("base") }
 
 // Convenience for local development: when running './gradlew' without any parameters show the tasks
-// from the 'build' group
 defaultTasks("tasks")
 
 tasks.register("qualityCheck") {
