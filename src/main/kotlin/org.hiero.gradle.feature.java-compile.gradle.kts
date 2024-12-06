@@ -1,17 +1,28 @@
 // SPDX-License-Identifier: Apache-2.0
+import java.util.Properties
+
 plugins {
     id("java")
     id("org.gradlex.reproducible-builds")
 }
 
 @Suppress("UnstableApiUsage")
-val fullJavaVersion =
+val versionsFile =
+    project.isolated.rootProject.projectDirectory.file("gradle/toolchain-versions.properties")
+val versions = Properties()
+
+versions.load(
     providers
-        .fileContents(isolated.rootProject.projectDirectory.file("gradle/jdk-version.txt"))
+        .fileContents(versionsFile)
         .asText
-        .orElse(provider { throw RuntimeException("gradle/jdk-version.txt file not found") })
+        .orElse(
+            providers.provider { throw RuntimeException("${versionsFile.asFile} does not exist") }
+        )
         .get()
-        .trim()
+        .reader()
+)
+
+val fullJavaVersion = versions.getValue("jdk") as String
 val majorJavaVersion = JavaVersion.toVersion(fullJavaVersion)
 val currentJavaVersion = providers.systemProperty("java.version").get()
 
