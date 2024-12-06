@@ -89,6 +89,7 @@ tasks.register("versionAsSpecified") {
     group = "versioning"
 
     inputs.property("newVersion", providers.gradleProperty("newVersion")).optional(true)
+    outputs.file(versionTxt)
 
     doLast {
         val newVer =
