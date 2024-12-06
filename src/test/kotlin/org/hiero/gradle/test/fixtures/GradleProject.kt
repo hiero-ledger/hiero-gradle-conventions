@@ -21,7 +21,7 @@ class GradleProject {
     private val dependencyVersions = file("hiero-dependency-versions/build.gradle.kts")
     private val aggregation = file("gradle/aggregation/build.gradle.kts")
     private val versionFile = file("version.txt")
-    private val jdkVersionFile = file("gradle/jdk-version.txt")
+    private val toolchainVersionsFile = file("gradle/toolchain-versions.properties")
 
     private val developersProperties = file("product/developers.properties")
     val descriptionTxt = file("product/description.txt")
@@ -60,7 +60,7 @@ class GradleProject {
         )
         aggregation.writeText("")
         versionFile.writeText("1.0")
-        jdkVersionFile.writeText("17.0.12")
+        toolchainVersionsFile.writeText("jdk=17.0.12")
         developersProperties.writeText("test=test@hiero.org")
         descriptionTxt.writeText("A module to test hiero-gradle-conventions")
         moduleInfoFile("module org.hiero.product.module.a {}")
