@@ -53,7 +53,7 @@ gradlePlugin {
                 .get()
                 .trim()
         @Suppress("UnstableApiUsage")
-        tags = listOf("conventions", "java", "modules", "jpms")
+        tags = listOf("hiero", "conventions", "java", "modules", "jpms")
     }
 
     plugins.configureEach { displayName = name }
