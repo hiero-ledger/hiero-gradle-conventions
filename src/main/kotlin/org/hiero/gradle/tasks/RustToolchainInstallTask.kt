@@ -91,7 +91,7 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
 
         val targets =
             toolchains.get().flatMap {
-                listOf("-t", it.target.replaceAfter(".", "").replace(".", ""))
+                listOf("-t", it.target.substringBeforeLast("."))
             }
 
         execute(

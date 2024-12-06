@@ -71,7 +71,7 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
     }
 
     private fun stripTargetVersion(toolchain: CargoToolchain): String {
-        return toolchain.target.replaceAfter(".", "").replace(".", "")
+        return toolchain.target.substringBeforeLast(".")
     }
 
     private fun buildForTarget(buildsForWindows: Boolean) {
