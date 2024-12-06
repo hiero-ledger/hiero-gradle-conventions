@@ -89,10 +89,7 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
         val xwinCmd = destinationDirectory.dir("cargo/bin/xwin").get().asFile.absolutePath
         val xwinFolder = destinationDirectory.dir("xwin").get().asFile.absolutePath
 
-        val targets =
-            toolchains.get().flatMap {
-                listOf("-t", it.target.substringBeforeLast("."))
-            }
+        val targets = toolchains.get().flatMap { listOf("-t", it.target.substringBeforeLast(".")) }
 
         execute(
             listOf(
