@@ -1,0 +1,1 @@
+Standard configuration for a remote build cache that is pushed to from CI and pulled from everywhere

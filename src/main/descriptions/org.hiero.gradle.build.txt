@@ -1,0 +1,1 @@
+Entry point settings plugin that applies a basic set of 'org.hiero.gradle' convention plugins to the build and to all subprojects

@@ -1,0 +1,1 @@
+Conventions for 'me.champeau.jmh' to use it in JPMS projects

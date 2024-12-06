@@ -38,9 +38,22 @@ gradlePlugin {
     website = "https://github.com/hiero-ledger/hiero-gradle-conventions"
     vcsUrl = "https://github.com/hiero-ledger/hiero-gradle-conventions"
     plugins.configureEach {
-        description = project.description
+        val descriptionFile = layout.projectDirectory.file("src/main/descriptions/${id}.txt")
+        description =
+            providers
+                .fileContents(descriptionFile)
+                .asText
+                .orElse(
+                    provider {
+                        throw RuntimeException(
+                            "File not found ${descriptionFile.asFile.absolutePath}"
+                        )
+                    }
+                )
+                .get()
+                .trim()
         @Suppress("UnstableApiUsage")
-        tags = listOf("conventions", "java", "modules", "jpms")
+        tags = listOf("hiero", "conventions", "java", "modules", "jpms")
     }
 
     plugins.configureEach { displayName = name }

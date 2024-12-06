@@ -1,0 +1,1 @@
+Conventions for 'io.github.gradle-nexus.publish-plugin' to publish to Maven Central and filter which modules are published through the '-PpublishingPackageGroup' parameter (root project plugin)

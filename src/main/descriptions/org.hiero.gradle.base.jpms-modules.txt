@@ -1,0 +1,1 @@
+Adds a 'module-info.class' to Java libraries that do not yet provide it

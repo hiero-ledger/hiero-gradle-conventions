@@ -1,0 +1,1 @@
+Configures a set of standard repositories for dependency resolution including Maven Central

@@ -1,0 +1,1 @@
+Conventions for 'com.diffplug.spotless' with flexmark Markdown format

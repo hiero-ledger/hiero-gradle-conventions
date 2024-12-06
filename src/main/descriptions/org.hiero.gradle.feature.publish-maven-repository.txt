@@ -1,0 +1,1 @@
+Conventions for 'maven-publish' that configure signing and add additional metadata to POM files

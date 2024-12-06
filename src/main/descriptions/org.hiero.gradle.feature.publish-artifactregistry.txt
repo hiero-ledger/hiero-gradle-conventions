@@ -1,0 +1,1 @@
+Conventions for 'com.google.cloud.artifactregistry.gradle-plugin' to publish to GCP Artifact Registry repositories
