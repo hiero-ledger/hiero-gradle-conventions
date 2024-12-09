@@ -1,0 +1,1 @@
+Conventions for reproducible Java Module compilation: applies 'org.gradlex.reproducible-builds' and ensures that an exact JDK version is configured and used

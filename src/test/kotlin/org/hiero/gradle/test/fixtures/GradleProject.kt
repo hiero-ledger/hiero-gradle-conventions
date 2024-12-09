@@ -76,6 +76,12 @@ class GradleProject {
         return this
     }
 
+    fun copyFromFolder(folderName: String): GradleProject {
+        projectDir.deleteRecursively()
+        File(folderName).copyRecursively(projectDir)
+        return this
+    }
+
     fun settingsFile(content: String) = settingsFile.also { it.writeFormatted(content) }
 
     fun moduleBuildFile(content: String) = moduleBuildFile.also { it.writeFormatted(content) }

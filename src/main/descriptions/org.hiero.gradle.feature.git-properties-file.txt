@@ -1,0 +1,1 @@
+Adds a 'git.properties' file with 'git.commit.id' entries to the Jar and makes sure the file is ignored in classpath normalization

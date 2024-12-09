@@ -1,0 +1,1 @@
+Conventions for 'javadoc' that configures '-Xdoclint:all,-missing' and turns warnings into errors

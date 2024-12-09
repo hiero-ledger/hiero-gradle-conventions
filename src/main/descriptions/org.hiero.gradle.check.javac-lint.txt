@@ -1,0 +1,1 @@
+Conventions for the linting features (-Xlint) of 'javac' that run as part of each 'compileJava' task
