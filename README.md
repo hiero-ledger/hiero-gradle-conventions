@@ -33,7 +33,7 @@ javaModules {
 In each Module (subproject), apply one of the `org.hiero.gradle.module.*` plugins and, if desired, additional
 `org.hiero.gradle.feature.*` plugins.
 
-For example, to define a Library Module that also provides _test fixtures_ and has _JMH benchmarks_, the plugin block
+For example, to define a Library Module that also provides _test fixtures_ and has _JMH benchmarks_, the plugins block
 should look like this:
 
 ```
@@ -42,6 +42,29 @@ plugins {
     id("org.hiero.gradle.feature.test-fixtures")
     id("org.hiero.gradle.feature.benchmark")
 }
+```
+
+### Project structure
+
+There is a [minimal example](example) setup.
+
+```
+├── settings.gradle.kts                          // Entriy point (see above) 
+├── gradle.properties                            // Turn on Gradle caches
+├── gradle/aggregation/build.gradle.kts          // List of all product/service modules for consistent resolution
+├── gradle/toolchain-versions.properties         // JDK version (and other tools if applicable)
+├── gradle/wrapper/gradle-wrapper.properties     // Gradle version (defined through Gradle wrapper)
+├── hiero-dependency-versions/build.gradle.kts   // Versions of 3rd-party modules
+├── product-a                                    // Folder containing all modules of 'product-a'
+│   ├── module-app                               // Example of a Application module
+│   │   ├── build.gradle.kts                     // Select which build features to use in 'plugins {}' (see above) 
+│   │   └── src/main/java/module-info.java       // Define dependencies to other modules
+│   ├── module-lib                               // Example of a Library module
+│   │   ├── build.gradle.kts                     // Select which build features to use in 'plugins {}' (see above) 
+│   │   └── src/main/java/module-info.java       // Define dependencies to other modules
+│   ├── description.txt                          // Description of the product (for published metadata)
+│   └── developers.properties                    // Developers of the product (for published metadata)
+└── version.txt                                  // Version of all modules/products
 ```
 
 ## List of Convention Plugins
