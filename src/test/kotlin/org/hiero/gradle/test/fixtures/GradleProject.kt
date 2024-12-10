@@ -93,6 +93,9 @@ class GradleProject {
     fun dependencyVersionsFile(content: String) =
         dependencyVersions.also { it.writeFormatted(content) }
 
+    fun toolchainVersionsFile(content: String) =
+        toolchainVersionsFile.also { it.writeText(content) }
+
     fun file(path: String, content: String? = null) =
         File(projectDir, path).also {
             it.parentFile.mkdirs()
@@ -110,6 +113,8 @@ class GradleProject {
     fun failQualityCheck(): BuildResult = runner(listOf("qualityCheck")).buildAndFail()
 
     fun qualityGate(): BuildResult = runner(listOf("qualityGate")).build()
+
+    fun run(taskName: String): BuildResult = runner(listOf(taskName)).build()
 
     private fun File.writeFormatted(content: String) {
         writeText("$expectedHeader$content\n")
