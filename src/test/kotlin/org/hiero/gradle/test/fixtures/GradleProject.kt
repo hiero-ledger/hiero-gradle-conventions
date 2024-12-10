@@ -109,6 +109,8 @@ class GradleProject {
 
     fun failQualityCheck(): BuildResult = runner(listOf("qualityCheck")).buildAndFail()
 
+    fun qualityGate(): BuildResult = runner(listOf("qualityGate")).build()
+
     private fun File.writeFormatted(content: String) {
         writeText("$expectedHeader$content\n")
     }

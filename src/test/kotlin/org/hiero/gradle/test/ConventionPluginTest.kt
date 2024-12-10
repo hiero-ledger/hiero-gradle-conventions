@@ -45,7 +45,7 @@ class ConventionPluginTest {
                     .listFiles()!!
                     .filter { it.isFile && it.name.endsWith(".gradle.kts") }
                     .map { it.name.substringBeforeLast(".gradle.kts") }
-            return pluginList.toTypedArray()
+            return pluginList.sorted().toTypedArray()
         }
     }
 }
