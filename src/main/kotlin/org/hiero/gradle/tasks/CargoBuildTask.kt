@@ -57,7 +57,7 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
         val cargoOutputDir =
             File(
                 cargoToml.get().asFile.parent,
-                "target/${stripTargetVersion(toolchain.get())}/${profile}"
+                "target/${toolchain.get().targetWithoutVersion()}/${profile}"
             )
 
         files.sync {
@@ -68,10 +68,6 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
             include("lib${libname.get()}.dylib")
             include("${libname.get()}.dll")
         }
-    }
-
-    private fun stripTargetVersion(toolchain: CargoToolchain): String {
-        return toolchain.target.substringBeforeLast(".")
     }
 
     private fun buildForTarget(buildsForWindows: Boolean) {
