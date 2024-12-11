@@ -97,7 +97,6 @@ class MavenCentralPublishTest {
         p.settingsFile.appendText(
             """javaModules { directory("product-b") { group = "org.foo" } }"""
         )
-        p.file("product-b/developers.properties", "")
         p.file("product-b/module-b/src/main/java/module-info.java", "module org.foo.module.b {}")
         p.file(
             "product-b/module-b/build.gradle.kts",
