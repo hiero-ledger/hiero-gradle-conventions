@@ -1,6 +1,4 @@
 // SPDX-License-Identifier: Apache-2.0
-import java.util.Properties
-
 plugins {
     id("java")
     id("maven-publish")
@@ -35,27 +33,6 @@ publishing.publications.withType<MavenPublication>().configureEach {
     suppressAllPomMetadataWarnings()
 
     pom {
-        val devGroups = Properties()
-        @Suppress("UnstableApiUsage")
-        val developerProperties =
-            if (project.path == isolated.rootProject.path) {
-                layout.projectDirectory.file("developers.properties")
-            } else {
-                layout.projectDirectory.file("../developers.properties")
-            }
-        devGroups.load(
-            providers
-                .fileContents(developerProperties)
-                .asText
-                .orElse(
-                    provider {
-                        throw RuntimeException("${developerProperties.asFile} does not exist")
-                    }
-                )
-                .get()
-                .reader()
-        )
-
         name = project.name
         url = "https://hiero.org/"
         inceptionYear = "2024"
@@ -94,14 +71,12 @@ publishing.publications.withType<MavenPublication>().configureEach {
         }
 
         developers {
-            devGroups.forEach { mail, team ->
-                developer {
-                    id = team as String
-                    name = team as String
-                    email = mail as String
-                    organization = "Hiero - a Linux Foundation Decentralized Trust project"
-                    organizationUrl = "https://hiero.org/"
-                }
+            developer {
+                id = "hiero"
+                name = "The Hiero Team"
+                email = "info@lfdecentralizedtrust.org"
+                organization = "Hiero - a Linux Foundation Decentralized Trust project"
+                organizationUrl = "https://hiero.org/"
             }
         }
     }

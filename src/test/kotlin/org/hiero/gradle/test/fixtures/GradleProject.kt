@@ -23,7 +23,6 @@ class GradleProject {
     val versionFile = file("version.txt")
     private val toolchainVersionsFile = file("gradle/toolchain-versions.properties")
 
-    private val developersProperties = file("product/developers.properties")
     val descriptionTxt = file("product/description.txt")
     val moduleBuildFile = file("product/module-a/build.gradle.kts")
     private val moduleInfo = file("product/module-a/src/main/java/module-info.java")
@@ -66,7 +65,6 @@ class GradleProject {
         aggregation.writeFormatted("""plugins { id("org.hiero.gradle.base.lifecycle") }""")
         versionFile.writeText("1.0")
         toolchainVersionsFile.writeText("jdk=17.0.12")
-        developersProperties.writeText("test=test@hiero.org")
         descriptionTxt.writeText("A module to test hiero-gradle-conventions")
         moduleInfoFile("module org.hiero.product.module.a {}")
         javaSourceFile(
