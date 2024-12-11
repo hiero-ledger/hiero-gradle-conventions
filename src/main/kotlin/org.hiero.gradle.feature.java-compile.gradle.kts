@@ -8,7 +8,7 @@ plugins {
 
 @Suppress("UnstableApiUsage")
 val versionsFile =
-    project.isolated.rootProject.projectDirectory.file("gradle/toolchain-versions.properties")
+    isolated.rootProject.projectDirectory.file("gradle/toolchain-versions.properties")
 val versions = Properties()
 
 versions.load(

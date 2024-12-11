@@ -36,7 +36,13 @@ publishing.publications.withType<MavenPublication>().configureEach {
 
     pom {
         val devGroups = Properties()
-        val developerProperties = layout.projectDirectory.file("../developers.properties")
+        @Suppress("UnstableApiUsage")
+        val developerProperties =
+            if (project.path == isolated.rootProject.path) {
+                layout.projectDirectory.file("developers.properties")
+            } else {
+                layout.projectDirectory.file("../developers.properties")
+            }
         devGroups.load(
             providers
                 .fileContents(developerProperties)

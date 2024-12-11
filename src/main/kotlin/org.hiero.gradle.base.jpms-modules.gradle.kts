@@ -296,7 +296,8 @@ configurations.create("allDependencies") {
 }
 
 jvmDependencyConflicts.consistentResolution {
-    if (project == rootProject) {
+    @Suppress("UnstableApiUsage")
+    if (project.path == isolated.rootProject.path) {
         // single project build, e.g. for examples
         providesVersions(project.path)
     } else {
