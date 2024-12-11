@@ -17,20 +17,25 @@ class GradleProject {
 
     val problemsReport = file("build/reports/problems/problems-report.html")
     private val gradlePropertiesFile = file("gradle.properties")
-    private val settingsFile = file("settings.gradle.kts")
+    val settingsFile = file("settings.gradle.kts")
     private val dependencyVersions = file("hiero-dependency-versions/build.gradle.kts")
     private val aggregation = file("gradle/aggregation/build.gradle.kts")
-    private val versionFile = file("version.txt")
+    val versionFile = file("version.txt")
     private val toolchainVersionsFile = file("gradle/toolchain-versions.properties")
 
     private val developersProperties = file("product/developers.properties")
     val descriptionTxt = file("product/description.txt")
-    private val moduleBuildFile = file("product/module-a/build.gradle.kts")
+    val moduleBuildFile = file("product/module-a/build.gradle.kts")
     private val moduleInfo = file("product/module-a/src/main/java/module-info.java")
     private val javaSourceFile =
         file("product/module-a/src/main/java/org/hiero/product/module/a/ModuleA.java")
 
     private val expectedHeader = "// SPDX-License-Identifier: Apache-2.0\n"
+
+    private val env =
+        mutableMapOf<String, String>().also {
+            it["PATH"] = System.getenv("PATH") // to find 'git' command
+        }
 
     fun withMinimalStructure(): GradleProject {
         gradlePropertiesFile.writeText(
@@ -47,7 +52,7 @@ class GradleProject {
             
             rootProject.name = "test-project"
             
-            javaModules { directory("product") }
+            javaModules { directory("product") { group = "org.example" } }
         """
                 .trimIndent()
         )
@@ -58,7 +63,7 @@ class GradleProject {
         }"""
                 .trimIndent()
         )
-        aggregation.writeText("")
+        aggregation.writeFormatted("""plugins { id("org.hiero.gradle.base.lifecycle") }""")
         versionFile.writeText("1.0")
         toolchainVersionsFile.writeText("jdk=17.0.12")
         developersProperties.writeText("test=test@hiero.org")
@@ -73,6 +78,11 @@ class GradleProject {
                 .trimIndent()
         )
 
+        return this
+    }
+
+    fun withEnv(env: Map<String, String>): GradleProject {
+        this.env.putAll(env)
         return this
     }
 
@@ -114,22 +124,26 @@ class GradleProject {
 
     fun qualityGate(): BuildResult = runner(listOf("qualityGate")).build()
 
-    fun run(taskName: String): BuildResult = runner(listOf(taskName)).build()
+    fun run(params: String): BuildResult = runner(params.split(" ")).build()
+
+    fun runAndFail(params: String): BuildResult = runner(params.split(" ")).buildAndFail()
 
     private fun File.writeFormatted(content: String) {
         writeText("$expectedHeader$content\n")
     }
 
-    private fun runner(args: List<String>) =
-        GradleRunner.create()
+    private fun runner(args: List<String>): GradleRunner {
+        val debugMode =
+            ManagementFactory.getRuntimeMXBean()
+                .inputArguments
+                .toString()
+                .contains("-agentlib:jdwp")
+        return GradleRunner.create()
             .forwardOutput()
             .withPluginClasspath()
             .withProjectDir(projectDir)
             .withArguments(args + listOf("-s", "--warning-mode=all"))
-            .withDebug(
-                ManagementFactory.getRuntimeMXBean()
-                    .inputArguments
-                    .toString()
-                    .contains("-agentlib:jdwp")
-            )
+            .withDebug(debugMode)
+            .let { if (debugMode) it else it.withEnvironment(env) }
+    }
 }

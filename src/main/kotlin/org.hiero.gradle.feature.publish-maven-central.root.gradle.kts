@@ -8,14 +8,14 @@ nexusPublishing {
     val s01SonatypeHost = providers.gradleProperty("s01SonatypeHost").getOrElse("false").toBoolean()
     val versionTxt = layout.projectDirectory.file("version.txt")
 
-    packageGroup = providers.gradleProperty("publishingPackageGroup").getOrElse("")
+    packageGroup = providers.gradleProperty("publishingPackageGroup")
     useStaging =
-        providers.fileContents(versionTxt).asText.map { it.contains("-SNAPSHOT") }.getOrElse(false)
+        providers.fileContents(versionTxt).asText.map { !it.contains("-SNAPSHOT") }.orElse(false)
 
     repositories {
         sonatype {
-            username = System.getenv("NEXUS_USERNAME")
-            password = System.getenv("NEXUS_PASSWORD")
+            username = providers.environmentVariable("NEXUS_USERNAME")
+            password = providers.environmentVariable("NEXUS_PASSWORD")
             if (s01SonatypeHost) {
                 nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
                 snapshotRepositoryUrl =
@@ -31,7 +31,16 @@ tasks.named("closeSonatypeStagingRepository") {
     dependsOn(subprojects.map { ":${it.name}:releaseMavenCentral" })
 }
 
-tasks.named("releaseMavenCentral") { dependsOn(tasks.closeAndReleaseStagingRepository) }
+tasks.named("releaseMavenCentral") {
+    val publishTestRelease =
+        providers.gradleProperty("publishTestRelease").getOrElse("false").toBoolean()
+    if (publishTestRelease) {
+        // Test release: only close staging repo but do not auto-release
+        dependsOn(tasks.named("closeSonatypeStagingRepository"))
+    } else {
+        dependsOn(tasks.closeAndReleaseStagingRepository)
+    }
+}
 
 tasks.register("releaseMavenCentralSnapshot") {
     group = "release"
