@@ -25,7 +25,7 @@ plugins {
 // Define location of Modules (subprojects)
 javaModules {
     directory("product-a") { // searches for 'module-info.java' in subfolders of 'product-a'
-      group = "org.example.product-a"
+        group = "org.example.product-a"
     }
 }
 ```
