@@ -34,5 +34,9 @@ afterEvaluate {
         if (this is Test) {
             group = "build"
         }
+        // added by Kotlin if used
+        if (name in listOf("buildKotlinToolingMetadata", "kotlinSourcesJar")) {
+            group = null
+        }
     }
 }
