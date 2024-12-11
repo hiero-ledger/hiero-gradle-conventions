@@ -6,7 +6,7 @@ plugins {
     id("com.diffplug.spotless") version "6.25.0"
 }
 
-version = "0.1.0"
+version = "0.1.1"
 
 group = "org.hiero.gradle"
 
