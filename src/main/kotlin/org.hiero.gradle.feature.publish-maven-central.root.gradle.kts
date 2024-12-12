@@ -38,7 +38,7 @@ tasks.named("releaseMavenCentral") {
         // Test release: only close staging repo but do not auto-release
         dependsOn(tasks.named("closeSonatypeStagingRepository"))
     } else {
-        dependsOn(tasks.closeAndReleaseStagingRepository)
+        dependsOn(tasks.closeAndReleaseStagingRepositories)
     }
 }
 
