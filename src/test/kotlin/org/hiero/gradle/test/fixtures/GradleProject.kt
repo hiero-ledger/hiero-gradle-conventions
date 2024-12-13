@@ -31,10 +31,7 @@ class GradleProject {
 
     private val expectedHeader = "// SPDX-License-Identifier: Apache-2.0\n"
 
-    private val env =
-        mutableMapOf<String, String>().also {
-            it["PATH"] = System.getenv("PATH") // to find 'git' command
-        }
+    private val env = mutableMapOf<String, String>()
 
     fun withMinimalStructure(): GradleProject {
         gradlePropertiesFile.writeText(
@@ -142,6 +139,6 @@ class GradleProject {
             .withProjectDir(projectDir)
             .withArguments(args + listOf("-s", "--warning-mode=all"))
             .withDebug(debugMode)
-            .let { if (debugMode) it else it.withEnvironment(env) }
+            .let { if (env.isEmpty() || debugMode) it else it.withEnvironment(env) }
     }
 }
