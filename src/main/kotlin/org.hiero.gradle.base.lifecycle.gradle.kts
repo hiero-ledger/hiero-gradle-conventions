@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 plugins { id("base") }
 
-// Convenience for local development: when running './gradlew' without any parameters show the tasks
+// Convenience for local development: when running './gradlew' without parameters show the tasks...
 defaultTasks("tasks")
+
+if (gradle.startParameter.taskNames.isEmpty()) {
+    // ...of group 'build' only
+    tasks.withType<TaskReportTask>().configureEach { displayGroup = "build" }
+}
 
 tasks.register("qualityCheck") {
     group = "verification"
