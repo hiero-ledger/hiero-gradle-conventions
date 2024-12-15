@@ -43,5 +43,9 @@ afterEvaluate {
         if (name in listOf("buildKotlinToolingMetadata", "kotlinSourcesJar")) {
             group = null
         }
+        // added by Spring Boot plugin if used
+        if (name in listOf("resolveMainClassName", "resolveTestMainClassName")) {
+            group = null
+        }
     }
 }
