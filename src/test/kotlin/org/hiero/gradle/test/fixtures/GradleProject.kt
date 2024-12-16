@@ -98,6 +98,8 @@ class GradleProject {
     fun dependencyVersionsFile(content: String) =
         dependencyVersions.also { it.writeFormatted(content) }
 
+    fun aggregationBuildFile(content: String) = aggregation.also { it.writeFormatted(content) }
+
     fun toolchainVersionsFile(content: String) =
         toolchainVersionsFile.also { it.writeText(content) }
 
