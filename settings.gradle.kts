@@ -4,4 +4,5 @@ plugins {
     `kotlin-dsl` apply false
 }
 
-dependencyResolutionManagement { @Suppress("UnstableApiUsage") repositories.gradlePluginPortal() }
+@Suppress("UnstableApiUsage")
+dependencyResolutionManagement { repositories { gradlePluginPortal() } }
