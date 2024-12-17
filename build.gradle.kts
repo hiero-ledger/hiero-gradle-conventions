@@ -29,7 +29,7 @@ dependencies {
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:${embeddedKotlinVersion}"))
 
-    testImplementation(platform("org.junit:junit-bom:5.11.3"))
+    testImplementation(platform("org.junit:junit-bom:5.11.4"))
     testImplementation("org.assertj:assertj-core:3.26.3")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
 }
