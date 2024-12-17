@@ -13,7 +13,7 @@ dependencies {
     implementation("com.autonomousapps:dependency-analysis-gradle-plugin:2.6.1")
     implementation("com.diffplug.spotless:spotless-plugin-gradle:6.25.0")
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
-    implementation("com.gradle:develocity-gradle-plugin:3.18.2")
+    implementation("com.gradle:develocity-gradle-plugin:3.19")
     implementation("com.gradle.publish:plugin-publish-plugin:1.3.0")
     implementation(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
