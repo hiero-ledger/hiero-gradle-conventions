@@ -12,8 +12,8 @@ defaults:
 
 env:
   LC_ALL: C.UTF-8
-  GRADLE_CACHE_USERNAME: ${{ secrets.gradle-cache-username }}
-  GRADLE_CACHE_PASSWORD: ${{ secrets.gradle-cache-password }}
+  GRADLE_CACHE_USERNAME: ${{ secrets.GRADLE_CACHE_USERNAME }}
+  GRADLE_CACHE_PASSWORD: ${{ secrets.GRADLE_CACHE_PASSWORD }}
 
 jobs:
   plugin-portal-release:
