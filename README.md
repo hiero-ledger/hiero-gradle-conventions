@@ -11,8 +11,17 @@ That includes projects that are not part of the Hiero organisation. The conventi
 and ensure compatibility with performance features such as the
 [Remote Build Cache](https://docs.gradle.com/build-cache-node/) and the
 [Configuration Cache](https://docs.gradle.org/current/userguide/configuration_cache.html).
-The convention plugins pull in a [curated set of third-party Gradle plugins](build.gradle.kts#L18-L34)
+The convention plugins pull in a [curated set of third-party Gradle plugins](build.gradle.kts#L12-L29)
 that also support these features and are compatible with the latest Gradle version.
+
+## ToC
+
+- [Using the Convention Plugins](#using-the-convention-plugins) (for project maintainers)
+- [List of Convention Plugins](#list-of-convention-plugins) (for project maintainers)
+- [Building a project that uses these plugins](#building-a-project-that-uses-these-plugins) (for developers)
+  - [From the command line](#from-the-command-line)
+  - [In IntelliJ](#in-intellij)
+  - [In GitHub Actions](#in-github-actions)
 
 ## Using the Convention Plugins
 
@@ -90,6 +99,142 @@ Each plugin configures a certain build aspect, following this naming pattern:
 - `org.hiero.gradle.module.*` _Module_ plugins combine plugins from all categories above to define
   _Module Types_ that are then used in the `build.gradle.kts` files of the individual Modules of our software.
 
+## Building a project that uses these plugins
+
+## From the command line
+
+Run `./gradlw` to get the list of tasks that are useful to check and test local changes:
+
+```
+Build tasks
+-----------
+assemble - Assembles the outputs of this project.
+build - Assembles and tests this project.
+qualityGate - Apply spotless rules and run all quality checks.
+test - Runs the test suite.
+```
+
+In addition, the following build parameters may be useful:
+
+|  Task  |               Parameter                |                          Description                           |                Remarks                 |
+|--------|----------------------------------------|----------------------------------------------------------------|----------------------------------------|
+| `test` | `-PactiveProcessorCount=<proc-number>` | not run tests in parallel and reduce number of processors used |                                        |
+| `jmh`  | `-PjmhTests=<includes>`                | select benchmarks to run - e.g. `com.example.jmh.Benchmark1`   | only projects with `feature.benchmark` |
+
+## In IntelliJ
+
+Open the root folder of the project in IntelliJ. It is automatically recognized as Gradle project and imported.
+
+### Configure the JDK used by Gradle
+
+Before you can use all features reliably, make sure that Gradle is started with the JDK used in the project.
+The JDK version of the project is defined in `gradle/toolchain-versions.properties`.
+
+You can use IntelliJ to download the JDK if you do not have it installed.
+
+![Configuring the JDK in IntelliJ](src/docs/assets/gradle-jdk.png)
+
+## Reload Project with Gradle
+
+After you changed something in the project setup you should press the **Reload All Gradle project** in IntelliJ.
+Changes to the project setup include:
+
+- Changing build setup/plugins in `build.gradle.kts` files
+- Changing dependencies in `src/main/java/module-info.java` files
+- Changing dependency versions in `hiero-dependency-versions/build.gradle.kts`
+
+![Configuring the JDK in IntelliJ](src/docs/assets/gradle-reload.png)
+
+## Build, test, run through Gradle tasks
+
+You can run all tasks (see [command line](#from-the-command-line)) from the Gradle tool window.
+Usually, you only require the tasks listed in the **build** group.
+
+![Configuring the JDK in IntelliJ](src/docs/assets/gradle-tasks.png)
+
+To run only a single test, you can use the _run test_ options offered by IntelliJ when you open a test file.
+IntelliJ then automatically constructs the required Gradle call to run the test through Gradle.
+
+## In GitHub Actions
+
+GitHub action pipelines should use the official [setup-gradle action](https://github.com/gradle/actions/) with the following tasks and parameters.
+
+### Building and testing
+
+In a CI pipeline for PR validation with multiple steps use the following.
+(The available _test sets_ are determined by the additional `feature.test-*` plugins used in the project.)
+
+|       Task and Parameters       |                              Description                               |
+|---------------------------------|------------------------------------------------------------------------|
+| `./gradlew assemble --scan`     | Build all artifacts (populates remote build cache)                     |
+| `./gradlew qualityCheck --scan` | Run all checks except tests                                            |
+| `./gradlew test --scan`         | Run all unit tests                                                     |
+| `./gradlew <test-set> --scan`   | Run all tests in _test-set_ (possibly on different agents in parallel) |
+
+Alternatively, if you are fine to do more in one pipeline step, you can use:
+
+|      Task and Parameters      |             Description             |
+|-------------------------------|-------------------------------------|
+| `./gradlew build --scan`      | `assemble` + `qualiyCheck` + `test` |
+| `./gradlew <test-set> --scan` | Run all tests in _test-set_         |
+
+#### Environment
+
+The following environment variables should be populated from _secrets_ to ensure a performant build.
+
+|      Env Variable       |             Description              |
+|-------------------------|--------------------------------------|
+| `GRADLE_CACHE_USERNAME` | Gradle remote build cache _username_ |
+| `GRADLE_CACHE_PASSWORD` | Gradle remote build cache _password_ |
+
+### Publishing
+
+Before doing the publishing, you may need to update the version (version.txt file) in a preceding step.
+
+|                     Task and Parameters                     |               Description                |
+|-------------------------------------------------------------|------------------------------------------|
+| `./gradlew versionAsSpecified -PnewVersion=<version>`       | Define version to store in version.txt   |
+| `./gradlew versionAsSnapshot`                               | Add _-SNAPSHOT_ suffix to version.txt    |
+| `./gradlew versionAsPrefixedCommit -PcommitPrefix=<prefix>` | Set version based on current commit hash |
+
+To perform the actual publishing use one of the following.
+(If multiple _products_ with different _groups_ should be published, the `releaseMavenCentral` task needs to run
+multiple times with different values for the `publishingPackageGroup` parameter.)
+
+|                                       Task and Parameters                                        |              Description               |
+|--------------------------------------------------------------------------------------------------|----------------------------------------|
+| `./gradlew releaseMavenCentral -PpublishingPackageGroup=<group> --no-configuration-cache --scan` | Publish artifacts to Maven central     |
+| `./gradlew publishPlugins --no-configuration-cache --scan`                                       | Publish plugin to Gradle plugin portal |
+
+The following parameters may be used to tune or test the publishing (default is `false` for all parameters).
+
+|           Task and Parameters           |                     Description                     |
+|-----------------------------------------|-----------------------------------------------------|
+| `-PpublishSigningEnabled=<true\|false>` | Set to `true` for actual publishing                 |
+| `-Ps01SonatypeHost=<true\|false>`       | Use the `s01.oss.sonatype.org` host if required     |
+| `-PpublishTestRelease=<true\|false>`    | `false` - auto-release from staging when successful |
+
+The following environment variables should be populated from _secrets_ to ensure a fully functional build.
+
+#### Environment
+
+|      Env Variable       |               Description               |
+|-------------------------|-----------------------------------------|
+| `NEXUS_USERNAME`        | Maven Central publish _username_        |
+| `NEXUS_PASSWORD`        | Maven Central publish _password_        |
+| `GRADLE_PUBLISH_KEY`    | Gradle plugin portal publish _username_ |
+| `GRADLE_PUBLISH_SECRET` | Gradle plugin portal publish _password_ |
+
+### Testing Rust code on multiple operating systems
+
+If `feature.rust` and `feature.test-multios` is used, you can configure a matrix pipeline to run `test` on multiple
+agents with different operating systems. In this case, you can use the following parameter to skip the rust installation
+on the test-only agents where compiled code is retrieved from the remote build cache.
+
+|                Env Variable                 |                                 Description                                 |
+|---------------------------------------------|-----------------------------------------------------------------------------|
+| `-PskipInstallRustToolchains=<true\|false>` | Skip `installRustToolchains` task if all `cargoBuild*` tasks are FROM-CACHE |
+
 ## Contributing
 
 Whether you’re fixing bugs, enhancing features, or improving documentation, your contributions are important — let’s build something great together!
@@ -119,7 +264,7 @@ Your changes are automatically used when running a build.
 #### Add or adjust a test
 
 Each change done to the plugins should be covered by a test. The tests are located in
-[src/test/kotlin](src/main/kotlin). They are written in Kotlin using [JUnit5](https://junit.org/junit5/), 
+[src/test/kotlin](src/main/kotlin). They are written in Kotlin using [JUnit5](https://junit.org/junit5/),
 [AssertJ](https://assertj.github.io/doc/) and [Gradle Test Kit](https://docs.gradle.org/current/userguide/test_kit.html).
 Each test creates an artificial project that applies the plugin(s) under test, runs a build and asserts build results –
 such as: state of tasks executed, console logging, created files. Take a look at the existing tests for more details.

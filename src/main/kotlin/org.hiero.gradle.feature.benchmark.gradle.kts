@@ -19,7 +19,10 @@ dependencies {
     jmhAnnotationProcessor("org.openjdk.jmh:jmh-generator-annprocess:${jmh.jmhVersion.get()}")
 }
 
-tasks.jmh { outputs.upToDateWhen { false } }
+tasks.jmh {
+    group = "build"
+    outputs.upToDateWhen { false }
+}
 
 tasks.withType<JMHTask>().configureEach {
     group = "jmh"
