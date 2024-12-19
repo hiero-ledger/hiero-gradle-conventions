@@ -127,6 +127,7 @@ extraJavaModuleInfo {
     module("com.google.dagger:dagger", "dagger")
     module("io.perfmark:perfmark-api", "io.perfmark")
     module("javax.inject:javax.inject", "javax.inject")
+    module("commons-codec:commons-codec", "org.apache.commons.codec")
     module("com.esaulpaugh:headlong", "com.esaulpaugh.headlong") {
         exportAllPackages()
         overrideModuleName() // for older versions with 'Automatic-Module-Name: headlong'
@@ -136,6 +137,7 @@ extraJavaModuleInfo {
         exportAllPackages()
         requires("org.connid.framework") // this is missing in POM
     }
+    module("org.jetbrains:annotations", "org.jetbrains.annotations")
     module("io.tmio:tuweni-units", "tuweni.units")
     module("io.tmio:tuweni-bytes", "tuweni.bytes")
     module("net.i2p.crypto:eddsa", "net.i2p.crypto.eddsa")
@@ -215,6 +217,24 @@ extraJavaModuleInfo {
     module("net.ltgt.gradle.incap:incap", "net.ltgt.gradle.incap")
     module("org.jetbrains.kotlinx:kotlinx-metadata-jvm", "kotlinx.metadata.jvm")
 
+    // Annotation processing - error prone
+    module(
+        "com.github.kevinstern:software-and-algorithms",
+        "com.github.kevinstern.software_and_algorithms"
+    )
+    module("com.google.auto.value:auto-value-annotations", "com.google.auto.value.annotations")
+    module("com.google.errorprone:error_prone_annotation", "com.google.errorprone.annotation")
+    module("com.google.errorprone:error_prone_check_api", "com.google.errorprone.check.api")
+    module("com.google.errorprone:error_prone_core", "com.google.errorprone.core")
+    module(
+        "com.google.errorprone:error_prone_type_annotations",
+        "com.google.errorprone.type.annotations"
+    )
+    module("com.uber.nullaway:nullaway", "com.uber.nullaway")
+    module("io.github.eisop:dataflow-errorprone", "org.checkerframework.dataflow")
+    module("io.github.java-diff-utils:java-diff-utils", "io.github.javadiffutils")
+    module("io.grpc:grpc-java-api-checker", "io.grpc.java.api.checker")
+
     // Testing only
     module("io.grpc:grpc-netty-shaded", "io.grpc.netty.shaded") {
         exportAllPackages()
@@ -223,7 +243,7 @@ extraJavaModuleInfo {
         requires("jdk.unsupported")
         ignoreServiceProvider("reactor.blockhound.integration.BlockHoundIntegration")
     }
-    module("com.google.jimfs:jimfs", "com.google.common.jimfs")
+    module("com.google.jimfs:jimfs", "com.google.jimfs")
     module("io.github.json-snapshot:json-snapshot", "json.snapshot")
     module("org.awaitility:awaitility", "awaitility")
     module("uk.org.webcompere:system-stubs-core", "uk.org.webcompere.systemstubs.core")
@@ -243,6 +263,7 @@ extraJavaModuleInfo {
     }
     module("junit:junit", "junit")
     module("org.hamcrest:hamcrest", "org.hamcrest")
+    module("org.json:json", "org.json")
     module("org.mockito:mockito-core", "org.mockito")
     module("org.objenesis:objenesis", "org.objenesis")
     module("org.rnorth.duct-tape:duct-tape", "org.rnorth.ducttape")
