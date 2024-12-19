@@ -90,6 +90,50 @@ Each plugin configures a certain build aspect, following this naming pattern:
 - `org.hiero.gradle.module.*` _Module_ plugins combine plugins from all categories above to define
   _Module Types_ that are then used in the `build.gradle.kts` files of the individual Modules of our software.
 
+## Building a project that uses these plugins
+
+## From the command line
+
+Run `./gradlw` to get the list of tasks that are useful locally to check and test local changes:
+
+```
+Build tasks
+-----------
+assemble - Assembles the outputs of this project.
+build - Assembles and tests this project.
+clean - Deletes the build directory.
+qualityGate - Apply spotless rules and run all quality checks.
+test - Runs the test suite.
+```
+
+In addition, the following build parameters may be useful:
+
+- `-PjmhTests=<includes>` If a project contains JMH benchmarks, select the benchmarks to run.
+  E.g. `./gradlw :module-a:jmh -PjmhTests=com.example.jmh.Benchmark1`.
+- `-PactiveProcessorCount=<proc-number>` Do not run tests in parallel and reduce the number of processors used by the
+  test process. E.g. `./gradlw :module-a:test -PactiveProcessorCount=2`. Useful when working on other things while
+  running tests in the background to not occupy the whole machine.
+
+## In IntelliJ
+
+## In GitHub Actions
+
+### Publishing
+
+`-PpublishingPackageGroup=<group-of-modules-to-publish>`
+`-Ps01SonatypeHost=<true|false>` (defaults to `false`)
+`-PpublishSigningEnabled=<true|false>` (defaults to `false`)
+`-PpublishTestRelease=<true|false>` (defaults to `false`)
+
+### Versioning
+
+`-PcommitPrefix=<prefix-before-commit-hash>` (defaults to `adhoc`)
+`-PnewVersion=<new-version>`
+
+### Testing Rust code on multiple operating systems
+
+`skipInstallRustToolchains`
+
 ## Contributing
 
 Whether you’re fixing bugs, enhancing features, or improving documentation, your contributions are important — let’s build something great together!
