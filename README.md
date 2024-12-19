@@ -96,6 +96,34 @@ Whether you’re fixing bugs, enhancing features, or improving documentation, yo
 
 Please read our [contributing guide](https://github.com/hiero-ledger/.github/blob/main/CONTRIBUTING.md) to see how you can get involved.
 
+### Making and testing changes
+
+#### Use local changes to plugins in a project
+
+Insert the line
+`pluginManagement { includeBuild("<path-to-hiero-gradle-conventions>") }`
+in the top of your `settings.gradle.kts`. For example, if this repository is cloned next to the project repository in
+your local file system, the top part of your `settings.gradle.kts` should look like this:
+
+```
+// SPDX-License-Identifier: Apache-2.0
+pluginManagement { includeBuild("../hiero-gradle-conventions") }
+
+plugins { id("org.hiero.gradle.build") version "0.1.0" }
+```
+
+After you inserted that line, reload your project in IntelliJ. You will now see `hiero-gradle-conventions`
+next to your project in the workspace. You can now make changes to the files in [src/main/kotlin](src/main/kotlin).
+Your changes are automatically used when running a build.
+
+#### Add or adjust a test
+
+Each change done to the plugins should be covered by a test. The tests are located in
+[src/test/kotlin](src/main/kotlin). They are written in Kotlin using [JUnit5](https://junit.org/junit5/), 
+[AssertJ](https://assertj.github.io/doc/) and [Gradle Test Kit](https://docs.gradle.org/current/userguide/test_kit.html).
+Each test creates an artificial project that applies the plugin(s) under test, runs a build and asserts build results –
+such as: state of tasks executed, console logging, created files. Take a look at the existing tests for more details.
+
 ## Code of Conduct
 
 Hiero uses the Linux Foundation Decentralised Trust [Code of Conduct](https://www.lfdecentralizedtrust.org/code-of-conduct).
