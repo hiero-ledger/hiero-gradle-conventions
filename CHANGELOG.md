@@ -2,6 +2,7 @@
 
 ## Version 0.1.2
 
+* make license header configurable via 'license-header.txt' (#48)
 * replace 'developer.properties' with generic Hiero entry (#38)
 * update 'io.github.gradle-nexus:publish-plugin' to 2.0.0 (#40)
 

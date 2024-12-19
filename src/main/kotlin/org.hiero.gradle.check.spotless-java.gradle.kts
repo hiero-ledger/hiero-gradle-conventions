@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.hiero.gradle.spotless.LicenseHeader
 import org.hiero.gradle.spotless.RepairDashedCommentsFormatterStep
 import org.hiero.gradle.spotless.SortModuleInfoRequiresStep
 
@@ -22,6 +23,7 @@ spotless {
         // through git history (see "license" section below).
         // The delimiter override below is required to support some
         // of our test classes which are in the default package.
-        licenseHeader("// SPDX-License-Identifier: Apache-2.0\n", "(package|import|module)")
+        licenseHeader(LicenseHeader.javaFormat(project), "(package|import|module)")
+            .updateYearWithLatest(true)
     }
 }

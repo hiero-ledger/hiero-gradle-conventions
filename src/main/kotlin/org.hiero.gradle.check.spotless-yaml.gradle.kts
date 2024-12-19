@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.hiero.gradle.spotless.LicenseHeader
+
 plugins { id("com.diffplug.spotless") }
 
 spotless {
@@ -18,6 +20,6 @@ spotless {
         indentWithSpaces()
         endWithNewline()
 
-        licenseHeader("# SPDX-License-Identifier: Apache-2.0\n", "(name)")
+        licenseHeader(LicenseHeader.yamlFormat(project), "(name)").updateYearWithLatest(true)
     }
 }
