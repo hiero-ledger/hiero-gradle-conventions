@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 plugins { id("maven-publish") }
 
-if (gradle.startParameter.taskNames.any { it.startsWith("release") }) {
+if (
+    gradle.startParameter.taskNames.any { it.startsWith("release") && !it.contains("MavenCentral") }
+) {
     // We apply the 'artifactregistry' plugin conditionally, as it does not support configuration
     // cache.
     // https://github.com/GoogleCloudPlatform/artifact-registry-maven-tools/issues/85
