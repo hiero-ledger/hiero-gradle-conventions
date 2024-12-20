@@ -2,8 +2,11 @@
 plugins { id("maven-publish") }
 
 if (
-    gradle.startParameter.taskNames.any { it.startsWith("release") && !it.contains("MavenCentral") &&
-            !it.contains("PrereleaseChannel") }
+    gradle.startParameter.taskNames.any {
+        it.startsWith("release") &&
+            !it.contains("MavenCentral") &&
+            !it.contains("PrereleaseChannel")
+    }
 ) {
     // We apply the 'artifactregistry' plugin conditionally, as it does not support configuration
     // cache.

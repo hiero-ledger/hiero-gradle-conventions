@@ -2,7 +2,7 @@
 
 ## Version 0.1.4
 
-* fix issue caused by interaction between 'publish-prerelease-channel' and 'publish-artifactregistry' (#55)
+* fix issue caused by interaction between 'releasePrereleaseChannel' and 'publish-artifactregistry' (#55)
 
 ## Version 0.1.3
 
