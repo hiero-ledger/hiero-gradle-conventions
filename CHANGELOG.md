@@ -1,5 +1,13 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.2.0
+
+* JPMS - remove patching rule: commons-codec:commons-codec
+* JPMS - remove patching rule: org.jetbrains:annotations
+* JPMS - remove patching rule: org.json:json
+* JPMS - remove patching rule: errorprone (rules were not creating valid modules)
+* JPMS - adjust module name: com.google.common.jimfs
+
 ## Version 0.1.4
 
 * fix issue caused by interaction between 'releasePrereleaseChannel' and 'publish-artifactregistry' (#55)
