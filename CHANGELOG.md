@@ -1,5 +1,9 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.1.4
+
+* fix issue caused by interaction between 'publish-prerelease-channel' and 'publish-artifactregistry' (#55)
+
 ## Version 0.1.3
 
 * fix issue caused by interaction between 'publish-maven-central' and 'publish-artifactregistry' (#54)
