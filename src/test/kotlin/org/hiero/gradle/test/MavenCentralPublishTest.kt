@@ -9,6 +9,25 @@ import org.junit.jupiter.api.Test
 class MavenCentralPublishTest {
 
     @Test
+    fun `does not break with when using publish-artifactregistry plugin`() {
+        val p = GradleProject().withMinimalStructure()
+        p.withEnv(mapOf("NEXUS_USERNAME" to "foo", "NEXUS_PASSWORD" to "bar"))
+        p.moduleBuildFile(
+            """plugins { 
+                id("org.hiero.gradle.module.library")
+                id("org.hiero.gradle.feature.publish-artifactregistry")
+            }
+          """
+                .trimMargin()
+        )
+
+        // We should not get: 'No staging repository with name sonatype created'
+        p.run(
+            "releaseMavenCentral -PpublishingPackageGroup=org.foo --dry-run --no-configuration-cache"
+        )
+    }
+
+    @Test
     fun `attempts staging for non-snapshot releases`() {
         val p = GradleProject().withMinimalStructure()
         p.withEnv(mapOf("NEXUS_USERNAME" to "foo", "NEXUS_PASSWORD" to "bar"))

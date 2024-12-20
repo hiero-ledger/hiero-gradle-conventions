@@ -1,5 +1,9 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.1.3
+
+* fix issue caused by interaction between 'publish-maven-central' and 'publish-artifactregistry' (#54)
+
 ## Version 0.1.2
 
 * make license header configurable via 'license-header.txt' (#48)
