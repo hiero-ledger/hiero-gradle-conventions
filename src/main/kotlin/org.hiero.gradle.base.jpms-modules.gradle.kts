@@ -66,6 +66,12 @@ jvmDependencyConflicts.patch {
     }
     module("junit:junit") { removeDependency("org.hamcrest:hamcrest-core") }
     module("org.hyperledger.besu:secp256k1") { addApiDependency("net.java.dev.jna:jna") }
+    module("com.squareup.okhttp3:okhttp") {
+        // Depend directly on 'okio-jvm' as 'okio' just contain Kotlin Mulitplatform metadata that
+        // we do not need and that is not a Java Module
+        removeDependency("com.squareup.okio:okio")
+        addApiDependency("com.squareup.okio:okio-jvm")
+    }
 }
 
 // Fix or enhance the 'module-info.class' of third-party Modules. This is about the
@@ -103,6 +109,10 @@ extraJavaModuleInfo {
     module("io.grpc:grpc-util", "io.grpc.util")
     module("io.grpc:grpc-protobuf", "io.grpc.protobuf")
     module("io.grpc:grpc-protobuf-lite", "io.grpc.protobuf.lite")
+    module(
+        "com.carrotsearch.thirdparty:simple-xml-safe",
+        "com.carrotsearch.thirdparty.simple.xml.safe"
+    )
     module("com.github.spotbugs:spotbugs-annotations", "com.github.spotbugs.annotations")
     module("com.google.code.findbugs:jsr305", "java.annotation")
     module("com.google.protobuf:protobuf-javalite", "com.google.protobuf") {
@@ -125,6 +135,8 @@ extraJavaModuleInfo {
     module("com.google.guava:failureaccess", "com.google.common.util.concurrent.internal")
     module("com.google.api.grpc:proto-google-common-protos", "com.google.api.grpc.common")
     module("com.google.dagger:dagger", "dagger")
+    module("com.squareup.okhttp3:okhttp", "okhttp3")
+    module("com.squareup.okio:okio-jvm", "okio")
     module("io.perfmark:perfmark-api", "io.perfmark")
     module("javax.inject:javax.inject", "javax.inject")
     module("com.esaulpaugh:headlong", "com.esaulpaugh.headlong") {
@@ -139,6 +151,7 @@ extraJavaModuleInfo {
     module("io.tmio:tuweni-units", "tuweni.units")
     module("io.tmio:tuweni-bytes", "tuweni.bytes")
     module("net.i2p.crypto:eddsa", "net.i2p.crypto.eddsa")
+    module("io.minio:minio", "io.minio")
     module("io.netty:netty-codec-http", "io.netty.codec.http")
     module("io.netty:netty-codec-http2", "io.netty.codec.http2")
     module("io.netty:netty-codec-socks", "io.netty.codec.socks")
@@ -180,6 +193,7 @@ extraJavaModuleInfo {
     }
     module("org.eclipse.collections:eclipse-collections-api", "org.eclipse.collections.api")
     module("org.eclipse.collections:eclipse-collections", "org.eclipse.collections.impl")
+    module("org.xerial.snappy:snappy-java", "org.xerial.snappy.java")
     module("io.prometheus:simpleclient", "io.prometheus.simpleclient")
     module("io.prometheus:simpleclient_common", "io.prometheus.simpleclient_common")
     module("io.prometheus:simpleclient_httpserver", "io.prometheus.simpleclient.httpserver") {
