@@ -66,6 +66,12 @@ jvmDependencyConflicts.patch {
     }
     module("junit:junit") { removeDependency("org.hamcrest:hamcrest-core") }
     module("org.hyperledger.besu:secp256k1") { addApiDependency("net.java.dev.jna:jna") }
+    module("com.squareup.okhttp3:okhttp") {
+        // Depend directly on 'okio-jvm' as 'okio' just contain Kotlin Mulitplatform metadata that
+        // we do not need and that is not a Java Module
+        removeDependency("com.squareup.okio:okio")
+        addApiDependency("com.squareup.okio:okio-jvm")
+    }
 }
 
 // Fix or enhance the 'module-info.class' of third-party Modules. This is about the
@@ -103,6 +109,10 @@ extraJavaModuleInfo {
     module("io.grpc:grpc-util", "io.grpc.util")
     module("io.grpc:grpc-protobuf", "io.grpc.protobuf")
     module("io.grpc:grpc-protobuf-lite", "io.grpc.protobuf.lite")
+    module(
+        "com.carrotsearch.thirdparty:simple-xml-safe",
+        "com.carrotsearch.thirdparty.simple.xml.safe"
+    )
     module("com.github.spotbugs:spotbugs-annotations", "com.github.spotbugs.annotations")
     module("com.google.code.findbugs:jsr305", "java.annotation")
     module("com.google.protobuf:protobuf-javalite", "com.google.protobuf") {
@@ -125,9 +135,10 @@ extraJavaModuleInfo {
     module("com.google.guava:failureaccess", "com.google.common.util.concurrent.internal")
     module("com.google.api.grpc:proto-google-common-protos", "com.google.api.grpc.common")
     module("com.google.dagger:dagger", "dagger")
+    module("com.squareup.okhttp3:okhttp", "okhttp3")
+    module("com.squareup.okio:okio-jvm", "okio")
     module("io.perfmark:perfmark-api", "io.perfmark")
     module("javax.inject:javax.inject", "javax.inject")
-    module("commons-codec:commons-codec", "org.apache.commons.codec")
     module("com.esaulpaugh:headlong", "com.esaulpaugh.headlong") {
         exportAllPackages()
         overrideModuleName() // for older versions with 'Automatic-Module-Name: headlong'
@@ -137,10 +148,10 @@ extraJavaModuleInfo {
         exportAllPackages()
         requires("org.connid.framework") // this is missing in POM
     }
-    module("org.jetbrains:annotations", "org.jetbrains.annotations")
     module("io.tmio:tuweni-units", "tuweni.units")
     module("io.tmio:tuweni-bytes", "tuweni.bytes")
     module("net.i2p.crypto:eddsa", "net.i2p.crypto.eddsa")
+    module("io.minio:minio", "io.minio")
     module("io.netty:netty-codec-http", "io.netty.codec.http")
     module("io.netty:netty-codec-http2", "io.netty.codec.http2")
     module("io.netty:netty-codec-socks", "io.netty.codec.socks")
@@ -182,6 +193,7 @@ extraJavaModuleInfo {
     }
     module("org.eclipse.collections:eclipse-collections-api", "org.eclipse.collections.api")
     module("org.eclipse.collections:eclipse-collections", "org.eclipse.collections.impl")
+    module("org.xerial.snappy:snappy-java", "org.xerial.snappy.java")
     module("io.prometheus:simpleclient", "io.prometheus.simpleclient")
     module("io.prometheus:simpleclient_common", "io.prometheus.simpleclient_common")
     module("io.prometheus:simpleclient_httpserver", "io.prometheus.simpleclient.httpserver") {
@@ -190,8 +202,6 @@ extraJavaModuleInfo {
         requires("jdk.httpserver")
     }
 
-    // Need to use Jar file names here as there is currently no other way to address Jar with
-    // classifier directly for patching
     module(
         "io.netty:netty-transport-native-epoll|linux-x86_64",
         "io.netty.transport.epoll.linux.x86_64"
@@ -217,24 +227,6 @@ extraJavaModuleInfo {
     module("net.ltgt.gradle.incap:incap", "net.ltgt.gradle.incap")
     module("org.jetbrains.kotlinx:kotlinx-metadata-jvm", "kotlinx.metadata.jvm")
 
-    // Annotation processing - error prone
-    module(
-        "com.github.kevinstern:software-and-algorithms",
-        "com.github.kevinstern.software_and_algorithms"
-    )
-    module("com.google.auto.value:auto-value-annotations", "com.google.auto.value.annotations")
-    module("com.google.errorprone:error_prone_annotation", "com.google.errorprone.annotation")
-    module("com.google.errorprone:error_prone_check_api", "com.google.errorprone.check.api")
-    module("com.google.errorprone:error_prone_core", "com.google.errorprone.core")
-    module(
-        "com.google.errorprone:error_prone_type_annotations",
-        "com.google.errorprone.type.annotations"
-    )
-    module("com.uber.nullaway:nullaway", "com.uber.nullaway")
-    module("io.github.eisop:dataflow-errorprone", "org.checkerframework.dataflow")
-    module("io.github.java-diff-utils:java-diff-utils", "io.github.javadiffutils")
-    module("io.grpc:grpc-java-api-checker", "io.grpc.java.api.checker")
-
     // Testing only
     module("io.grpc:grpc-netty-shaded", "io.grpc.netty.shaded") {
         exportAllPackages()
@@ -243,7 +235,7 @@ extraJavaModuleInfo {
         requires("jdk.unsupported")
         ignoreServiceProvider("reactor.blockhound.integration.BlockHoundIntegration")
     }
-    module("com.google.jimfs:jimfs", "com.google.jimfs")
+    module("com.google.jimfs:jimfs", "com.google.common.jimfs")
     module("io.github.json-snapshot:json-snapshot", "json.snapshot")
     module("org.awaitility:awaitility", "awaitility")
     module("uk.org.webcompere:system-stubs-core", "uk.org.webcompere.systemstubs.core")
