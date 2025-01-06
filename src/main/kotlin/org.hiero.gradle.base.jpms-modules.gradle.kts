@@ -243,6 +243,7 @@ extraJavaModuleInfo {
     }
     module("junit:junit", "junit")
     module("org.hamcrest:hamcrest", "org.hamcrest")
+    module("org.json:json", "org.json")
     module("org.mockito:mockito-core", "org.mockito")
     module("org.objenesis:objenesis", "org.objenesis")
     module("org.rnorth.duct-tape:duct-tape", "org.rnorth.ducttape")
