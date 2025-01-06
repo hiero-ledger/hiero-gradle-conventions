@@ -188,8 +188,6 @@ extraJavaModuleInfo {
         requires("jdk.httpserver")
     }
 
-    // Need to use Jar file names here as there is currently no other way to address Jar with
-    // classifier directly for patching
     module(
         "io.netty:netty-transport-native-epoll|linux-x86_64",
         "io.netty.transport.epoll.linux.x86_64"
