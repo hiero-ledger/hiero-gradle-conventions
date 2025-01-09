@@ -4,7 +4,7 @@ import org.hiero.gradle.spotless.LicenseHeader
 plugins { id("com.diffplug.spotless") }
 
 spotless {
-    format("actionYaml") {
+    format("yaml") {
         target(".github/**/*.yaml", ".github/**/*.yml")
         /*
          * Prettier requires NodeJS and NPM installed; however, the NodeJS Gradle plugin and Spotless do not yet
