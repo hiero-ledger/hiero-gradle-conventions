@@ -7,7 +7,7 @@ spotless {
         targetExclude("platform-sdk/sdk/**", "node_modules/**")
         flexmark()
         trimTrailingWhitespace()
-        indentWithSpaces()
+        leadingTabsToSpaces()
         endWithNewline()
     }
 }

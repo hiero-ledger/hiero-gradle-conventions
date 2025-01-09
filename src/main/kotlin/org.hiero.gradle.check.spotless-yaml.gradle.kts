@@ -17,7 +17,7 @@ spotless {
         // prettier()
 
         trimTrailingWhitespace()
-        indentWithSpaces()
+        leadingTabsToSpaces()
         endWithNewline()
 
         licenseHeader(LicenseHeader.yamlFormat(project), "(name)").updateYearWithLatest(true)
