@@ -12,7 +12,7 @@ class QualityGateTest {
     fun `qualityGate formats yml and yaml files`() {
         val p = GradleProject().withMinimalStructure()
         val flow1 = p.file(".github/workflows/flow1.yml", "name: Flow 1    ")
-        val flow2 = p.file(".github/workflows/flow2.yaml", "name: Flow 2    ")
+        val flow2 = p.file(".github/workflows/flow2.yaml", "name:      Flow 2    ")
         val bot = p.file(".github/dependabot.yml", "updates:    ")
         val txtFile = p.file(".github/workflows/temp.txt", "name: Flow 3    ")
 
