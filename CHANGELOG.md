@@ -2,6 +2,22 @@
 
 ## Version 0.2.1
 
+* JPMS - add patching rule: io.prometheus:prometheus-metrics-config
+* JPMS - add patching rule: io.prometheus:prometheus-metrics-core
+* JPMS - add patching rule: io.prometheus:prometheus-metrics-exposition-formats
+* JPMS - add patching rule: io.prometheus:prometheus-metrics-exposition-textformat
+* JPMS - add patching rule: io.prometheus:prometheus-metrics-model
+* JPMS - add patching rule: io.prometheus:prometheus-metrics-tracer-common
+* JPMS - add patching rule: io.prometheus:prometheus-metrics-tracer-initializer
+* JPMS - add patching rule: io.prometheus:prometheus-metrics-tracer-otel
+* JPMS - add patching rule: io.prometheus:prometheus-metrics-tracer-otel-agent
+* JPMS - add patching rule: io.prometheus:simpleclient_tracer_common
+* JPMS - add patching rule: io.micrometer:micrometer-commons
+* JPMS - add patching rule: io.micrometer:micrometer-core
+* JPMS - add patching rule: io.micrometer:micrometer-observation
+* JPMS - add patching rule: io.micrometer:micrometer-registry-prometheus
+* JPMS - add patching rule: org.hdrhistogram:HdrHistogram
+* JPMS - add patching rule: org.latencyutils:LatencyUtils
 * JPMS - remove patching rule: org.json:json
 
 ## Version 0.2.0

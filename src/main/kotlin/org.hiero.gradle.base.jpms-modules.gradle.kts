@@ -194,6 +194,24 @@ extraJavaModuleInfo {
     module("org.eclipse.collections:eclipse-collections-api", "org.eclipse.collections.api")
     module("org.eclipse.collections:eclipse-collections", "org.eclipse.collections.impl")
     module("org.xerial.snappy:snappy-java", "org.xerial.snappy.java")
+    module("io.prometheus:prometheus-metrics-config", "io.prometheus.metrics.config")
+    module("io.prometheus:prometheus-metrics-core", "io.prometheus.metrics.core")
+    module(
+        "io.prometheus:prometheus-metrics-exposition-formats",
+        "io.prometheus.metrics.expositionformats"
+    )
+    module("io.prometheus:prometheus-metrics-exposition-textformats", "io.prometheus.writer.text")
+    module("io.prometheus:prometheus-metrics-model", "io.prometheus.metrics.model")
+    module("io.prometheus:prometheus-metrics-tracer-common", "io.prometheus.metrics.tracer.common")
+    module(
+        "io.prometheus:prometheus-metrics-tracer-initializer",
+        "io.prometheus.metrics.tracer.initializer"
+    )
+    module("io.prometheus:prometheus-metrics-tracer-otel", "io.prometheus.metrics.tracer.otel")
+    module(
+        "io.prometheus:prometheus-metrics-tracer-otel-agent",
+        "io.prometheus.metrics.tracer.otel_agent"
+    )
     module("io.prometheus:simpleclient", "io.prometheus.simpleclient")
     module("io.prometheus:simpleclient_common", "io.prometheus.simpleclient_common")
     module("io.prometheus:simpleclient_httpserver", "io.prometheus.simpleclient.httpserver") {
@@ -201,6 +219,13 @@ extraJavaModuleInfo {
         requireAllDefinedDependencies()
         requires("jdk.httpserver")
     }
+    module("io.prometheus:simpleclient_tracer_common", "io.prometheus.simpleclient.tracer.common")
+    module("io.micrometer:micrometer-commons", "micrometer.commons")
+    module("io.micrometer:micrometer-core", "micrometer.core")
+    module("io.micrometer:micrometer-observation", "micrometer.observation")
+    module("io.micrometer:micrometer-registry-prometheus", "micrometer.registry.prometheus")
+    module("org.hdrhistogram:HdrHistogram", "org.hdrhistogram")
+    module("org.latencyutils:LatencyUtils", "org.latencyutils")
 
     module(
         "io.netty:netty-transport-native-epoll|linux-x86_64",
