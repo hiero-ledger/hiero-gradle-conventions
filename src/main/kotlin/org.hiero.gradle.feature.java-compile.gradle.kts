@@ -73,7 +73,12 @@ tasks.withType<JavaCompile>().configureEach {
     }
 }
 
-tasks.jar { manifest { attributes["Implementation-Version"] = project.version } }
+tasks.jar {
+    manifest {
+        attributes["Implementation-Title"] = project.name
+        attributes["Implementation-Version"] = project.version
+    }
+}
 
 sourceSets.all {
     // 'assemble' compiles all sources, including all test sources
