@@ -13,6 +13,7 @@ class QualityGateTest {
         val p = GradleProject().withMinimalStructure()
         val flow1 = p.file(".github/workflows/flow1.yml", "name: Flow 1    ")
         val flow2 = p.file(".github/workflows/flow2.yaml", "name: Flow 2    ")
+        val bot = p.file(".github/dependabot.yml", "updates:    ")
         val txtFile = p.file(".github/workflows/temp.txt", "name: Flow 3    ")
 
         val result = p.qualityGate()
@@ -30,6 +31,14 @@ class QualityGateTest {
                 """
             # SPDX-License-Identifier: Apache-2.0
             name: Flow 2
+        """
+                    .trimIndent()
+            )
+        assertThat(bot)
+            .hasContent(
+                """
+            # SPDX-License-Identifier: Apache-2.0
+            updates:
         """
                     .trimIndent()
             )

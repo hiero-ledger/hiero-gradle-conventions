@@ -5,7 +5,7 @@ plugins { id("com.diffplug.spotless") }
 
 spotless {
     format("actionYaml") {
-        target(".github/workflows/*.yaml", ".github/workflows/*.yml")
+        target(".github/**/*.yaml", ".github/**/*.yml")
         /*
          * Prettier requires NodeJS and NPM installed; however, the NodeJS Gradle plugin and Spotless do not yet
          * integrate with each other. Currently there is an open issue report against spotless.
@@ -20,6 +20,6 @@ spotless {
         leadingTabsToSpaces()
         endWithNewline()
 
-        licenseHeader(LicenseHeader.yamlFormat(project), "(name)").updateYearWithLatest(true)
+        licenseHeader(LicenseHeader.yamlFormat(project), "\\w+\\:").updateYearWithLatest(true)
     }
 }
