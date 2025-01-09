@@ -1,5 +1,9 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.2.1
+
+* JPMS - remove patching rule: org.json:json
+
 ## Version 0.2.0
 
 * JPMS - add patching rule: com.carrotsearch.thirdparty:simple-xml-safe
