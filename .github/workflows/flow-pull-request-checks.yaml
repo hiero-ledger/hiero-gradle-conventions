@@ -23,6 +23,3 @@ jobs:
   build:
     name: Code
     uses: ./.github/workflows/zxc-build-plugins.yaml
-    secrets:
-      gradle-cache-username: ${{ secrets.GRADLE_CACHE_USERNAME }}
-      gradle-cache-password: ${{ secrets.GRADLE_CACHE_PASSWORD }}
