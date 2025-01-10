@@ -11,19 +11,24 @@ spotless {
 
         // fix errors due to dashed comment blocks (eg: /*-, /*--, etc)
         addStep(RepairDashedCommentsFormatterStep.create())
-        // Sort the 'requires' entries in Module Info files
-        addStep(SortModuleInfoRequiresStep.create())
         // enable toggle comment support
         toggleOffOn()
-        // don't need to set target, it is inferred from java
-        // apply a specific flavor of google-java-format
+        // apply flavor of google-java-format
         palantirJavaFormat()
-        // make sure every file has the following copyright header.
-        // optionally, Spotless can set copyright years by digging
-        // through git history (see "license" section below).
-        // The delimiter override below is required to support some
-        // of our test classes which are in the default package.
-        licenseHeader(LicenseHeader.javaFormat(project), "(package|import|module)")
+
+        licenseHeader(LicenseHeader.javaFormat(project), "(package|import)")
+            .updateYearWithLatest(true)
+    }
+    format("javaInfoFiles") {
+        // separate extension due to https://github.com/diffplug/spotless/issues/532
+        target("src/**/module-info.java", "src/**/package-info.java")
+
+        // sort the 'requires' entries in 'module-info' files
+        addStep(SortModuleInfoRequiresStep.create())
+
+        licenseHeader(LicenseHeader.javaFormat(project), "(package|import|module|@|/\\*\\*)")
             .updateYearWithLatest(true)
     }
 }
+
+tasks.named("spotlessJavaInfoFiles") { dependsOn(tasks.named("spotlessJava")) }
