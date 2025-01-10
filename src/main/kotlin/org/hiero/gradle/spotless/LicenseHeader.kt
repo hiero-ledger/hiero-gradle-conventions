@@ -4,7 +4,7 @@ package org.hiero.gradle.spotless
 import org.gradle.api.Project
 
 object LicenseHeader {
-    const val default = "SPDX-License-Identifier: Apache-2.0"
+    private const val DEFAULT = "SPDX-License-Identifier: Apache-2.0"
 
     fun javaFormat(project: Project): String {
         val plainHeader = plainHeader(project).lines()
@@ -39,7 +39,7 @@ object LicenseHeader {
     private fun plainHeader(project: Project): String {
         @Suppress("UnstableApiUsage") val rootDir = project.isolated.rootProject.projectDirectory
         val headerFile = rootDir.file("gradle/license-header.txt").asFile
-        val header = if (headerFile.exists()) headerFile.readText() else default
+        val header = if (headerFile.exists()) headerFile.readText() else DEFAULT
         return header
     }
 }
