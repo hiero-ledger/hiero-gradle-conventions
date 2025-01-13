@@ -32,7 +32,6 @@ class JpmsPatchTest {
             dependencies.constraints {
                 modules.forEach {  api("${'$'}it:latest.release") }
                 api("org.jetbrains:annotations:latest.release")
-                api("com.google.dagger:dagger-compiler:2.42!!")
                 api("org.hyperledger.besu:evm:24.3.3!!")
             }
         """

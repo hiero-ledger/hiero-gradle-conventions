@@ -40,6 +40,10 @@ jvmDependencyConflicts.patch {
     }
     module("com.google.dagger:dagger-compiler") {
         annotationLibraries.forEach { removeDependency(it) }
+        // Depend directly on 'kotlinpoet-jvm' as 'kotlinpoet' just contain Kotlin Multiplatform
+        // metadata that we do not need and that is not a Java Module
+        removeDependency("com.squareup:kotlinpoet")
+        addApiDependency("com.squareup:kotlinpoet-jvm")
     }
     module("com.google.dagger:dagger-producers") {
         annotationLibraries.forEach { removeDependency(it) }
@@ -67,7 +71,7 @@ jvmDependencyConflicts.patch {
     module("junit:junit") { removeDependency("org.hamcrest:hamcrest-core") }
     module("org.hyperledger.besu:secp256k1") { addApiDependency("net.java.dev.jna:jna") }
     module("com.squareup.okhttp3:okhttp") {
-        // Depend directly on 'okio-jvm' as 'okio' just contain Kotlin Mulitplatform metadata that
+        // Depend directly on 'okio-jvm' as 'okio' just contain Kotlin Multiplatform metadata that
         // we do not need and that is not a Java Module
         removeDependency("com.squareup.okio:okio")
         addApiDependency("com.squareup.okio:okio-jvm")
@@ -135,6 +139,7 @@ extraJavaModuleInfo {
     module("com.google.guava:failureaccess", "com.google.common.util.concurrent.internal")
     module("com.google.api.grpc:proto-google-common-protos", "com.google.api.grpc.common")
     module("com.google.dagger:dagger", "dagger")
+    module("com.squareup:kotlinpoet-jvm", "com.squareup.kotlinpoet")
     module("com.squareup.okhttp3:okhttp", "okhttp3")
     module("com.squareup.okio:okio-jvm", "okio")
     module("io.perfmark:perfmark-api", "io.perfmark")
