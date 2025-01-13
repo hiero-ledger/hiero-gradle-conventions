@@ -113,7 +113,7 @@ class GradleProject {
 
     fun help(): BuildResult = runner(listOf("help")).build()
 
-    fun build(): BuildResult = runner(listOf("build")).build()
+    fun check(): BuildResult = runner(listOf("check")).build()
 
     fun qualityCheck(): BuildResult = runner(listOf("qualityCheck")).build()
 

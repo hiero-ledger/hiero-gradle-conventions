@@ -187,6 +187,17 @@ The following environment variables should be populated from _secrets_ to ensure
 | `GRADLE_CACHE_USERNAME` | Gradle remote build cache _username_ |
 | `GRADLE_CACHE_PASSWORD` | Gradle remote build cache _password_ |
 
+### Code coverage reports
+
+Running `test` produces code coverage data. The following creates a single XML file with all coverage data for upload
+to coverage analysis services like Codecov.
+
+|            Task and Parameters            |                 Description                  |
+|-------------------------------------------|----------------------------------------------|
+| `./gradlew testCodeCoverageReport --scan` | Generate a single XML with all coverage data |
+
+Report location: `gradle/aggregation/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml`
+
 ### Publishing
 
 Before doing the publishing, you may need to update the version (version.txt file) in a preceding step.

@@ -21,6 +21,8 @@ plugins {
 // Make the Jar itself executable by setting the 'Main-Class' manifest attribute.
 tasks.jar { manifest { attributes("Main-Class" to application.mainClass) } }
 
+tasks.check { dependsOn(tasks.jacocoTestReport) }
+
 // The 'application' plugin activates the following tasks as part of 'assemble'.
 // As we do not use these results right now, disable them:
 tasks.startScripts { enabled = false }
