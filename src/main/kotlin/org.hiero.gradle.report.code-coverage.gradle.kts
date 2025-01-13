@@ -11,3 +11,5 @@ tasks.withType<ModuleDirectivesScopeCheck> { enabled = false }
 
 // Make aggregation "classpath" use the platform for versions (gradle/versions)
 configurations.aggregateCodeCoverageReportResults { extendsFrom(configurations["internal"]) }
+
+tasks.check { dependsOn(tasks.testCodeCoverageReport) }

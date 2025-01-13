@@ -20,6 +20,8 @@ plugins {
     id("org.hiero.gradle.report.test-logger")
 }
 
+tasks.check { dependsOn(tasks.jacocoTestReport) }
+
 extraJavaModuleInfo {
     failOnMissingModuleInfo = false
     failOnAutomaticModules = false

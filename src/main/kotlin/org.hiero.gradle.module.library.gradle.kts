@@ -19,3 +19,5 @@ plugins {
     id("org.hiero.gradle.feature.test")
     id("org.hiero.gradle.report.test-logger")
 }
+
+tasks.check { dependsOn(tasks.jacocoTestReport) }
