@@ -4,7 +4,7 @@ plugins { id("com.gradle.develocity") }
 develocity {
     buildScan {
         val publishBuildScan =
-            providers.gradleProperty("scan").getOrElse("false").let {
+            providers.environmentVariable("CI").getOrElse("false").let {
                 if (it.isBlank()) true else it.toBoolean()
             }
 
@@ -13,10 +13,4 @@ develocity {
         // Enable Gradle Build Scan only with explicit '-Pscan'
         publishing.onlyIf { publishBuildScan }
     }
-}
-
-if (gradle.startParameter.isBuildScan) {
-    logger.lifecycle(
-        "WARNING: running with '--scan' has negative effects on build caching, use '-Pscan' instead"
-    )
 }

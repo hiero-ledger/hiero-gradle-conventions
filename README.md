@@ -164,19 +164,19 @@ GitHub action pipelines should use the official [setup-gradle action](https://gi
 In a CI pipeline for PR validation with multiple steps use the following.
 (The available _test sets_ are determined by the additional `feature.test-*` plugins used in the project.)
 
-|       Task and Parameters       |                              Description                               |
-|---------------------------------|------------------------------------------------------------------------|
-| `./gradlew assemble -Pscan`     | Build all artifacts (populates remote build cache)                     |
-| `./gradlew qualityCheck -Pscan` | Run all checks except tests                                            |
-| `./gradlew test -Pscan`         | Run all unit tests                                                     |
-| `./gradlew <test-set> -Pscan`   | Run all tests in _test-set_ (possibly on different agents in parallel) |
+|   Task and Parameters    |                              Description                               |
+|--------------------------|------------------------------------------------------------------------|
+| `./gradlew assemble`     | Build all artifacts (populates remote build cache)                     |
+| `./gradlew qualityCheck` | Run all checks except tests                                            |
+| `./gradlew test`         | Run all unit tests                                                     |
+| `./gradlew <test-set>`   | Run all tests in _test-set_ (possibly on different agents in parallel) |
 
 Alternatively, if you are fine to do more in one pipeline step, you can use:
 
-|      Task and Parameters      |             Description             |
-|-------------------------------|-------------------------------------|
-| `./gradlew build -Pscan`      | `assemble` + `qualiyCheck` + `test` |
-| `./gradlew <test-set> -Pscan` | Run all tests in _test-set_         |
+|  Task and Parameters   |             Description             |
+|------------------------|-------------------------------------|
+| `./gradlew build`      | `assemble` + `qualiyCheck` + `test` |
+| `./gradlew <test-set>` | Run all tests in _test-set_         |
 
 #### Environment
 
@@ -192,9 +192,9 @@ The following environment variables should be populated from _secrets_ to ensure
 Running `test` produces code coverage data. The following creates a single XML file with all coverage data for upload
 to coverage analysis services like Codecov.
 
-|            Task and Parameters            |                 Description                  |
-|-------------------------------------------|----------------------------------------------|
-| `./gradlew testCodeCoverageReport -Pscan` | Generate a single XML with all coverage data |
+|        Task and Parameters         |                 Description                  |
+|------------------------------------|----------------------------------------------|
+| `./gradlew testCodeCoverageReport` | Generate a single XML with all coverage data |
 
 Report location: `gradle/aggregation/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml`
 
@@ -212,10 +212,10 @@ To perform the actual publishing use one of the following.
 (If multiple _products_ with different _groups_ should be published, the `releaseMavenCentral` task needs to run
 multiple times with different values for the `publishingPackageGroup` parameter.)
 
-|                                       Task and Parameters                                        |              Description               |
-|--------------------------------------------------------------------------------------------------|----------------------------------------|
-| `./gradlew releaseMavenCentral -PpublishingPackageGroup=<group> --no-configuration-cache -Pscan` | Publish artifacts to Maven central     |
-| `./gradlew publishPlugins --no-configuration-cache -Pscan`                                       | Publish plugin to Gradle plugin portal |
+|                                    Task and Parameters                                    |              Description               |
+|-------------------------------------------------------------------------------------------|----------------------------------------|
+| `./gradlew releaseMavenCentral -PpublishingPackageGroup=<group> --no-configuration-cache` | Publish artifacts to Maven central     |
+| `./gradlew publishPlugins --no-configuration-cache`                                       | Publish plugin to Gradle plugin portal |
 
 The following parameters may be used to tune or test the publishing (default is `false` for all parameters).
 
