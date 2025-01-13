@@ -166,17 +166,17 @@ In a CI pipeline for PR validation with multiple steps use the following.
 
 |       Task and Parameters       |                              Description                               |
 |---------------------------------|------------------------------------------------------------------------|
-| `./gradlew assemble --scan`     | Build all artifacts (populates remote build cache)                     |
-| `./gradlew qualityCheck --scan` | Run all checks except tests                                            |
-| `./gradlew test --scan`         | Run all unit tests                                                     |
-| `./gradlew <test-set> --scan`   | Run all tests in _test-set_ (possibly on different agents in parallel) |
+| `./gradlew assemble -Pscan`     | Build all artifacts (populates remote build cache)                     |
+| `./gradlew qualityCheck -Pscan` | Run all checks except tests                                            |
+| `./gradlew test -Pscan`         | Run all unit tests                                                     |
+| `./gradlew <test-set> -Pscan`   | Run all tests in _test-set_ (possibly on different agents in parallel) |
 
 Alternatively, if you are fine to do more in one pipeline step, you can use:
 
 |      Task and Parameters      |             Description             |
 |-------------------------------|-------------------------------------|
-| `./gradlew build --scan`      | `assemble` + `qualiyCheck` + `test` |
-| `./gradlew <test-set> --scan` | Run all tests in _test-set_         |
+| `./gradlew build -Pscan`      | `assemble` + `qualiyCheck` + `test` |
+| `./gradlew <test-set> -Pscan` | Run all tests in _test-set_         |
 
 #### Environment
 
@@ -194,7 +194,7 @@ to coverage analysis services like Codecov.
 
 |            Task and Parameters            |                 Description                  |
 |-------------------------------------------|----------------------------------------------|
-| `./gradlew testCodeCoverageReport --scan` | Generate a single XML with all coverage data |
+| `./gradlew testCodeCoverageReport -Pscan` | Generate a single XML with all coverage data |
 
 Report location: `gradle/aggregation/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml`
 
@@ -214,8 +214,8 @@ multiple times with different values for the `publishingPackageGroup` parameter.
 
 |                                       Task and Parameters                                        |              Description               |
 |--------------------------------------------------------------------------------------------------|----------------------------------------|
-| `./gradlew releaseMavenCentral -PpublishingPackageGroup=<group> --no-configuration-cache --scan` | Publish artifacts to Maven central     |
-| `./gradlew publishPlugins --no-configuration-cache --scan`                                       | Publish plugin to Gradle plugin portal |
+| `./gradlew releaseMavenCentral -PpublishingPackageGroup=<group> --no-configuration-cache -Pscan` | Publish artifacts to Maven central     |
+| `./gradlew publishPlugins --no-configuration-cache -Pscan`                                       | Publish plugin to Gradle plugin portal |
 
 The following parameters may be used to tune or test the publishing (default is `false` for all parameters).
 
