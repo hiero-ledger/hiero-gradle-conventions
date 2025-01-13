@@ -1,0 +1,1 @@
+Adds the 'publishDependencyConstraint' scope that is used to define dependencies for which direct dependency constraints should be published
