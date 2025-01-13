@@ -1,5 +1,14 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.0
+
+* use Prettier for Yaml file formatting
+* add license header check for 'module-info' and 'package-info'
+* produce code coverage reports as part of 'check'
+* always publish build scans on CI
+* add 'feature.publish-dependency-constraints' convention plugin
+* JPMS - add patching rule: com.squareup:kotlinpoet-jvm
+
 ## Version 0.2.1
 
 * JPMS - add patching rule: io.prometheus:prometheus-metrics-config

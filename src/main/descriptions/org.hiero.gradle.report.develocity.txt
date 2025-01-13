@@ -1,1 +1,1 @@
-Conventions for 'com.gradle.develocity' that automatically accept the terms of use for 'scans.gradle.com' if users opt-in via '-Pscan'
+Conventions for 'com.gradle.develocity' that accept the terms of use for 'scans.gradle.com' and automatically publishes scans on CI
