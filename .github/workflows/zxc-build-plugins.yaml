@@ -41,10 +41,10 @@ jobs:
           cache-read-only: false
 
       - name: Compile Code
-        run: ./gradlew assemble --scan
+        run: ./gradlew assemble
 
       - name: Code Quality Checks and Tests
-        run: ./gradlew check --scan
+        run: ./gradlew check
 
       - name: Publish JUnit Test Report
         uses: EnricoMi/publish-unit-test-result-action@170bf24d20d201b842d7a52403b73ed297e6645b # v2.18.0
