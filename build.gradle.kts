@@ -11,7 +11,7 @@ description = "Gradle convention plugins used by Hiero projects"
 dependencies {
     implementation("com.adarshr:gradle-test-logger-plugin:4.0.0")
     implementation("com.autonomousapps:dependency-analysis-gradle-plugin:2.7.0")
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:6.25.0")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:7.0.2")
     implementation("com.github.node-gradle:gradle-node-plugin:7.1.0") // install NPM for prettier
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
     implementation("com.gradle.publish:plugin-publish-plugin:1.3.0")
