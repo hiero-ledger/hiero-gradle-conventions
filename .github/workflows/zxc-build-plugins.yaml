@@ -2,13 +2,6 @@
 name: "ZXC: Compile"
 on:
   workflow_call:
-    secrets:
-      gradle-cache-username:
-        description: "The username used to authenticate with the Gradle Build Cache Node."
-        required: true
-      gradle-cache-password:
-        description: "The password used to authenticate with the Gradle Build Cache Node."
-        required: true
 
 defaults:
   run:
