@@ -23,6 +23,7 @@ that also support these features and are compatible with the latest Gradle versi
   - [In IntelliJ](#in-intellij)
   - [In GitHub Actions](#in-github-actions)
 
+<a name="plugins"></a>
 ## Using the Convention Plugins
 
 Apply the entry point plugin `org.hiero.gradle.build` in the `settings.gradle.kts` file.  Additionally, define where
@@ -99,6 +100,7 @@ Each plugin configures a certain build aspect, following this naming pattern:
 - `org.hiero.gradle.module.*` _Module_ plugins combine plugins from all categories above to define
   _Module Types_ that are then used in the `build.gradle.kts` files of the individual Modules of our software.
 
+<a name="build"></a>
 ## Building a project that uses these plugins
 
 ## From the command line
