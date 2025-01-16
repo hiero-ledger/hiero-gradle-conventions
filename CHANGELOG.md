@@ -1,5 +1,11 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.1
+
+* deactivate signing for Gradle plugin publishing if not explicitly turned on
+* update spotless-plugin-gradle to 7.0.2 (improves configuration cache compatibility)
+* update dependency-analysis-gradle-plugin to 2.7.0 (addresses Gradle deprecation)
+
 ## Version 0.3.0
 
 * use Prettier for Yaml file formatting

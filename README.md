@@ -33,7 +33,7 @@ Modules (subprojects) are located in the directory hierarchy by using the `javaM
 ```
 // settings.gradle.kts
 plugins {
-    id("org.hiero.gradle.build") version "0.3.0"
+    id("org.hiero.gradle.build") version "0.3.1"
 }
 
 // Define location of Modules (subprojects)
@@ -267,7 +267,7 @@ your local file system, the top part of your `settings.gradle.kts` should look l
 // SPDX-License-Identifier: Apache-2.0
 pluginManagement { includeBuild("../hiero-gradle-conventions") }
 
-plugins { id("org.hiero.gradle.build") version "0.3.0" }
+plugins { id("org.hiero.gradle.build") version "0.3.1" }
 ```
 
 After you inserted that line, reload your project in IntelliJ. You will now see `hiero-gradle-conventions`
