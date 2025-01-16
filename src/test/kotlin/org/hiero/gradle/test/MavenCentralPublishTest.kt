@@ -18,7 +18,7 @@ class MavenCentralPublishTest {
                 id("org.hiero.gradle.feature.publish-artifactregistry")
             }
           """
-                .trimMargin()
+                .trimIndent()
         )
 
         // We should not get: 'No staging repository with name sonatype created'

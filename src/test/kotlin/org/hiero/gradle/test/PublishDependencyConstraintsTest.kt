@@ -31,7 +31,7 @@ class PublishDependencyConstraintsTest {
                 publishDependencyConstraint("io.grpc:grpc-netty")
             }
           """
-                .trimMargin()
+                .trimIndent()
         )
 
         p.run("generateMetadataFileForMavenPublication")

@@ -15,11 +15,11 @@ java {
 val publishSigningEnabled =
     providers.gradleProperty("publishSigningEnabled").getOrElse("false").toBoolean()
 
-if (publishSigningEnabled) {
-    signing {
-        sign(publishing.publications)
-        useGpgCmd()
-    }
+tasks.withType<Sign>().configureEach { enabled = publishSigningEnabled }
+
+signing {
+    sign(publishing.publications)
+    useGpgCmd()
 }
 
 publishing.publications.withType<MavenPublication>().configureEach {
