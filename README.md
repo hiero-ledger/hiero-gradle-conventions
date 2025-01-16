@@ -252,6 +252,7 @@ on the test-only agents where compiled code is retrieved from the remote build c
 | `-PskipInstallRustToolchains=<true\|false>` | Skip `installRustToolchains` task if all `cargoBuild*` tasks are FROM-CACHE |
 
 <a name="modules"></a>
+
 ## Defining modules and dependencies in a project that uses these plugins
 
 The [project structure](#project-structure) endorsed by this setup uses the
@@ -269,7 +270,7 @@ For more background information please refer to:
 A module is defined by adding a
 [build.gradle.kts](example/product-a/module-lib/build.gradle.kts)
 and [module-info.java](example/product-a/module-lib/src/main/java/module-info.java)
-in a [module](example/product-a/module-lib) folder inside the folder that represents the 
+in a [module](example/product-a/module-lib) folder inside the folder that represents the
 [product](example/product-a) the module belongs to:
 
 ```
@@ -310,7 +311,7 @@ If you need to support additional features for the developing of the module, you
 ### Changing or adding dependencies
 
 With the _Java Module System (JPMS)_, dependencies between modules are
-defined in the [src/main/java/module-info.java](example/product-a/module-lib/src/main/java/module-info.java) files
+defined in the [src/main/java/module-info.java](example/product-a/module-lib/src/main/java/module-info.java) file
 that each module contains. A dependency to another module is defined by a `requires` statement  and the other module
 is identified by its _Module Name_ there. For example, a dependency to the `module-a` module is expressed by
 `requires org.example.module.a`. A dependency to the 3rd party library `com.fasterxml.jackson.databind` is expressed by
