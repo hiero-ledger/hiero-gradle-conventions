@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ModuleLib {
     public void use() {
+        internalImplementation();
+    }
+
+    protected void internalImplementation() {
         new ObjectMapper();
     }
 }
