@@ -26,7 +26,7 @@ spotless {
         prettier().npmExecutable(npm)
 
         trimTrailingWhitespace()
-        indentWithSpaces()
+        leadingTabsToSpaces()
         endWithNewline()
 
         licenseHeader(LicenseHeader.yamlFormat(project), "\\w+\\:").updateYearWithLatest(true)
