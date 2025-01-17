@@ -16,6 +16,7 @@ dependencies {
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
     implementation("com.gradle.publish:plugin-publish-plugin:1.3.0")
     implementation("com.gradle:develocity-gradle-plugin:3.19")
+    implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.5")
     implementation(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
     )
