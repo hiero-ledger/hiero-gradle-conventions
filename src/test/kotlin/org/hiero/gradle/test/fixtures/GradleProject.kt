@@ -25,7 +25,7 @@ class GradleProject {
 
     val descriptionTxt = file("product/description.txt")
     val moduleBuildFile = file("product/module-a/build.gradle.kts")
-    private val moduleInfo = file("product/module-a/src/main/java/module-info.java")
+    val moduleInfo = file("product/module-a/src/main/java/module-info.java")
     private val javaSourceFile =
         file("product/module-a/src/main/java/org/hiero/product/module/a/ModuleA.java")
 
@@ -61,7 +61,7 @@ class GradleProject {
         )
         aggregation.writeFormatted("""plugins { id("org.hiero.gradle.base.lifecycle") }""")
         versionFile.writeText("1.0")
-        toolchainVersionsFile.writeText("jdk=17.0.12")
+        toolchainVersionsFile.writeText("jdk=17.0.13")
         descriptionTxt.writeText("A module to test hiero-gradle-conventions")
         moduleInfoFile("module org.hiero.product.module.a {}")
         javaSourceFile(

@@ -5,6 +5,7 @@
 * deactivate signing for Gradle plugin publishing if not explicitly turned on
 * update spotless-plugin-gradle to 7.0.2 (improves configuration cache compatibility)
 * update dependency-analysis-gradle-plugin to 2.7.0 (addresses Gradle deprecation)
+* add 'feature.legacy-classpath' convention plugin
 
 ## Version 0.3.0
 
