@@ -26,9 +26,10 @@ jvmDependencyConflicts.patch {
         addFeature("linux-aarch_64")
     }
     module("io.grpc:grpc-api") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-core") { annotationLibraries.forEach { removeDependency(it) } }
     module("io.grpc:grpc-context") { annotationLibraries.forEach { removeDependency(it) } }
+    module("io.grpc:grpc-core") { annotationLibraries.forEach { removeDependency(it) } }
     module("io.grpc:grpc-netty") { annotationLibraries.forEach { removeDependency(it) } }
+    module("io.grpc:grpc-netty-shaded") { annotationLibraries.forEach { removeDependency(it) } }
     module("io.grpc:grpc-protobuf") { annotationLibraries.forEach { removeDependency(it) } }
     module("io.grpc:grpc-protobuf-lite") { annotationLibraries.forEach { removeDependency(it) } }
     module("io.grpc:grpc-services") { annotationLibraries.forEach { removeDependency(it) } }
