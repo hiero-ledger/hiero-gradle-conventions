@@ -1,1 +1,1 @@
-Add support for installing Rust toolchains and cross-compiling Rust source code
+Add support for cross-compiling Rust source code

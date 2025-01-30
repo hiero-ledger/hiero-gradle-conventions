@@ -6,18 +6,24 @@ tasks.register<WriteProperties>("writeGitProperties") {
     property(
         "git.commit.id",
         providers
-            .exec { commandLine("git", "rev-parse", "HEAD") }
+            .exec {
+                commandLine("git", "rev-parse", "HEAD")
+                workingDir = layout.projectDirectory.asFile
+            }
             .standardOutput
             .asText
-            .map { it.trim() }
+            .map { it.trim() },
     )
     property(
         "git.commit.id.abbrev",
         providers
-            .exec { commandLine("git", "rev-parse", "HEAD") }
+            .exec {
+                commandLine("git", "rev-parse", "HEAD")
+                workingDir = layout.projectDirectory.asFile
+            }
             .standardOutput
             .asText
-            .map { it.trim().substring(0, 7) }
+            .map { it.trim().substring(0, 7) },
     )
 
     destinationFile = layout.buildDirectory.file("generated/git/git.properties")
