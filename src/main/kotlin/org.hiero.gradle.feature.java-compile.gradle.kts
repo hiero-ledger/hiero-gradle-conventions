@@ -7,9 +7,9 @@ plugins {
 }
 
 @Suppress("UnstableApiUsage") val rootDir = project.isolated.rootProject.projectDirectory
-val versions = EnvAccess.toolchainVersions(rootDir, providers)
+val versions = EnvAccess.toolchainVersions(rootDir, providers, objects)
 
-val fullJavaVersion = versions.getValue("jdk") as String
+val fullJavaVersion = versions.getting("jdk").get()
 val majorJavaVersion = JavaVersion.toVersion(fullJavaVersion)
 val currentJavaVersion = providers.systemProperty("java.version").get()
 

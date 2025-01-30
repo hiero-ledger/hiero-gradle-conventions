@@ -17,11 +17,11 @@ val os =
 tasks.register<RustToolchainInstallTask>("installRustToolchains") {
     description = "Installs Rust and toolchain components required for cross-compilation"
 
-    val versions = EnvAccess.toolchainVersions(layout.projectDirectory, providers)
-    rustVersion.convention(versions.getValue("rust") as String)
-    cargoZigbuildVersion.convention(versions.getValue("cargo-zigbuild") as String)
-    zigVersion.convention(versions.getValue("zig") as String)
-    xwinVersion.convention(versions.getValue("xwin") as String)
+    val versions = EnvAccess.toolchainVersions(layout.projectDirectory, providers, objects)
+    rustVersion.convention(versions.getting("rust"))
+    cargoZigbuildVersion.convention(versions.getting("cargo-zigbuild"))
+    zigVersion.convention(versions.getting("zig"))
+    xwinVersion.convention(versions.getting("xwin"))
 
     // Track host system as input as the task output differs between operating systems
     hostOperatingSystem.set(os)

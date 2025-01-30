@@ -31,13 +31,13 @@ abstract class CargoExtension {
 
     init {
         @Suppress("UnstableApiUsage") val rootDir = project.isolated.rootProject.projectDirectory
-        val versions = EnvAccess.toolchainVersions(rootDir, providers)
+        val versions = EnvAccess.toolchainVersions(rootDir, providers, project.objects)
 
         tasks.withType<CargoVersions>().configureEach {
-            rustVersion.convention(versions.getValue("rust") as String)
-            cargoZigbuildVersion.convention(versions.getValue("cargo-zigbuild") as String)
-            zigVersion.convention(versions.getValue("zig") as String)
-            xwinVersion.convention(versions.getValue("xwin") as String)
+            rustVersion.convention(versions.getting("rust"))
+            cargoZigbuildVersion.convention(versions.getting("cargo-zigbuild"))
+            zigVersion.convention(versions.getting("zig"))
+            xwinVersion.convention(versions.getting("xwin"))
         }
 
         libname.convention(project.name)

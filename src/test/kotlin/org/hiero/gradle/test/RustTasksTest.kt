@@ -51,8 +51,7 @@ class RustTasksTest {
         push.file("product/module-a/Cargo.toml", cargoToml)
         pull.file("product/module-a/Cargo.toml", cargoToml)
 
-        val rustToolchainsDir =
-            push.file("product/module-a/build/rust-toolchains/rustup/toolchains")
+        val rustToolchainsDir = push.file("build/rust-toolchains/rustup/toolchains")
 
         val pushResult = push.run("assemble --build-cache")
         val pullResult = pull.run("assemble --build-cache -PskipInstallRustToolchains=true")
