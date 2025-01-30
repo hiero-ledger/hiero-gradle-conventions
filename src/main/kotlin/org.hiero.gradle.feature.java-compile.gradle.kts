@@ -1,28 +1,15 @@
 // SPDX-License-Identifier: Apache-2.0
-import java.util.Properties
+import org.hiero.gradle.environment.EnvAccess
 
 plugins {
     id("java")
     id("org.gradlex.reproducible-builds")
 }
 
-@Suppress("UnstableApiUsage")
-val versionsFile =
-    isolated.rootProject.projectDirectory.file("gradle/toolchain-versions.properties")
-val versions = Properties()
+@Suppress("UnstableApiUsage") val rootDir = project.isolated.rootProject.projectDirectory
+val versions = EnvAccess.toolchainVersions(rootDir, providers, objects)
 
-versions.load(
-    providers
-        .fileContents(versionsFile)
-        .asText
-        .orElse(
-            providers.provider { throw RuntimeException("${versionsFile.asFile} does not exist") }
-        )
-        .get()
-        .reader()
-)
-
-val fullJavaVersion = versions.getValue("jdk") as String
+val fullJavaVersion = versions.getting("jdk").get()
 val majorJavaVersion = JavaVersion.toVersion(fullJavaVersion)
 val currentJavaVersion = providers.systemProperty("java.version").get()
 

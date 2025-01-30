@@ -1,13 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.hiero.gradle.environment.EnvAccess
+
 plugins { id("com.gradle.develocity") }
 
 develocity {
     buildScan {
-        val publishBuildScan =
-            providers.environmentVariable("CI").getOrElse("false").let {
-                if (it.isBlank()) true else it.toBoolean()
-            }
-
+        val publishBuildScan = EnvAccess.isCiServer(providers)
         termsOfUseUrl = "https://gradle.com/help/legal-terms-of-use"
         termsOfUseAgree = "yes"
         // Enable Gradle Build Scan only with explicit '-Pscan'

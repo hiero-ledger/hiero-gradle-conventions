@@ -57,7 +57,7 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
         val cargoOutputDir =
             File(
                 cargoToml.get().asFile.parent,
-                "target/${toolchain.get().targetWithoutVersion()}/${profile}"
+                "target/${toolchain.get().targetWithoutVersion()}/${profile}",
             )
 
         files.sync {
@@ -88,7 +88,7 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
                     File(cargoHome, "bin/cargo").absolutePath,
                     "+${rustVersion.get()}",
                     buildCommand,
-                    "--target=${toolchain.get().target}"
+                    "--target=${toolchain.get().target}",
                 )
 
             if (buildsForWindows) {
@@ -110,7 +110,7 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
                 environment("CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER", rustLld.absolutePath)
                 environment(
                     "RUSTFLAGS",
-                    "-Lnative=$xwinFolder/crt/lib/x86_64 -Lnative=$xwinFolder/sdk/lib/um/x86_64 -Lnative=$xwinFolder/sdk/lib/ucrt/x86_64"
+                    "-Lnative=$xwinFolder/crt/lib/x86_64 -Lnative=$xwinFolder/sdk/lib/um/x86_64 -Lnative=$xwinFolder/sdk/lib/ucrt/x86_64",
                 )
             }
 
@@ -122,7 +122,5 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
                 args("--verbose")
             }
         }
-
-        CargoUtil.cleanCache(cargoHome)
     }
 }

@@ -51,8 +51,7 @@ class RustTasksTest {
         push.file("product/module-a/Cargo.toml", cargoToml)
         pull.file("product/module-a/Cargo.toml", cargoToml)
 
-        val rustToolchainsDir =
-            push.file("product/module-a/build/rust-toolchains/rustup/toolchains")
+        val rustToolchainsDir = push.file("build/rust-toolchains/rustup/toolchains")
 
         val pushResult = push.run("assemble --build-cache")
         val pullResult = pull.run("assemble --build-cache -PskipInstallRustToolchains=true")
@@ -68,13 +67,11 @@ class RustTasksTest {
                     .single()
             assertThat(toolchainDir).isNotEmptyDirectory()
         }
-        assertThat(pushResult.task(":module-a:installRustToolchains")?.outcome)
-            .isEqualTo(TaskOutcome.SUCCESS)
 
         // rust build results are taken FROM-CACHE and installRustToolchains can be skipped
-        assertThat(pushResult.task(":module-a:installRustToolchains")?.outcome)
+        assertThat(pushResult.task(":installRustToolchains")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(pullResult.task(":module-a:installRustToolchains")).isNull()
+        assertThat(pullResult.task(":installRustToolchains")).isNull()
         assertThat(pushResult.task(":module-a:cargoBuildAarch64Darwin")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
         assertThat(pullResult.task(":module-a:cargoBuildAarch64Darwin")?.outcome)

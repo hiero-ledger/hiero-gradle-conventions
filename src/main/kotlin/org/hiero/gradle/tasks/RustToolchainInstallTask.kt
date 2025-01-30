@@ -5,13 +5,15 @@ import java.net.URI
 import javax.inject.Inject
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ArchiveOperations
+import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.internal.file.FileOperations
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.OutputDirectories
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import org.hiero.gradle.extensions.CargoToolchain
@@ -23,13 +25,29 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
 
     @get:Input abstract val toolchains: ListProperty<CargoToolchain>
 
-    @get:OutputDirectory abstract val destinationDirectory: DirectoryProperty
+    @get:Internal abstract val destinationDirectory: DirectoryProperty
+
+    @get:OutputDirectories abstract val trackedDirectories: ListProperty<Directory>
 
     @get:Inject protected abstract val exec: ExecOperations
 
     @get:Inject protected abstract val files: FileOperations
 
     @get:Inject protected abstract val archives: ArchiveOperations
+
+    init {
+        @Suppress("LeakingThis")
+        trackedDirectories.set(
+            destinationDirectory.map {
+                listOf(
+                    destinationDirectory.dir("cargo/bin").get(),
+                    destinationDirectory.dir("rustup").get(),
+                    destinationDirectory.dir("xwin").get(),
+                    destinationDirectory.dir("zig").get(),
+                )
+            }
+        )
+    }
 
     @TaskAction
     fun install() {
@@ -65,7 +83,7 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
                     "xJf",
                     zigArchive.absolutePath,
                     "-C",
-                    destinationDirectory.get().asFile.absolutePath
+                    destinationDirectory.get().asFile.absolutePath,
                 )
             }
         }
@@ -97,7 +115,7 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
                 "-y",
                 "--no-modify-path",
                 "--profile=minimal",
-                "--default-toolchain=${rustVersion.get()}"
+                "--default-toolchain=${rustVersion.get()}",
             ) + targets
         )
         execute(
@@ -108,7 +126,7 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
                 "--locked",
                 "--ignore-rust-version",
                 "--profile=release",
-                "cargo-zigbuild@${cargoZigbuildVersion.get()}"
+                "cargo-zigbuild@${cargoZigbuildVersion.get()}",
             )
         )
         execute(
@@ -118,12 +136,10 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
                 "install",
                 "--locked",
                 "--profile=release",
-                "xwin@${xwinVersion.get()}"
+                "xwin@${xwinVersion.get()}",
             )
         )
         execute(listOf(xwinCmd, "--accept-license", "splat", "--output", xwinFolder))
-
-        CargoUtil.cleanCache(destinationDirectory.dir("cargo").get().asFile)
         files.delete(rustupInstall)
     }
 
