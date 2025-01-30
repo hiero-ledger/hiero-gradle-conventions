@@ -1,5 +1,12 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.2
+
+* update jmh-gradle-plugin to 0.7.3 (fixes configuration cache compatibility)
+* update dependency-analysis-gradle-plugin to 2.8.0
+* update develocity-gradle-plugin to 3.19.1
+* rust: install toolchains only once / do not delete Cargo cache
+
 ## Version 0.3.1
 
 * deactivate signing for Gradle plugin publishing if not explicitly turned on
