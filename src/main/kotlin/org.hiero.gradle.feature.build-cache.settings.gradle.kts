@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.hiero.gradle.environment.EnvAccess
+
 buildCache {
     remote<HttpBuildCache> {
         url = uri("https://cache.gradle.hedera.svcs.eng.swirldslabs.io/cache/")
@@ -6,10 +8,10 @@ buildCache {
         isUseExpectContinue = true
         isEnabled = !gradle.startParameter.isOffline
 
-        val isCiServer = providers.environmentVariable("CI").getOrElse("false").toBoolean()
+        val ci = EnvAccess.isCiServer(providers)
         val gradleCacheUsername = providers.environmentVariable("GRADLE_CACHE_USERNAME")
         val gradleCachePassword = providers.environmentVariable("GRADLE_CACHE_PASSWORD")
-        if (isCiServer && gradleCacheUsername.isPresent && gradleCachePassword.isPresent) {
+        if (ci && gradleCacheUsername.isPresent && gradleCachePassword.isPresent) {
             isPush = true
             credentials {
                 username = gradleCacheUsername.get()

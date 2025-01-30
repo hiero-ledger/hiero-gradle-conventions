@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-import org.hiero.gradle.versions.Versions
+import org.hiero.gradle.environment.EnvAccess
 
 plugins {
     id("java")
@@ -7,7 +7,7 @@ plugins {
 }
 
 @Suppress("UnstableApiUsage") val rootDir = project.isolated.rootProject.projectDirectory
-val versions = Versions.toolchainVersions(rootDir, providers)
+val versions = EnvAccess.toolchainVersions(rootDir, providers)
 
 val fullJavaVersion = versions.getValue("jdk") as String
 val majorJavaVersion = JavaVersion.toVersion(fullJavaVersion)

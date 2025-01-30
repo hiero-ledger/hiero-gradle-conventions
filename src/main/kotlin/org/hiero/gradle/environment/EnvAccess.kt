@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
-package org.hiero.gradle.versions
+package org.hiero.gradle.environment
 
 import java.util.Properties
 import org.gradle.api.file.Directory
 import org.gradle.api.provider.ProviderFactory
 
-object Versions {
+object EnvAccess {
 
     fun toolchainVersions(rootDir: Directory, providers: ProviderFactory): Map<Any, Any> {
         val versionsFile = rootDir.file("gradle/toolchain-versions.properties")
@@ -24,4 +24,9 @@ object Versions {
             )
         }
     }
+
+    fun isCiServer(providers: ProviderFactory) =
+        providers.environmentVariable("CI").getOrElse("false").let {
+            if (it.isBlank()) true else it.toBoolean()
+        }
 }

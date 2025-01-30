@@ -10,9 +10,9 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
+import org.hiero.gradle.environment.EnvAccess
 import org.hiero.gradle.tasks.CargoBuildTask
 import org.hiero.gradle.tasks.CargoVersions
-import org.hiero.gradle.versions.Versions
 
 @Suppress("LeakingThis")
 abstract class CargoExtension {
@@ -31,7 +31,7 @@ abstract class CargoExtension {
 
     init {
         @Suppress("UnstableApiUsage") val rootDir = project.isolated.rootProject.projectDirectory
-        val versions = Versions.toolchainVersions(rootDir, providers)
+        val versions = EnvAccess.toolchainVersions(rootDir, providers)
 
         tasks.withType<CargoVersions>().configureEach {
             rustVersion.convention(versions.getValue("rust") as String)
