@@ -1,4 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.hiero.gradle.environment.EnvAccess
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+
 plugins {
     id("org.hiero.gradle.module.gradle-plugin")
     `kotlin-dsl`
@@ -64,6 +68,14 @@ gradlePlugin {
 tasks.test {
     // If success, delete all test projects
     doLast { File("build/test-projects").deleteRecursively() }
+}
+
+val env = EnvAccess.toolchainVersions(layout.projectDirectory, providers, objects)
+val fullJavaVersion = env.getting("jdk").get()
+val majorJavaVersion = JavaVersion.toVersion(fullJavaVersion).majorVersion
+
+tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions { jvmTarget = JvmTarget.valueOf("JVM_$majorJavaVersion") }
 }
 
 spotless {
