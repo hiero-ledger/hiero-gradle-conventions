@@ -1,5 +1,10 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.3
+
+* JPMS - add patching rule: org.apache.logging.log4j:log4j-api (for compile time checks)
+* JPMS - add patching rule: org.apache.logging.log4j:log4j-api (for compile time checks)
+
 ## Version 0.3.2
 
 * update jmh-gradle-plugin to 0.7.3 (fixes configuration cache compatibility)

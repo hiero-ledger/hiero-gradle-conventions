@@ -28,7 +28,7 @@ dependencies {
     implementation("io.github.gradle-nexus:publish-plugin:2.0.0")
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.0.0")
-    implementation("org.gradlex:extra-java-module-info:1.9")
+    implementation("org.gradlex:extra-java-module-info:1.10")
     implementation("org.gradlex:java-module-dependencies:1.8")
     implementation("org.gradlex:jvm-dependency-conflict-resolution:2.1.2")
     implementation("org.gradlex:reproducible-builds:1.0")
