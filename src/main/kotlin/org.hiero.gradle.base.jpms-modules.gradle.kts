@@ -18,7 +18,7 @@ jvmDependencyConflicts.patch {
             "com.google.guava:listenablefuture",
             "org.checkerframework:checker-compat-qual",
             "org.checkerframework:checker-qual",
-            "org.codehaus.mojo:animal-sniffer-annotations"
+            "org.codehaus.mojo:animal-sniffer-annotations",
         )
 
     module("io.netty:netty-transport-native-epoll") {
@@ -106,7 +106,7 @@ extraJavaModuleInfo {
     module("io.grpc:grpc-protobuf-lite", "io.grpc.protobuf.lite")
     module(
         "com.carrotsearch.thirdparty:simple-xml-safe",
-        "com.carrotsearch.thirdparty.simple.xml.safe"
+        "com.carrotsearch.thirdparty.simple.xml.safe",
     )
     module("com.github.spotbugs:spotbugs-annotations", "com.github.spotbugs.annotations")
     module("com.google.code.findbugs:jsr305", "java.annotation")
@@ -196,19 +196,19 @@ extraJavaModuleInfo {
     module("io.prometheus:prometheus-metrics-core", "io.prometheus.metrics.core")
     module(
         "io.prometheus:prometheus-metrics-exposition-formats",
-        "io.prometheus.metrics.expositionformats"
+        "io.prometheus.metrics.expositionformats",
     )
     module("io.prometheus:prometheus-metrics-exposition-textformats", "io.prometheus.writer.text")
     module("io.prometheus:prometheus-metrics-model", "io.prometheus.metrics.model")
     module("io.prometheus:prometheus-metrics-tracer-common", "io.prometheus.metrics.tracer.common")
     module(
         "io.prometheus:prometheus-metrics-tracer-initializer",
-        "io.prometheus.metrics.tracer.initializer"
+        "io.prometheus.metrics.tracer.initializer",
     )
     module("io.prometheus:prometheus-metrics-tracer-otel", "io.prometheus.metrics.tracer.otel")
     module(
         "io.prometheus:prometheus-metrics-tracer-otel-agent",
-        "io.prometheus.metrics.tracer.otel_agent"
+        "io.prometheus.metrics.tracer.otel_agent",
     )
     module("io.prometheus:simpleclient", "io.prometheus.simpleclient")
     module("io.prometheus:simpleclient_common", "io.prometheus.simpleclient_common")
@@ -227,11 +227,11 @@ extraJavaModuleInfo {
 
     module(
         "io.netty:netty-transport-native-epoll|linux-x86_64",
-        "io.netty.transport.epoll.linux.x86_64"
+        "io.netty.transport.epoll.linux.x86_64",
     )
     module(
         "io.netty:netty-transport-native-epoll|linux-aarch_64",
-        "io.netty.transport.epoll.linux.aarch_64"
+        "io.netty.transport.epoll.linux.aarch_64",
     )
 
     // Annotation processing only
@@ -243,7 +243,7 @@ extraJavaModuleInfo {
     module("com.google.dagger:dagger-spi", "dagger.spi")
     module(
         "com.google.devtools.ksp:symbol-processing-api",
-        "com.google.devtools.ksp.symbolprocessingapi"
+        "com.google.devtools.ksp.symbolprocessingapi",
     )
     module("com.google.errorprone:javac-shaded", "com.google.errorprone.javac.shaded")
     module("com.google.googlejavaformat:google-java-format", "com.google.googlejavaformat")
@@ -269,7 +269,7 @@ extraJavaModuleInfo {
     module("com.github.docker-java:docker-java-transport", "com.github.dockerjava.transport")
     module(
         "com.github.docker-java:docker-java-transport-zerodep",
-        "com.github.dockerjava.transport.zerodep"
+        "com.github.dockerjava.transport.zerodep",
     )
     module("com.google.protobuf:protobuf-java-util", "com.google.protobuf.util")
     module("com.squareup:javapoet", "com.squareup.javapoet") {
@@ -297,7 +297,7 @@ configurations.create("allDependencies") {
             configurations[this.implementationConfigurationName],
             configurations[this.compileOnlyConfigurationName],
             configurations[this.runtimeOnlyConfigurationName],
-            configurations[this.annotationProcessorConfigurationName]
+            configurations[this.annotationProcessorConfigurationName],
         )
     }
     attributes {
