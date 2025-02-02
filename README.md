@@ -23,6 +23,7 @@ that also support these features and are compatible with the latest Gradle versi
   - [In IntelliJ](#in-intellij)
   - [In GitHub Actions](#in-github-actions)
 - [Defining modules and dependencies in a project that uses these plugins](#defining-modules-and-dependencies-in-a-project-that-uses-these-plugins) (for developers)
+- [Contributing / changing plugins themselves](#contributing) (for project maintainers)
 
 <a name="plugins"></a>
 
