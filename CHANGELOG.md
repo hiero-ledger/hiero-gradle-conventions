@@ -2,6 +2,7 @@
 
 ## Version 0.3.3
 
+* Fix 'generateProto' caching issue
 * JPMS - add patching rule: org.apache.logging.log4j:log4j-api (for compile time checks)
 * JPMS - add patching rule: org.apache.logging.log4j:log4j-api (for compile time checks)
 
