@@ -26,7 +26,7 @@ spotless {
         // sort the 'requires' entries in 'module-info' files
         addStep(SortModuleInfoRequiresStep.create())
 
-        licenseHeader(LicenseHeader.javaFormat(project), "(package|import|module|@|/\\*\\*)")
+        licenseHeader(LicenseHeader.javaFormat(project), "(package|import|module|open|@|/\\*\\*)")
             .updateYearWithLatest(true)
     }
 }
