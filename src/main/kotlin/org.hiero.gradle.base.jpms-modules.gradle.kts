@@ -4,9 +4,33 @@ plugins {
     id("org.gradlex.extra-java-module-info")
 }
 
+// Dependencies that are missing in metadata because the 'compileOnlyApi' scope is not supported by
+// POM. We add these dependencies with a version to avoid maintaining versions in every single
+// project. These are "only" annotation libraries that are not included in the runtime classpath.
+// Because of this, they are not automatically visible to the consistent resolution. Therefore, we
+// need to explicitly add them to the version-providing Configuration (called mainRuntimeClasspath).
+val additionalTransitiveCompileOnlyApiDependencies =
+    listOf(
+        "biz.aQute.bnd:biz.aQute.bnd.annotation:7.1.0",
+        "com.google.errorprone:error_prone_annotations:2.36.0",
+        "org.jspecify:jspecify:1.0.0",
+    )
+
 // Fix or enhance the metadata of third-party Modules. This is about the metadata in the
 // repositories: '*.pom' and '*.module' files.
 jvmDependencyConflicts.patch {
+    // Make annotation classes used by 'log4j' avaliable at compile time
+    module("org.apache.logging.log4j:log4j-api") {
+        additionalTransitiveCompileOnlyApiDependencies.forEach { addCompileOnlyApiDependency(it) }
+    }
+    module("org.apache.logging.log4j:log4j-core") {
+        additionalTransitiveCompileOnlyApiDependencies.forEach { addCompileOnlyApiDependency(it) }
+    }
+    module("biz.aQute.bnd:biz.aQute.bnd.annotation") {
+        removeDependency("org.osgi:org.osgi.resource")
+        removeDependency("org.osgi:org.osgi.service.serviceloader")
+    }
+
     // These compile time annotation libraries are not of interest in our setup and are thus removed
     // from the dependencies of all components that bring them in.
     val annotationLibraries =
@@ -75,6 +99,21 @@ jvmDependencyConflicts.patch {
 extraJavaModuleInfo {
     failOnAutomaticModules = true // Only allow Jars with 'module-info' on all module paths
     versionsProvidingConfiguration = "mainRuntimeClasspath"
+
+    // Patching LOG4J so that all annotation classes are available at compile time
+    module("org.apache.logging.log4j:log4j-api", "org.apache.logging.log4j") {
+        preserveExisting()
+        requiresStatic("biz.aQute.bnd.annotation")
+        requiresStatic("com.github.spotbugs.annotations")
+        requiresStatic("com.google.errorprone.annotations")
+    }
+    module("org.apache.logging.log4j:log4j-core", "org.apache.logging.log4j.core") {
+        preserveExisting()
+        requiresStatic("biz.aQute.bnd.annotation")
+        requiresStatic("com.github.spotbugs.annotations")
+        requiresStatic("com.google.errorprone.annotations")
+    }
+    module("biz.aQute.bnd:biz.aQute.bnd.annotation", "biz.aQute.bnd.annotation")
 
     module("io.grpc:grpc-api", "io.grpc") {
         exportAllPackages()
@@ -322,6 +361,10 @@ jvmDependencyConflicts.consistentResolution {
 
 configurations.getByName("mainRuntimeClasspath") {
     attributes.attribute(consistentResolutionAttribute, "global")
+}
+
+additionalTransitiveCompileOnlyApiDependencies.forEach {
+    dependencies.add("mainRuntimeClasspath", it)
 }
 
 // In case published versions of a module are also available, always prefer the local one
