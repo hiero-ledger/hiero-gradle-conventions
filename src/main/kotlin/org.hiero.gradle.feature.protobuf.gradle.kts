@@ -11,7 +11,12 @@ protobuf {
     // Add GRPC plugin as we need to generate GRPC services
     plugins { register("grpc") { artifact = "io.grpc:protoc-gen-grpc-java" } }
     generateProtoTasks {
-        all().configureEach { plugins.register("grpc") { option("@generated=omit") } }
+        all().configureEach {
+            plugins.register("grpc") { option("@generated=omit") }
+            // Track all tools as input to react if version changes for the tools
+            inputs.files(configurations["protobufToolsLocator_protoc"])
+            inputs.files(configurations["protobufToolsLocator_grpc"])
+        }
     }
 }
 
