@@ -42,7 +42,6 @@ jvmDependencyConflicts.patch {
             "com.google.guava:listenablefuture",
             "org.checkerframework:checker-compat-qual",
             "org.checkerframework:checker-qual",
-            "org.codehaus.mojo:animal-sniffer-annotations",
         )
 
     module("io.netty:netty-transport-native-epoll") {
