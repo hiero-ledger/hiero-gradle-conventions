@@ -7,7 +7,6 @@ plugins { id("java") }
 @Suppress("UnstableApiUsage")
 testing.suites {
     register<JvmTestSuite>("hammer") {
-        testType = "hammer"
         targets.all {
             testTask {
                 maxHeapSize = "8g"
