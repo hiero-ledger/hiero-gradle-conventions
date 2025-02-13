@@ -1,5 +1,12 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.4
+
+* update extra-java-module-info to 1.10.1 (fixes InvalidModuleDescriptorException in Log4J)
+* update dependency-analysis-gradle-plugin to 2.8.2
+* update shadow-gradle-plugin to 8.3.6
+* update io.freefair.gradle:maven-plugin to 8.12.1
+
 ## Version 0.3.3
 
 * Fix 'generateProto' caching issue
