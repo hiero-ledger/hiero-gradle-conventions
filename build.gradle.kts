@@ -58,7 +58,6 @@ gradlePlugin {
                 )
                 .get()
                 .trim()
-        @Suppress("UnstableApiUsage")
         tags = listOf("hiero", "conventions", "java", "modules", "jpms")
     }
 
