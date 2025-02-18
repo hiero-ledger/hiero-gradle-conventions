@@ -8,7 +8,6 @@ plugins { id("java") }
 @Suppress("UnstableApiUsage")
 testing.suites {
     register<JvmTestSuite>("timingSensitive") {
-        testType = "timing-sensitive"
         targets.all {
             testTask {
                 maxHeapSize = "4g"
