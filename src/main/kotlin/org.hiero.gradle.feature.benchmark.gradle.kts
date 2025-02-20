@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 import me.champeau.jmh.JMHTask
 
-plugins { id("me.champeau.jmh") }
+plugins {
+    id("java")
+    id("org.hiero.gradle.base.jpms-modules")
+    id("me.champeau.jmh")
+}
 
 jmh {
     jmhVersion = "1.37"
@@ -32,13 +36,5 @@ tasks.withType<JMHTask>().configureEach {
 
 tasks.jmhJar { manifest { attributes(mapOf("Multi-Release" to true)) } }
 
-configurations {
-    // Disable module Jar patching for the JMH runtime classpath.
-    // The way the JMH plugin interacts with this in the 'jmhJar' task triggers this Gradle issue:
-    // https://github.com/gradle/gradle/issues/27372
-    // And since 'jmhJar' builds a fat jar, module information is not needed here anyway.
-    val javaModule = Attribute.of("javaModule", Boolean::class.javaObjectType)
-    jmhRuntimeClasspath { attributes { attribute(javaModule, false) } }
-    jmhCompileClasspath { attributes { attribute(javaModule, false) } }
-    jmhAnnotationProcessor { attributes { attribute(javaModule, false) } }
-}
+// Disable module Jar patching for the JMH runtime classpath.
+extraJavaModuleInfo { deactivate(sourceSets.jmh) }
