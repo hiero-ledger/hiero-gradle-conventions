@@ -1,5 +1,14 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.5
+
+* support Gradle 8.13
+* formatting of properties files
+* update dependency-analysis-gradle-plugin to 2.10.1
+* update extra-java-module-info to 1.11
+* update io.freefair.gradle:maven-plugin to 8.12.2
+* update develocity-gradle-plugin to 3.19.2
+
 ## Version 0.3.4
 
 * update extra-java-module-info to 1.10.1 (fixes InvalidModuleDescriptorException in Log4J)
@@ -9,7 +18,7 @@
 
 ## Version 0.3.3
 
-* Fix 'generateProto' caching issue
+* fix 'generateProto' caching issue
 * JPMS - add patching rule: org.apache.logging.log4j:log4j-api (for compile time checks)
 * JPMS - add patching rule: org.apache.logging.log4j:log4j-core (for compile time checks)
 
