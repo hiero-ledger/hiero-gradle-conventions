@@ -28,8 +28,9 @@ class QualityCheckTest {
 
         assertThat(result.task(":module-a:validatePomFileForMavenPublication")?.outcome)
             .isEqualTo(TaskOutcome.FAILED)
-        assertThat(p.problemsReport).content().contains("Missing Element in Maven Pom")
-        assertThat(p.problemsReport).content().contains("No description found")
+        assertThat(result.output).contains("No description found in")
+        assertThat(result.output)
+            .contains("product/module-a/build/publications/maven/pom-default.xml")
     }
 
     @Test
