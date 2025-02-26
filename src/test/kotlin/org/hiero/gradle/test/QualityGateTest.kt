@@ -83,22 +83,22 @@ class QualityGateTest {
                     
                     exports       org.hiero.product.module.a;
                   }    """
-                    .trimIndent()
+                    .trimIndent(),
             )
         val packageInfoA =
             p.file(
                 "product/module-a/src/main/java/org/hiero/product/module/a/package-info.java",
-                "package     org.hiero.product.module.a;  "
+                "package     org.hiero.product.module.a;  ",
             )
         val packageInfoB =
             p.file(
                 "product/module-a/src/main/java/org/hiero/product/module/b/package-info.java",
-                "/** some comment */    package     org.hiero.product.module.b;  "
+                "/** some comment */    package     org.hiero.product.module.b;  ",
             )
         val packageInfoC =
             p.file(
                 "product/module-a/src/main/java/org/hiero/product/module/c/package-info.java",
-                "@Deprecated   package     org.hiero.product.module.c;  "
+                "@Deprecated   package     org.hiero.product.module.c;  ",
             )
 
         val result = p.qualityGate()
@@ -139,6 +139,26 @@ class QualityGateTest {
             // SPDX-License-Identifier: Apache-2.0
             @Deprecated
             package org.hiero.product.module.c;
+        """
+                    .trimIndent()
+            )
+
+        assertThat(result.task(":qualityGate")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
+    fun `qualityGate formats property files`() {
+        val p = GradleProject().withMinimalStructure()
+        val props1 = p.file("props1.properties", "\nfoo=bar    ")
+
+        val result = p.qualityGate()
+
+        assertThat(props1)
+            .hasContent(
+                """
+            # SPDX-License-Identifier: Apache-2.0
+            
+            foo=bar
         """
                     .trimIndent()
             )
