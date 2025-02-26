@@ -1,14 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.hiero.gradle.spotless.LicenseHeader
+
 plugins { id("com.diffplug.spotless") }
 
 spotless {
     format("misc") {
-        // define the files to apply `misc` to
-        target(".gitignore")
+        target("**/*.properties")
 
-        // define the steps to apply to those files
         trimTrailingWhitespace()
         leadingTabsToSpaces()
         endWithNewline()
+
+        licenseHeader(LicenseHeader.yamlFormat(project), "$").updateYearWithLatest(true)
     }
 }

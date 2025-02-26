@@ -36,9 +36,12 @@ class GradleProject {
     fun withMinimalStructure(): GradleProject {
         gradlePropertiesFile.writeText(
             """
+            # SPDX-License-Identifier: Apache-2.0
+            
             org.gradle.configuration-cache=true
             # org.gradle.unsafe.isolated-projects=true
             # org.gradle.caching=true
+            
         """
                 .trimIndent()
         )
@@ -61,7 +64,15 @@ class GradleProject {
         )
         aggregation.writeFormatted("""plugins { id("org.hiero.gradle.base.lifecycle") }""")
         versionFile.writeText("1.0")
-        toolchainVersionsFile.writeText("jdk=17.0.13")
+        toolchainVersionsFile.writeText(
+            """
+            # SPDX-License-Identifier: Apache-2.0
+            
+            jdk=17.0.13
+            
+        """
+                .trimIndent()
+        )
         descriptionTxt.writeText("A module to test hiero-gradle-conventions")
         moduleInfoFile("module org.hiero.product.module.a {}")
         javaSourceFile(
