@@ -4,8 +4,5 @@ plugins { id("java") }
 // Tests that could be in the default "test" set but take more than 100ms to execute.
 @Suppress("UnstableApiUsage")
 testing.suites {
-    register<JvmTestSuite>("timeConsuming") {
-        testType = "timing-consuming"
-        targets.all { testTask { maxHeapSize = "4g" } }
-    }
+    register<JvmTestSuite>("timeConsuming") { targets.all { testTask { maxHeapSize = "4g" } } }
 }
