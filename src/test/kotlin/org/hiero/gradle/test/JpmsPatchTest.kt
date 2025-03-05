@@ -32,6 +32,8 @@ class JpmsPatchTest {
             dependencies.constraints {
                 modules.forEach {  api("${'$'}it:latest.release") }
                 api("org.jetbrains:annotations:latest.release")
+                api("org.mockito:mockito-core:latest.release")
+                api("org.mockito:mockito-junit-jupiter:latest.release")
                 api("org.hyperledger.besu:evm:24.3.3!!")
             }
         """
