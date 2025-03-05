@@ -317,12 +317,10 @@ extraJavaModuleInfo {
     }
     module("junit:junit", "junit")
     module("org.hamcrest:hamcrest", "org.hamcrest")
-    module("org.mockito:mockito-core", "org.mockito") { preserveExisting() }
     module("org.objenesis:objenesis", "org.objenesis")
     module("org.rnorth.duct-tape:duct-tape", "org.rnorth.ducttape")
     module("org.testcontainers:testcontainers", "org.testcontainers")
     module("org.testcontainers:junit-jupiter", "org.testcontainers.junit.jupiter")
-    module("org.mockito:mockito-junit-jupiter", "org.mockito.junit.jupiter") { preserveExisting() }
 }
 
 // Configure consistent resolution across the whole project
