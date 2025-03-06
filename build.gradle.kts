@@ -24,7 +24,7 @@ dependencies {
     implementation(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
     )
-    implementation("io.freefair.gradle:maven-plugin:8.12.2") // for POM validation
+    implementation("io.freefair.gradle:maven-plugin:8.12.2.1") // for POM validation
     implementation("io.github.gradle-nexus:publish-plugin:2.0.0")
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.0.0")
