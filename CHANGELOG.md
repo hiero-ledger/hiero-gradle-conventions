@@ -1,5 +1,10 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.6
+
+* JPMS - remove patching rules: org.mockito and org.mockito.junit.jupiter
+* update io.freefair.gradle:maven-plugin to 8.12.2.1
+
 ## Version 0.3.5
 
 * support Gradle 8.13
