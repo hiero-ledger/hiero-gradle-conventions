@@ -214,6 +214,7 @@ extraJavaModuleInfo {
     module("org.hyperledger.besu:blake2bf", "org.hyperledger.besu.nativelib.blake2bf")
     module("org.hyperledger.besu:bls12-381", "org.hyperledger.besu.nativelib.bls12_381")
     module("org.hyperledger.besu:besu-datatypes", "org.hyperledger.besu.datatypes")
+    module("org.hyperledger.besu:besu-native-common", "org.hyperledger.besu.nativelib.common")
     module("org.hyperledger.besu:evm", "org.hyperledger.besu.evm") {
         exportAllPackages()
         requireAllDefinedDependencies()
