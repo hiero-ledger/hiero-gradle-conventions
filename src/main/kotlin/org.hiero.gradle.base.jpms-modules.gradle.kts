@@ -19,6 +19,9 @@ val additionalTransitiveCompileOnlyApiDependencies =
 // Fix or enhance the metadata of third-party Modules. This is about the metadata in the
 // repositories: '*.pom' and '*.module' files.
 jvmDependencyConflicts.patch {
+    // Workaround for: https://github.com/hyperledger/besu/pull/8443
+    module("org.hyperledger.besu:bom") { removeDependency("javax.inject:javax.inject") }
+
     // Make annotation classes used by 'log4j' avaliable at compile time
     module("org.apache.logging.log4j:log4j-api") {
         additionalTransitiveCompileOnlyApiDependencies.forEach { addCompileOnlyApiDependency(it) }
