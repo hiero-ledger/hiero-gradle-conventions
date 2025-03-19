@@ -228,7 +228,10 @@ extraJavaModuleInfo {
     module("org.hyperledger.besu:gnark", "org.hyperledger.besu.nativelib.gnark")
     module("com.goterl:resource-loader", "resource.loader")
     module("com.goterl:lazysodium-java", "lazysodium.java")
+    // 'io.consensys.protocols' replaces 'tech.pegasys' in org.hyperledger.besu:evm:25.x
+    // once 24.x is no longer used, 'tech.pegasys' rule can be removed.
     module("tech.pegasys:jc-kzg-4844", "tech.pegasys.jckzg4844")
+    module("io.consensys.protocols:jc-kzg-4844", "io.consensys.protocols.jckzg4844")
     module("net.java.dev.jna:jna", "com.sun.jna") {
         exportAllPackages()
         requires("java.logging")
