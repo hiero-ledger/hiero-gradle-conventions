@@ -1,5 +1,15 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.7
+
+* JPMS - add patching rule: io.consensys.protocols.jckzg4844
+* JPMS - add patching rule: io.prometheus.metrics.shaded.protobuf
+* JPMS - add patching rule: micrometer.registry.prometheus.simpleclient
+* JPMS - add patching rule: org.hyperledger.besu.nativelib.common
+* JPMS - add patching rule: org.hyperledger.besu.nativelib.gnark
+* update dependency-analysis-gradle-plugin to 2.12.0
+* update io.freefair.gradle:maven-plugin to 8.13
+
 ## Version 0.3.6
 
 * JPMS - remove patching rules: org.mockito and org.mockito.junit.jupiter
