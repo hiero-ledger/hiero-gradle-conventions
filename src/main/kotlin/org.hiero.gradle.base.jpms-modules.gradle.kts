@@ -19,6 +19,9 @@ val additionalTransitiveCompileOnlyApiDependencies =
 // Fix or enhance the metadata of third-party Modules. This is about the metadata in the
 // repositories: '*.pom' and '*.module' files.
 jvmDependencyConflicts.patch {
+    // Workaround for: https://github.com/hyperledger/besu/pull/8443
+    module("org.hyperledger.besu:bom") { removeDependency("javax.inject:javax.inject") }
+
     // Make annotation classes used by 'log4j' avaliable at compile time
     module("org.apache.logging.log4j:log4j-api") {
         additionalTransitiveCompileOnlyApiDependencies.forEach { addCompileOnlyApiDependency(it) }
@@ -214,6 +217,7 @@ extraJavaModuleInfo {
     module("org.hyperledger.besu:blake2bf", "org.hyperledger.besu.nativelib.blake2bf")
     module("org.hyperledger.besu:bls12-381", "org.hyperledger.besu.nativelib.bls12_381")
     module("org.hyperledger.besu:besu-datatypes", "org.hyperledger.besu.datatypes")
+    module("org.hyperledger.besu:besu-native-common", "org.hyperledger.besu.nativelib.common")
     module("org.hyperledger.besu:evm", "org.hyperledger.besu.evm") {
         exportAllPackages()
         requireAllDefinedDependencies()
@@ -221,9 +225,13 @@ extraJavaModuleInfo {
     }
     module("org.hyperledger.besu:secp256k1", "org.hyperledger.besu.nativelib.secp256k1")
     module("org.hyperledger.besu:secp256r1", "org.hyperledger.besu.nativelib.secp256r1")
+    module("org.hyperledger.besu:gnark", "org.hyperledger.besu.nativelib.gnark")
     module("com.goterl:resource-loader", "resource.loader")
     module("com.goterl:lazysodium-java", "lazysodium.java")
+    // 'io.consensys.protocols' replaces 'tech.pegasys' in org.hyperledger.besu:evm:25.x
+    // once 24.x is no longer used, 'tech.pegasys' rule can be removed.
     module("tech.pegasys:jc-kzg-4844", "tech.pegasys.jckzg4844")
+    module("io.consensys.protocols:jc-kzg-4844", "io.consensys.protocols.jckzg4844")
     module("net.java.dev.jna:jna", "com.sun.jna") {
         exportAllPackages()
         requires("java.logging")

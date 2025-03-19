@@ -34,7 +34,6 @@ class JpmsPatchTest {
                 api("org.jetbrains:annotations:latest.release")
                 api("org.mockito:mockito-core:latest.release")
                 api("org.mockito:mockito-junit-jupiter:latest.release")
-                api("org.hyperledger.besu:evm:24.3.3!!")
             }
         """
                 .trimIndent()
@@ -46,6 +45,7 @@ class JpmsPatchTest {
                 id("org.hiero.gradle.base.jpms-modules")
             }
             val modules = extraJavaModuleInfo.moduleSpecs.get().values.map { it.moduleName }.distinct()
+                .filter { it != "tech.pegasys.jckzg4844" }
             file("src/main/java/module-info.java").writeText(
                 "module org.example.module.a {\n${'$'}{modules.joinToString("") { "  requires ${'$'}it;\n"}}\n}")
             $versionPatching
