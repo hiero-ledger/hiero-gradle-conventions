@@ -247,6 +247,10 @@ extraJavaModuleInfo {
     )
     module("io.prometheus:prometheus-metrics-exposition-textformats", "io.prometheus.writer.text")
     module("io.prometheus:prometheus-metrics-model", "io.prometheus.metrics.model")
+    module(
+        "io.prometheus:prometheus-metrics-shaded-protobuf",
+        "io.prometheus.metrics.shaded.protobuf",
+    )
     module("io.prometheus:prometheus-metrics-tracer-common", "io.prometheus.metrics.tracer.common")
     module(
         "io.prometheus:prometheus-metrics-tracer-initializer",
@@ -269,6 +273,10 @@ extraJavaModuleInfo {
     module("io.micrometer:micrometer-core", "micrometer.core")
     module("io.micrometer:micrometer-observation", "micrometer.observation")
     module("io.micrometer:micrometer-registry-prometheus", "micrometer.registry.prometheus")
+    module(
+        "io.micrometer:micrometer-registry-prometheus-simpleclient",
+        "micrometer.registry.prometheus.simpleclient",
+    )
     module("org.hdrhistogram:HdrHistogram", "org.hdrhistogram")
     module("org.latencyutils:LatencyUtils", "org.latencyutils")
 
