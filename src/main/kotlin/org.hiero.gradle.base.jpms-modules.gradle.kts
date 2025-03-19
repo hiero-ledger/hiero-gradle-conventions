@@ -221,6 +221,7 @@ extraJavaModuleInfo {
     }
     module("org.hyperledger.besu:secp256k1", "org.hyperledger.besu.nativelib.secp256k1")
     module("org.hyperledger.besu:secp256r1", "org.hyperledger.besu.nativelib.secp256r1")
+    module("org.hyperledger.besu:gnark", "org.hyperledger.besu.nativelib.gnark")
     module("com.goterl:resource-loader", "resource.loader")
     module("com.goterl:lazysodium-java", "lazysodium.java")
     module("tech.pegasys:jc-kzg-4844", "tech.pegasys.jckzg4844")
