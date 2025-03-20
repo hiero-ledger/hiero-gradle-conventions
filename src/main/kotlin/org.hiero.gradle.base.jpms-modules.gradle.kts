@@ -40,8 +40,6 @@ jvmDependencyConflicts.patch {
         listOf(
             "com.google.android:annotations",
             "com.google.code.findbugs:annotations",
-            "com.google.code.findbugs:jsr305",
-            "com.google.errorprone:error_prone_annotations",
             "com.google.guava:listenablefuture",
             "org.checkerframework:checker-compat-qual",
             "org.checkerframework:checker-qual",
@@ -73,13 +71,7 @@ jvmDependencyConflicts.patch {
         annotationLibraries.forEach { removeDependency(it) }
     }
     module("com.google.dagger:dagger-spi") { annotationLibraries.forEach { removeDependency(it) } }
-    module("com.google.guava:guava") {
-        (annotationLibraries -
-                "com.google.code.findbugs:jsr305" -
-                "com.google.errorprone:error_prone_annotations" -
-                "org.checkerframework:checker-qual")
-            .forEach { removeDependency(it) }
-    }
+    module("com.google.guava:guava") { annotationLibraries.forEach { removeDependency(it) } }
     module("com.google.protobuf:protobuf-java-util") {
         annotationLibraries.forEach { removeDependency(it) }
     }
@@ -117,6 +109,12 @@ extraJavaModuleInfo {
         requiresStatic("com.google.errorprone.annotations")
     }
     module("biz.aQute.bnd:biz.aQute.bnd.annotation", "biz.aQute.bnd.annotation")
+    module("com.google.guava:guava", "com.google.common") {
+        preserveExisting()
+        requiresStatic("com.google.errorprone.annotations")
+        requiresStatic("com.google.j2objc.annotations")
+        requiresStatic("org.jspecify")
+    }
 
     module("io.grpc:grpc-api", "io.grpc") {
         exportAllPackages()
@@ -164,12 +162,6 @@ extraJavaModuleInfo {
         requires("java.logging")
         requires("jdk.unsupported")
     }
-    module("com.google.guava:guava", "com.google.common") {
-        exportAllPackages()
-        requireAllDefinedDependencies()
-        requires("java.logging")
-    }
-    module("com.google.guava:failureaccess", "com.google.common.util.concurrent.internal")
     module("com.google.api.grpc:proto-google-common-protos", "com.google.api.grpc.common")
     module("com.google.dagger:dagger", "dagger")
     module("com.squareup:kotlinpoet-jvm", "com.squareup.kotlinpoet")

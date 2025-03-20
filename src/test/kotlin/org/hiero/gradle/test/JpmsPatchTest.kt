@@ -34,6 +34,7 @@ class JpmsPatchTest {
                 api("org.jetbrains:annotations:latest.release")
                 api("org.mockito:mockito-core:latest.release")
                 api("org.mockito:mockito-junit-jupiter:latest.release")
+                api("com.google.guava:guava:latest.release")
             }
         """
                 .trimIndent()
