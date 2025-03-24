@@ -19,81 +19,81 @@ val additionalTransitiveCompileOnlyApiDependencies =
 // Fix or enhance the metadata of third-party Modules. This is about the metadata in the
 // repositories: '*.pom' and '*.module' files.
 jvmDependencyConflicts.patch {
-    // Workaround for: https://github.com/hyperledger/besu/pull/8443
+    // WORKAROUND: https://github.com/hyperledger/besu/pull/8443
     module("org.hyperledger.besu:bom") { removeDependency("javax.inject:javax.inject") }
 
-    // Make annotation classes used by 'log4j' avaliable at compile time
+    // WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
     module("org.apache.logging.log4j:log4j-api") {
         additionalTransitiveCompileOnlyApiDependencies.forEach { addCompileOnlyApiDependency(it) }
     }
     module("org.apache.logging.log4j:log4j-core") {
         additionalTransitiveCompileOnlyApiDependencies.forEach { addCompileOnlyApiDependency(it) }
     }
-    module("biz.aQute.bnd:biz.aQute.bnd.annotation") {
-        removeDependency("org.osgi:org.osgi.resource")
-        removeDependency("org.osgi:org.osgi.service.serviceloader")
-    }
 
-    // These compile time annotation libraries are not of interest in our setup and are thus removed
-    // from the dependencies of all components that bring them in.
-    val annotationLibraries =
-        listOf(
-            "com.google.android:annotations",
-            "com.google.code.findbugs:annotations",
-            "com.google.code.findbugs:jsr305",
-            "com.google.errorprone:error_prone_annotations",
-            "com.google.guava:listenablefuture",
-            "org.checkerframework:checker-compat-qual",
-            "org.checkerframework:checker-qual",
-            "org.codehaus.mojo:animal-sniffer-annotations",
-        )
-
+    // Register JARs with classifier as features
     module("io.netty:netty-transport-native-epoll") {
-        addFeature("linux-x86_64")
-        addFeature("linux-aarch_64")
+        addFeature("linux-x86_64") // refer to as 'io.netty.transport.epoll.linux.x86_64'
+        addFeature("linux-aarch_64") // refer to as 'io.netty.transport.epoll.linux.aarch_64'
     }
-    module("io.grpc:grpc-api") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-context") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-core") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-netty") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-netty-shaded") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-protobuf") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-protobuf-lite") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-services") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-stub") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-testing") { annotationLibraries.forEach { removeDependency(it) } }
-    module("io.grpc:grpc-util") { annotationLibraries.forEach { removeDependency(it) } }
-    module("com.github.ben-manes.caffeine:caffeine") {
-        annotationLibraries.forEach { removeDependency(it) }
-    }
-    module("com.google.dagger:dagger-compiler") {
-        annotationLibraries.forEach { removeDependency(it) }
-    }
-    module("com.google.dagger:dagger-producers") {
-        annotationLibraries.forEach { removeDependency(it) }
-    }
-    module("com.google.dagger:dagger-spi") { annotationLibraries.forEach { removeDependency(it) } }
-    module("com.google.guava:guava") {
-        (annotationLibraries -
-                "com.google.code.findbugs:jsr305" -
-                "com.google.errorprone:error_prone_annotations" -
-                "org.checkerframework:checker-qual")
-            .forEach { removeDependency(it) }
-    }
-    module("com.google.protobuf:protobuf-java-util") {
-        annotationLibraries.forEach { removeDependency(it) }
-    }
-    module("org.apache.tuweni:tuweni-bytes") { removeDependency("com.google.code.findbugs:jsr305") }
-    module("org.apache.tuweni:tuweni-units") { removeDependency("com.google.code.findbugs:jsr305") }
+
+    // Remove transitive dependencies that are not used
     module("io.prometheus:simpleclient") {
-        removeDependency("io.prometheus:simpleclient_tracer_otel")
-        removeDependency("io.prometheus:simpleclient_tracer_otel_agent")
+        removeDependency("io.prometheus:simpleclient_tracer_otel") // not needed
+        removeDependency("io.prometheus:simpleclient_tracer_otel_agent") // not needed
+    }
+    module("junit:junit") {
+        removeDependency("org.hamcrest:hamcrest-core") // not needed
     }
     module("org.jetbrains.kotlin:kotlin-stdlib") {
-        removeDependency("org.jetbrains.kotlin:kotlin-stdlib-common")
+        removeDependency("org.jetbrains.kotlin:kotlin-stdlib-common") // not needed
     }
-    module("junit:junit") { removeDependency("org.hamcrest:hamcrest-core") }
-    module("org.hyperledger.besu:secp256k1") { addApiDependency("net.java.dev.jna:jna") }
+    module("biz.aQute.bnd:biz.aQute.bnd.annotation") {
+        removeDependency("org.osgi:org.osgi.resource") // split package
+        removeDependency("org.osgi:org.osgi.service.serviceloader") // split package
+    }
+
+    // Add missing compile time dependencies
+    module("org.hyperledger.besu:secp256k1") {
+        addApiDependency("net.java.dev.jna:jna") // access annotation at compile time
+    }
+
+    // Reduce scope of transitively added annotation libraries
+    val annotationLibrariesCompileTime =
+        listOf("com.google.code.findbugs:jsr305", "org.jspecify:jspecify")
+    val annotationLibrariesUnused =
+        listOf(
+            "com.google.android:annotations",
+            "org.checkerframework:checker-compat-qual",
+            "org.codehaus.mojo:animal-sniffer-annotations",
+        )
+    val modulesUsingAnnotationLibraries =
+        listOf(
+            "com.github.ben-manes.caffeine:caffeine",
+            "com.google.dagger:dagger-compiler",
+            "com.google.dagger:dagger-producers",
+            "com.google.dagger:dagger-spi",
+            "com.google.guava:guava",
+            "com.google.protobuf:protobuf-java-util",
+            "io.grpc:grpc-api",
+            "io.grpc:grpc-context",
+            "io.grpc:grpc-core",
+            "io.grpc:grpc-netty",
+            "io.grpc:grpc-netty-shaded",
+            "io.grpc:grpc-protobuf",
+            "io.grpc:grpc-protobuf-lite",
+            "io.grpc:grpc-services",
+            "io.grpc:grpc-stub",
+            "io.grpc:grpc-testing",
+            "io.grpc:grpc-util",
+            "org.apache.tuweni:tuweni-bytes",
+            "org.apache.tuweni:tuweni-units",
+        )
+    modulesUsingAnnotationLibraries.forEach { module ->
+        module(module) {
+            annotationLibrariesCompileTime.forEach { reduceToCompileOnlyApiDependency(it) }
+            annotationLibrariesUnused.forEach { removeDependency(it) }
+        }
+    }
 }
 
 // Fix or enhance the 'module-info.class' of third-party Modules. This is about the
@@ -103,7 +103,7 @@ extraJavaModuleInfo {
     failOnAutomaticModules = true // Only allow Jars with 'module-info' on all module paths
     versionsProvidingConfiguration = "mainRuntimeClasspath"
 
-    // Patching LOG4J so that all annotation classes are available at compile time
+    // WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
     module("org.apache.logging.log4j:log4j-api", "org.apache.logging.log4j") {
         preserveExisting()
         requiresStatic("biz.aQute.bnd.annotation")
@@ -117,6 +117,14 @@ extraJavaModuleInfo {
         requiresStatic("com.google.errorprone.annotations")
     }
     module("biz.aQute.bnd:biz.aQute.bnd.annotation", "biz.aQute.bnd.annotation")
+
+    // WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
+    module("com.google.guava:guava", "com.google.common") {
+        preserveExisting()
+        requiresStatic("com.google.errorprone.annotations")
+        requiresStatic("com.google.j2objc.annotations")
+        requiresStatic("org.jspecify")
+    }
 
     module("io.grpc:grpc-api", "io.grpc") {
         exportAllPackages()
@@ -164,12 +172,6 @@ extraJavaModuleInfo {
         requires("java.logging")
         requires("jdk.unsupported")
     }
-    module("com.google.guava:guava", "com.google.common") {
-        exportAllPackages()
-        requireAllDefinedDependencies()
-        requires("java.logging")
-    }
-    module("com.google.guava:failureaccess", "com.google.common.util.concurrent.internal")
     module("com.google.api.grpc:proto-google-common-protos", "com.google.api.grpc.common")
     module("com.google.dagger:dagger", "dagger")
     module("com.squareup:kotlinpoet-jvm", "com.squareup.kotlinpoet")
@@ -363,8 +365,7 @@ configurations.create("allDependencies") {
 }
 
 jvmDependencyConflicts.consistentResolution {
-    @Suppress("UnstableApiUsage")
-    if (project.path == isolated.rootProject.path) {
+    if (project.path == ":") {
         // single project build, e.g. for examples
         providesVersions(project.path)
     } else {
@@ -377,6 +378,7 @@ configurations.getByName("mainRuntimeClasspath") {
     attributes.attribute(consistentResolutionAttribute, "global")
 }
 
+// WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
 additionalTransitiveCompileOnlyApiDependencies.forEach {
     dependencies.add("mainRuntimeClasspath", it)
 }
