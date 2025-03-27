@@ -118,14 +118,6 @@ extraJavaModuleInfo {
     }
     module("biz.aQute.bnd:biz.aQute.bnd.annotation", "biz.aQute.bnd.annotation")
 
-    // WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
-    module("com.google.guava:guava", "com.google.common") {
-        preserveExisting()
-        requiresStatic("com.google.errorprone.annotations")
-        requiresStatic("com.google.j2objc.annotations")
-        requiresStatic("org.jspecify")
-    }
-
     module("io.grpc:grpc-api", "io.grpc") {
         exportAllPackages()
         requireAllDefinedDependencies()
