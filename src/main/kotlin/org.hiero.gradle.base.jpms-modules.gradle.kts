@@ -116,7 +116,6 @@ extraJavaModuleInfo {
         requiresStatic("com.github.spotbugs.annotations")
         requiresStatic("com.google.errorprone.annotations")
     }
-    module("biz.aQute.bnd:biz.aQute.bnd.annotation", "biz.aQute.bnd.annotation")
 
     module("io.grpc:grpc-api", "io.grpc") {
         exportAllPackages()
@@ -146,6 +145,7 @@ extraJavaModuleInfo {
     module("io.grpc:grpc-util", "io.grpc.util")
     module("io.grpc:grpc-protobuf", "io.grpc.protobuf")
     module("io.grpc:grpc-protobuf-lite", "io.grpc.protobuf.lite")
+    module("biz.aQute.bnd:biz.aQute.bnd.annotation", "biz.aQute.bnd.annotation")
     module(
         "com.carrotsearch.thirdparty:simple-xml-safe",
         "com.carrotsearch.thirdparty.simple.xml.safe",

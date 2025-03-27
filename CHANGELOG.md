@@ -1,5 +1,11 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.8
+
+* JPMS - remove patching rule: com.google.guava:guava
+* update dependency-analysis-gradle-plugin to 2.13.2
+* update io.freefair.gradle:maven-plugin to 8.13.1
+
 ## Version 0.3.7
 
 * JPMS - add patching rule: io.consensys.protocols.jckzg4844
