@@ -185,6 +185,7 @@ extraJavaModuleInfo {
     module("io.tmio:tuweni-units", "tuweni.units")
     module("io.tmio:tuweni-bytes", "tuweni.bytes")
     module("net.i2p.crypto:eddsa", "net.i2p.crypto.eddsa")
+    module("io.minio:minio", "io.minio")
     module("org.antlr:antlr4-runtime", "org.antlr.antlr4.runtime")
     module("org.hyperledger.besu.internal:algorithms", "org.hyperledger.besu.internal.crypto")
     module("org.hyperledger.besu.internal:rlp", "org.hyperledger.besu.internal.rlp")
