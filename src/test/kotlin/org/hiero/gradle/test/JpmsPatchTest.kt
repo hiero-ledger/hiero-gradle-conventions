@@ -29,6 +29,9 @@ class JpmsPatchTest {
             """
             plugins { id("org.hiero.gradle.base.jpms-modules") }
             val modules = extraJavaModuleInfo.moduleSpecs.get().values.map { it.identifier }
+            dependencies {
+                api(platform("io.netty:netty-bom:latest.release"))
+            }
             dependencies.constraints {
                 modules.forEach {  api("${'$'}it:latest.release") }
                 api("org.jetbrains:annotations:latest.release")

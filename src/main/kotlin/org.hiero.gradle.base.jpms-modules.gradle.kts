@@ -85,8 +85,6 @@ jvmDependencyConflicts.patch {
             "io.grpc:grpc-stub",
             "io.grpc:grpc-testing",
             "io.grpc:grpc-util",
-            "org.apache.tuweni:tuweni-bytes",
-            "org.apache.tuweni:tuweni-units",
         )
     modulesUsingAnnotationLibraries.forEach { module ->
         module(module) {
@@ -136,6 +134,8 @@ extraJavaModuleInfo {
         exportAllPackages()
         requireAllDefinedDependencies()
         requires("java.logging")
+        requires("io.netty.handler")
+        requires("io.netty.transport")
     }
     module("io.grpc:grpc-stub", "io.grpc.stub") {
         exportAllPackages()
@@ -185,25 +185,6 @@ extraJavaModuleInfo {
     module("io.tmio:tuweni-units", "tuweni.units")
     module("io.tmio:tuweni-bytes", "tuweni.bytes")
     module("net.i2p.crypto:eddsa", "net.i2p.crypto.eddsa")
-    module("io.minio:minio", "io.minio")
-    module("io.netty:netty-codec-http", "io.netty.codec.http")
-    module("io.netty:netty-codec-http2", "io.netty.codec.http2")
-    module("io.netty:netty-codec-socks", "io.netty.codec.socks")
-    module("io.netty:netty-handler-proxy", "io.netty.handler.proxy")
-    module("io.netty:netty-transport-native-unix-common", "io.netty.transport.unix.common")
-    module("io.netty:netty-buffer", "io.netty.buffer")
-    module("io.netty:netty-codec", "io.netty.codec")
-    module("io.netty:netty-common", "io.netty.common") {
-        exportAllPackages()
-        requireAllDefinedDependencies()
-        requires("java.logging")
-        requires("jdk.unsupported")
-        ignoreServiceProvider("reactor.blockhound.integration.BlockHoundIntegration")
-    }
-    module("io.netty:netty-handler", "io.netty.handler")
-    module("io.netty:netty-resolver", "io.netty.resolver")
-    module("io.netty:netty-transport", "io.netty.transport")
-    module("io.netty:netty-transport-classes-epoll", "io.netty.transport.classes.epoll")
     module("org.antlr:antlr4-runtime", "org.antlr.antlr4.runtime")
     module("org.hyperledger.besu.internal:algorithms", "org.hyperledger.besu.internal.crypto")
     module("org.hyperledger.besu.internal:rlp", "org.hyperledger.besu.internal.rlp")
@@ -273,15 +254,6 @@ extraJavaModuleInfo {
     )
     module("org.hdrhistogram:HdrHistogram", "org.hdrhistogram")
     module("org.latencyutils:LatencyUtils", "org.latencyutils")
-
-    module(
-        "io.netty:netty-transport-native-epoll|linux-x86_64",
-        "io.netty.transport.epoll.linux.x86_64",
-    )
-    module(
-        "io.netty:netty-transport-native-epoll|linux-aarch_64",
-        "io.netty.transport.epoll.linux.aarch_64",
-    )
 
     // Annotation processing only
     module("com.google.auto.service:auto-service-annotations", "com.google.auto.service")
