@@ -16,7 +16,7 @@ class JpmsPatchTest {
             configurations.all { attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 21) }
             dependencies.components.withModule("com.goterl:resource-loader") { this.status = "release" }
             dependencies.components.withModule("com.goterl:lazysodium-java") { this.status = "release" }
-            dependencies.components.all { if(listOf("alpha", "beta", "rc").any { id.version.lowercase().contains(it) }) status = "integration" }
+            dependencies.components.all { if(listOf("alpha", "beta", "rc", "cr").any { id.version.lowercase().contains(it) }) status = "integration" }
             """
         p.aggregationBuildFile(
             """plugins { id("org.hiero.gradle.base.lifecycle") }
@@ -31,9 +31,10 @@ class JpmsPatchTest {
             val modules = extraJavaModuleInfo.moduleSpecs.get().values.map { it.identifier }
             dependencies {
                 api(platform("io.netty:netty-bom:latest.release"))
+                api(platform("org.hyperledger.besu:bom:24.+")) // Keep Besu on 24 versions, updating to 25 requires changes to module coordinates
             }
             dependencies.constraints {
-                modules.forEach {  api("${'$'}it:latest.release") }
+                modules.forEach { if (!it.startsWith("org.hyperledger.besu")) api("${'$'}it:latest.release") }
                 api("org.jetbrains:annotations:latest.release")
                 api("org.mockito:mockito-core:latest.release")
                 api("org.mockito:mockito-junit-jupiter:latest.release")
@@ -48,8 +49,11 @@ class JpmsPatchTest {
                 id("java-library")
                 id("org.hiero.gradle.base.jpms-modules")
             }
-            val modules = extraJavaModuleInfo.moduleSpecs.get().values.map { it.moduleName }.distinct()
-                .filter { it != "tech.pegasys.jckzg4844" }
+            val modules = extraJavaModuleInfo.moduleSpecs.get().values.map { it.moduleName }.distinct().filter { it !in listOf(
+                "tech.pegasys.jckzg4844",
+                "org.hyperledger.besu.nativelib.bls12_381",
+                "org.hyperledger.besu.nativelib.common"
+            ) }
             file("src/main/java/module-info.java").writeText(
                 "module org.example.module.a {\n${'$'}{modules.joinToString("") { "  requires ${'$'}it;\n"}}\n}")
             $versionPatching
