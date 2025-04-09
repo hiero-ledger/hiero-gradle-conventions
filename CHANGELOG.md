@@ -1,5 +1,15 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.9
+
+* JPMS - remove patching rules: io.netty.*
+* update dependency-analysis-gradle-plugin to 2.16.0
+* update develocity-gradle-plugin to 4.0
+* update spotless-plugin-gradle to 7.0.3
+* update jvm-dependency-conflict-resolution to 2.2
+* update extra-java-module-info to 1.12
+* update protobuf-gradle-plugin to 0.9.5
+
 ## Version 0.3.8
 
 * JPMS - remove patching rule: com.google.guava:guava
