@@ -14,12 +14,12 @@ description = "Gradle convention plugins used by Hiero projects"
 
 dependencies {
     implementation("com.adarshr:gradle-test-logger-plugin:4.0.0")
-    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:2.13.2")
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:7.0.2")
+    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:2.15.0")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:7.0.3")
     implementation("com.github.node-gradle:gradle-node-plugin:7.1.0") // install NPM for prettier
-    implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
+    implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.5")
     implementation("com.gradle.publish:plugin-publish-plugin:1.3.1")
-    implementation("com.gradle:develocity-gradle-plugin:3.19.2")
+    implementation("com.gradle:develocity-gradle-plugin:4.0")
     implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.6")
     implementation(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
@@ -28,9 +28,9 @@ dependencies {
     implementation("io.github.gradle-nexus:publish-plugin:2.0.0")
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.1.0")
-    implementation("org.gradlex:extra-java-module-info:1.11")
-    implementation("org.gradlex:java-module-dependencies:1.8")
-    implementation("org.gradlex:jvm-dependency-conflict-resolution:2.1.2")
+    implementation("org.gradlex:extra-java-module-info:1.12")
+    implementation("org.gradlex:java-module-dependencies:1.8.1")
+    implementation("org.gradlex:jvm-dependency-conflict-resolution:2.2")
     implementation("org.gradlex:reproducible-builds:1.0")
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:${embeddedKotlinVersion}"))

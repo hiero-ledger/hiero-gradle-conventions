@@ -36,7 +36,7 @@ jobs:
           java-version: 17.0.13
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b # v4.3.0
+        uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
         with:
           cache-read-only: false
 
@@ -47,7 +47,7 @@ jobs:
         run: ./gradlew check
 
       - name: Publish JUnit Test Report
-        uses: EnricoMi/publish-unit-test-result-action@170bf24d20d201b842d7a52403b73ed297e6645b # v2.18.0
+        uses: step-security/publish-unit-test-result-action@cc82caac074385ae176d39d2d143ad05e1130b2d # v2.18.0
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
           check_name: JUnit Test Report
