@@ -20,22 +20,28 @@ val deactivatedCompileLintOptions =
         // The following checks could be activated and fixed:
         "overrides", // overrides equals, but neither it ... overrides hashCode method
         "unchecked",
-        "rawtypes"
+        "rawtypes",
     )
 
 val deactivatedCompileLintOptionsJava21 =
     listOf(
-        "this-escape", // calling public/protected method in constructor
+        "this-escape" // calling public/protected method in constructor
     )
 
-tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.add("-implicit:none")
-    options.compilerArgs.add("-Werror")
-    options.compilerArgs.add("-Xlint:all")
-    options.compilerArgs.add("-Xlint:-" + deactivatedCompileLintOptions.joinToString(",-"))
-    if (java.targetCompatibility >= JavaVersion.VERSION_21) {
-        options.compilerArgs.add(
-            "-Xlint:-" + deactivatedCompileLintOptionsJava21.joinToString(",-")
-        )
+sourceSets.all {
+    tasks.named<JavaCompile>(compileJavaTaskName) {
+        options.compilerArgs.add("-implicit:none")
+        options.compilerArgs.add("-Werror")
+        options.compilerArgs.add("-Xlint:all")
+        options.compilerArgs.add("-Xlint:-" + deactivatedCompileLintOptions.joinToString(",-"))
+        if (JavaVersion.toVersion(targetCompatibility) >= JavaVersion.VERSION_21) {
+            options.compilerArgs.add(
+                "-Xlint:-" + deactivatedCompileLintOptionsJava21.joinToString(",-")
+            )
+        }
+        // only check '-exports' (requires transitive) if there is a corresponding 'api' scope
+        if (configurations.findByName(apiConfigurationName) == null) {
+            options.compilerArgs.add("-Xlint:-exports")
+        }
     }
 }
