@@ -56,6 +56,9 @@ jvmDependencyConflicts.patch {
     module("org.hyperledger.besu:secp256k1") {
         addApiDependency("net.java.dev.jna:jna") // access annotation at compile time
     }
+    module("uk.org.webcompere:system-stubs-jupiter") {
+        addApiDependency("org.junit.jupiter:junit-jupiter-api") // needed for super class
+    }
 
     // Reduce scope of transitively added annotation libraries
     val annotationLibrariesCompileTime =
@@ -101,6 +104,27 @@ extraJavaModuleInfo {
     failOnAutomaticModules = true // Only allow Jars with 'module-info' on all module paths
     versionsProvidingConfiguration = "mainRuntimeClasspath"
 
+    // WORKAROUND: https://github.com/netty/netty/issues/15003
+    module("io.netty:netty-codec-marshalling", "io.netty.codec.marshalling") {
+        patchRealModule()
+        requires("io.netty.buffer")
+        requires("io.netty.codec")
+        requires("io.netty.common")
+        requires("io.netty.transport")
+        requiresStatic("jboss.marshalling")
+        exports("io.netty.handler.codec.marshalling")
+    }
+    module("io.netty:netty-codec-protobuf", "io.netty.codec.protobuf") {
+        patchRealModule()
+        requires("io.netty.buffer")
+        requires("io.netty.codec")
+        requires("io.netty.common")
+        requires("io.netty.transport")
+        requiresStatic("com.google.protobuf")
+        requiresStatic("protobuf.javanano")
+        exports("io.netty.handler.codec.protobuf")
+    }
+
     // WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
     module("org.apache.logging.log4j:log4j-api", "org.apache.logging.log4j") {
         preserveExisting()
@@ -122,6 +146,7 @@ extraJavaModuleInfo {
         uses("io.grpc.LoadBalancerProvider")
         uses("io.grpc.ManagedChannelProvider")
         uses("io.grpc.NameResolverProvider")
+        uses("io.grpc.ServerProvider")
     }
     module("io.grpc:grpc-core", "io.grpc.internal") {
         exportAllPackages()
@@ -134,6 +159,10 @@ extraJavaModuleInfo {
         exportAllPackages()
         requireAllDefinedDependencies()
         requires("java.logging")
+        requires("io.netty.buffer")
+        requires("io.netty.codec")
+        requires("io.netty.codec.http")
+        requires("io.netty.common")
         requires("io.netty.handler")
         requires("io.netty.transport")
     }
@@ -280,10 +309,18 @@ extraJavaModuleInfo {
         requires("jdk.unsupported")
         ignoreServiceProvider("reactor.blockhound.integration.BlockHoundIntegration")
     }
-    module("com.google.jimfs:jimfs", "com.google.common.jimfs")
+    module("com.google.jimfs:jimfs", "com.google.common.jimfs") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+    }
     module("io.github.json-snapshot:json-snapshot", "json.snapshot")
     module("org.awaitility:awaitility", "awaitility")
-    module("uk.org.webcompere:system-stubs-core", "uk.org.webcompere.systemstubs.core")
+    module("uk.org.webcompere:system-stubs-core", "uk.org.webcompere.systemstubs.core") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.instrument")
+    }
     module("uk.org.webcompere:system-stubs-jupiter", "uk.org.webcompere.systemstubs.jupiter")
 
     // Testing only
@@ -293,7 +330,11 @@ extraJavaModuleInfo {
         "com.github.docker-java:docker-java-transport-zerodep",
         "com.github.dockerjava.transport.zerodep",
     )
-    module("com.google.protobuf:protobuf-java-util", "com.google.protobuf.util")
+    module("com.google.protobuf:protobuf-java-util", "com.google.protobuf.util") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+    }
     module("com.squareup:javapoet", "com.squareup.javapoet") {
         exportAllPackages()
         requires("java.compiler")
