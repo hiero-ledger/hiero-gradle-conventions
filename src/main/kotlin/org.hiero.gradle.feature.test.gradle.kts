@@ -29,6 +29,8 @@ testing.suites {
     }
 }
 
+configurations.testCompileOnly { extendsFrom(configurations.compileOnly.get()) }
+
 // If user gave the argument '-PactiveProcessorCount', then do:
 // - run all test tasks in sequence
 // - give the -XX:ActiveProcessorCount argument to the test JVMs
