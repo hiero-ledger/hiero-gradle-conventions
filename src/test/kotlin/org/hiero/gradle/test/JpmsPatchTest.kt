@@ -52,7 +52,9 @@ class JpmsPatchTest {
             val modules = extraJavaModuleInfo.moduleSpecs.get().values.map { it.moduleName }.distinct().filter { it !in listOf(
                 "tech.pegasys.jckzg4844",
                 "org.hyperledger.besu.nativelib.bls12_381",
-                "org.hyperledger.besu.nativelib.common"
+                "org.hyperledger.besu.nativelib.common",
+                "io.netty.codec.marshalling", // no direct dependency to keep excludes
+                "io.netty.codec.protobuf", // no direct dependency to keep excludes
             ) }
             file("src/main/java/module-info.java").writeText(
                 "module org.example.module.a {\n${'$'}{modules.joinToString("") { "  requires ${'$'}it;\n"}}\n}")
