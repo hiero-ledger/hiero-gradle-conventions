@@ -204,7 +204,7 @@ extraJavaModuleInfo {
     module("javax.inject:javax.inject", "javax.inject")
     module("com.esaulpaugh:headlong", "com.esaulpaugh.headlong") {
         exportAllPackages()
-        overrideModuleName() // for older versions with 'Automatic-Module-Name: headlong'
+        requireAllDefinedDependencies()
     }
     module("org.connid:framework", "org.connid.framework")
     module("org.connid:framework-internal", "org.connid.framework.internal") {
