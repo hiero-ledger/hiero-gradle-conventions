@@ -17,6 +17,7 @@ import org.hiero.gradle.tasks.CargoVersions
 @Suppress("LeakingThis")
 abstract class CargoExtension {
     abstract val libname: Property<String>
+    abstract val javaPackage: Property<String>
     abstract val release: Property<Boolean>
 
     @get:Inject protected abstract val project: Project
@@ -41,6 +42,7 @@ abstract class CargoExtension {
         }
 
         libname.convention(project.name)
+        javaPackage.convention("com.hedera.nativelibs")
         release.convention(true)
 
         // Lifecycle task to only do all carg build tasks (mainly for testing)
@@ -77,6 +79,7 @@ abstract class CargoExtension {
 
                     cargoToml.convention(layout.projectDirectory.file("Cargo.toml"))
                     libname.convention(this@CargoExtension.libname)
+                    javaPackage.convention(this@CargoExtension.javaPackage)
                     release.convention(this@CargoExtension.release)
                     rustInstallFolder.convention(installDir)
                 }
