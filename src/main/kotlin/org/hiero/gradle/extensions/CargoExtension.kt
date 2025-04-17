@@ -42,7 +42,7 @@ abstract class CargoExtension {
         }
 
         libname.convention(project.name)
-        javaPackage.convention("com.hedera.nativelibs")
+        javaPackage.convention("com.hedera.nativelib")
         release.convention(true)
 
         // Lifecycle task to only do all carg build tasks (mainly for testing)
