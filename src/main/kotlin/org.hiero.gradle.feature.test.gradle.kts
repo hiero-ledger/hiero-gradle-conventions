@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 import org.hiero.gradle.services.TaskLockService
 
-plugins { id("java") }
+plugins {
+    id("java")
+    // id("org.gradlex.java-module-testing")
+}
 
 @Suppress("UnstableApiUsage")
 testing.suites {
@@ -28,6 +31,8 @@ testing.suites {
         dependencies { runtimeOnly("org.junit.jupiter:junit-jupiter-engine") }
     }
 }
+
+configurations.testCompileOnly { extendsFrom(configurations.compileOnly.get()) }
 
 // If user gave the argument '-PactiveProcessorCount', then do:
 // - run all test tasks in sequence

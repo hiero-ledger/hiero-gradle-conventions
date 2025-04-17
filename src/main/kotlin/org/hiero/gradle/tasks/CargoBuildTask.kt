@@ -26,6 +26,8 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
 
     @get:Input abstract val libname: Property<String>
 
+    @get:Input abstract val javaPackage: Property<String>
+
     @get:Input abstract val release: Property<Boolean>
 
     @get:Input abstract val toolchain: Property<CargoToolchain>
@@ -61,8 +63,11 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
             )
 
         files.sync {
+            val baseFolder = javaPackage.get().replace('.', '/')
+            val targetFolder = baseFolder + "/" + libname.get() + "/" + toolchain.get().folder
+
             from(cargoOutputDir)
-            into(destinationDirectory.dir(toolchain.get().folder))
+            into(destinationDirectory.dir(targetFolder))
 
             include("lib${libname.get()}.so")
             include("lib${libname.get()}.dylib")

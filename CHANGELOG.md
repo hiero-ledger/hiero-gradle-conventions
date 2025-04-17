@@ -1,5 +1,12 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.3.10
+
+* JPMS - extend module patching rules to obtain working runtime modules
+* 'whitebox test sets' inherit dependencies from 'main'
+* do not perform '-exports' lint check for modules without 'api' scope
+* add org.gradlex.java-module-testing plugin (not yet active by default)
+
 ## Version 0.3.9
 
 * JPMS - remove patching rules: io.netty.*
