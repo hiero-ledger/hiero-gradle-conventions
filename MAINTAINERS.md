@@ -14,9 +14,12 @@ Maintainers are assigned the following scopes in this repository:
 
 <!-- Please keep this sorted alphabetically by github -->
 
-| Name | GitHub ID | Scope | LFID | Discord ID | Email | Company Affiliation |
-|----- | --------- | ----- | ---- | ---------- | ----- | ------------------- |
-|      |           |       |      |            |       |                     |
+| Name | GitHub ID     | Scope | LFID | Discord ID       | Email | Company Affiliation |
+|----- | ------------- | ----- | ---- | ---------------- | ----- | ------------------- |
+|      | rbarker-dev   |       |      | djbbot           |       | Hashgraph           |
+|      | andrewb1269hg |       |      | andrewb1269      |       | Hashgraph           |
+|      | nathanklick   |       |      | nathan.hashgraph |       | Hashgraph           |
+|      | jjohannes     |       |      |                  |       |                     |
 
 
 ## Emeritus Maintainers
