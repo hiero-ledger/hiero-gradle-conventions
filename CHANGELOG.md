@@ -1,5 +1,9 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.4.0
+
+* JPMS - remove patching rules: io.netty
+
 ## Version 0.3.10
 
 * JPMS - extend module patching rules to obtain working runtime modules
