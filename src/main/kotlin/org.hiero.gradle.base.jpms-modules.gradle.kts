@@ -104,27 +104,6 @@ extraJavaModuleInfo {
     failOnAutomaticModules = true // Only allow Jars with 'module-info' on all module paths
     versionsProvidingConfiguration = "mainRuntimeClasspath"
 
-    // WORKAROUND: https://github.com/netty/netty/issues/15003
-    module("io.netty:netty-codec-marshalling", "io.netty.codec.marshalling") {
-        patchRealModule()
-        requires("io.netty.buffer")
-        requires("io.netty.codec")
-        requires("io.netty.common")
-        requires("io.netty.transport")
-        requiresStatic("jboss.marshalling")
-        exports("io.netty.handler.codec.marshalling")
-    }
-    module("io.netty:netty-codec-protobuf", "io.netty.codec.protobuf") {
-        patchRealModule()
-        requires("io.netty.buffer")
-        requires("io.netty.codec")
-        requires("io.netty.common")
-        requires("io.netty.transport")
-        requiresStatic("com.google.protobuf")
-        requiresStatic("protobuf.javanano")
-        exports("io.netty.handler.codec.protobuf")
-    }
-
     // WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
     module("org.apache.logging.log4j:log4j-api", "org.apache.logging.log4j") {
         preserveExisting()
