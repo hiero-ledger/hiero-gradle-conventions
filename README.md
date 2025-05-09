@@ -218,18 +218,19 @@ To perform the actual publishing use one of the following.
 (If multiple _products_ with different _groups_ should be published, the `releaseMavenCentral` task needs to run
 multiple times with different values for the `publishingPackageGroup` parameter.)
 
-|                                    Task and Parameters                                    |              Description               |
-|-------------------------------------------------------------------------------------------|----------------------------------------|
-| `./gradlew releaseMavenCentral -PpublishingPackageGroup=<group> --no-configuration-cache` | Publish artifacts to Maven central     |
-| `./gradlew publishPlugins --no-configuration-cache`                                       | Publish plugin to Gradle plugin portal |
+|                                    Task and Parameters                                    |                   Description                   |
+|-------------------------------------------------------------------------------------------|-------------------------------------------------|
+| `./gradlew releaseMavenCentral publishAggregationToCentralPortal`                         | Publish artifacts to Maven central (new Portal) |
+| `./gradlew releaseMavenCentral -PpublishingPackageGroup=<group> --no-configuration-cache` | Publish artifacts to Maven central (old OSSRH)  |
+| `./gradlew publishPlugins --no-configuration-cache`                                       | Publish plugin to Gradle plugin portal          |
 
 The following parameters may be used to tune or test the publishing (default is `false` for all parameters).
 
-|           Task and Parameters           |                     Description                     |
-|-----------------------------------------|-----------------------------------------------------|
-| `-PpublishSigningEnabled=<true\|false>` | Set to `true` for actual publishing                 |
-| `-Ps01SonatypeHost=<true\|false>`       | Use the `s01.oss.sonatype.org` host if required     |
-| `-PpublishTestRelease=<true\|false>`    | `false` - auto-release from staging when successful |
+|           Task and Parameters           |                         Description                         |
+|-----------------------------------------|-------------------------------------------------------------|
+| `-PpublishSigningEnabled=<true\|false>` | Set to `true` for actual publishing                         |
+| `-PpublishTestRelease=<true\|false>`    | `false` - auto-release from staging when successful         |
+| `-Ps01SonatypeHost=<true\|false>`       | Use the `s01.oss.sonatype.org` host if required (old OSSRH) |
 
 The following environment variables should be populated from _secrets_ to ensure a fully functional build.
 
