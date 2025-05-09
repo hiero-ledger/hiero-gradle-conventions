@@ -122,7 +122,7 @@ extraJavaModuleInfo {
         requiresStatic("com.github.spotbugs.annotations")
         requiresStatic("com.google.errorprone.annotations")
     }
-    // WORKAROUND:
+    // WORKAROUND: https://github.com/raphw/byte-buddy/pull/1808
     module("net.bytebuddy:byte-buddy", "net.bytebuddy") {
         preserveExisting()
         requiresStatic("com.github.spotbugs.annotations")
