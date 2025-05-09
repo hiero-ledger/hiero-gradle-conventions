@@ -60,6 +60,11 @@ jvmDependencyConflicts.patch {
         addApiDependency("org.junit.jupiter:junit-jupiter-api") // needed for super class
     }
 
+    // Add missing runtime dependencies
+    module("org.rnorth.duct-tape:duct-tape") {
+        addRuntimeOnlyDependency("org.slf4j:slf4j-api") // wrongly marked as provided
+    }
+
     // Reduce scope of transitively added annotation libraries
     val annotationLibrariesCompileTime =
         listOf("com.google.code.findbugs:jsr305", "org.jspecify:jspecify")
@@ -117,6 +122,11 @@ extraJavaModuleInfo {
         requiresStatic("com.github.spotbugs.annotations")
         requiresStatic("com.google.errorprone.annotations")
     }
+    // WORKAROUND: https://github.com/raphw/byte-buddy/pull/1808
+    module("net.bytebuddy:byte-buddy", "net.bytebuddy") {
+        preserveExisting()
+        requiresStatic("com.github.spotbugs.annotations")
+    }
 
     module("io.grpc:grpc-api", "io.grpc") {
         exportAllPackages()
@@ -133,7 +143,11 @@ extraJavaModuleInfo {
         requires("java.logging")
     }
     module("io.grpc:grpc-context", "io.grpc.context")
-    module("io.grpc:grpc-inprocess", "io.grpc.inprocess")
+    module("io.grpc:grpc-inprocess", "io.grpc.inprocess") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+    }
     module("io.grpc:grpc-netty", "io.grpc.netty") {
         exportAllPackages()
         requireAllDefinedDependencies()
@@ -157,7 +171,11 @@ extraJavaModuleInfo {
     module(
         "com.carrotsearch.thirdparty:simple-xml-safe",
         "com.carrotsearch.thirdparty.simple.xml.safe",
-    )
+    ) {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.xml")
+    }
     module("com.github.spotbugs:spotbugs-annotations", "com.github.spotbugs.annotations")
     module("com.google.code.findbugs:jsr305", "java.annotation")
     module("com.google.protobuf:protobuf-javalite", "com.google.protobuf") {
@@ -176,8 +194,16 @@ extraJavaModuleInfo {
     module("com.google.dagger:dagger", "dagger")
     module("com.squareup:kotlinpoet-jvm", "com.squareup.kotlinpoet")
     module("com.squareup:kotlinpoet", "com.squareup.kotlinpoet")
-    module("com.squareup.okhttp3:okhttp", "okhttp3")
-    module("com.squareup.okio:okio-jvm", "okio")
+    module("com.squareup.okhttp3:okhttp", "okhttp3") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+    }
+    module("com.squareup.okio:okio-jvm", "okio") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+    }
     module("com.squareup.okio:okio", "okio")
     module("io.perfmark:perfmark-api", "io.perfmark")
     module("javax.inject:javax.inject", "javax.inject")
@@ -193,7 +219,12 @@ extraJavaModuleInfo {
     module("io.tmio:tuweni-units", "tuweni.units")
     module("io.tmio:tuweni-bytes", "tuweni.bytes")
     module("net.i2p.crypto:eddsa", "net.i2p.crypto.eddsa")
-    module("io.minio:minio", "io.minio")
+    module("io.minio:minio", "io.minio") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+        requiresStatic("com.github.spotbugs.annotations")
+    }
     module("org.antlr:antlr4-runtime", "org.antlr.antlr4.runtime")
     module("org.hyperledger.besu.internal:algorithms", "org.hyperledger.besu.internal.crypto")
     module("org.hyperledger.besu.internal:rlp", "org.hyperledger.besu.internal.rlp")
@@ -224,7 +255,12 @@ extraJavaModuleInfo {
     module("org.eclipse.collections:eclipse-collections", "org.eclipse.collections.impl")
     module("org.xerial.snappy:snappy-java", "org.xerial.snappy.java")
     module("io.prometheus:prometheus-metrics-config", "io.prometheus.metrics.config")
-    module("io.prometheus:prometheus-metrics-core", "io.prometheus.metrics.core")
+    module("io.prometheus:prometheus-metrics-core", "io.prometheus.metrics.core") {
+        exportAllPackages()
+        requires("io.prometheus.metrics.config")
+        requires("io.prometheus.metrics.model")
+        // io.prometheus:prometheus-metrics-tracer-initializer is excluded
+    }
     module(
         "io.prometheus:prometheus-metrics-exposition-formats",
         "io.prometheus.metrics.expositionformats",
@@ -245,17 +281,22 @@ extraJavaModuleInfo {
         "io.prometheus:prometheus-metrics-tracer-otel-agent",
         "io.prometheus.metrics.tracer.otel_agent",
     )
-    module("io.prometheus:simpleclient", "io.prometheus.simpleclient")
-    module("io.prometheus:simpleclient_common", "io.prometheus.simpleclient_common")
-    module("io.prometheus:simpleclient_httpserver", "io.prometheus.simpleclient.httpserver") {
+    module("io.prometheus:simpleclient", "simpleclient")
+    module("io.prometheus:simpleclient_common", "simpleclient.common")
+    module("io.prometheus:simpleclient_httpserver", "simpleclient.httpserver") {
         exportAllPackages()
         requireAllDefinedDependencies()
         requires("jdk.httpserver")
     }
-    module("io.prometheus:simpleclient_tracer_common", "io.prometheus.simpleclient.tracer.common")
+    module("io.prometheus:simpleclient_tracer_common", "simpleclient.tracer.common")
     module("io.micrometer:micrometer-commons", "micrometer.commons")
     module("io.micrometer:micrometer-core", "micrometer.core")
-    module("io.micrometer:micrometer-observation", "micrometer.observation")
+    module("io.micrometer:micrometer-observation", "micrometer.observation") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        // This is optional from io.micrometer:context-propagation and we do not use it
+        ignoreServiceProvider("io.micrometer.context.ThreadLocalAccessor")
+    }
     module("io.micrometer:micrometer-registry-prometheus", "micrometer.registry.prometheus")
     module(
         "io.micrometer:micrometer-registry-prometheus-simpleclient",
@@ -322,7 +363,15 @@ extraJavaModuleInfo {
     module("org.hamcrest:hamcrest", "org.hamcrest")
     module("org.objenesis:objenesis", "org.objenesis")
     module("org.rnorth.duct-tape:duct-tape", "org.rnorth.ducttape")
-    module("org.testcontainers:testcontainers", "org.testcontainers")
+    module("org.testcontainers:testcontainers", "org.testcontainers") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.management")
+        requires("java.sql")
+        uses("org.testcontainers.core.CreateContainerCmdModifier")
+        uses("org.testcontainers.dockerclient.DockerClientProviderStrategy")
+        uses("org.testcontainers.utility.ImageNameSubstitutor")
+    }
     module("org.testcontainers:junit-jupiter", "org.testcontainers.junit.jupiter")
 }
 

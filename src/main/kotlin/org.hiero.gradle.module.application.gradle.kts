@@ -2,6 +2,7 @@
 plugins {
     id("application")
     id("jacoco")
+    id("org.gradlex.java-module-testing")
     id("org.hiero.gradle.base.jpms-modules")
     id("org.hiero.gradle.base.lifecycle")
     id("org.hiero.gradle.base.version")
