@@ -60,6 +60,11 @@ jvmDependencyConflicts.patch {
         addApiDependency("org.junit.jupiter:junit-jupiter-api") // needed for super class
     }
 
+    // Add missing runtime dependencies
+    module("org.rnorth.duct-tape:duct-tape") {
+        addRuntimeOnlyDependency("org.slf4j:slf4j-api") // wrongly marked as provided
+    }
+
     // Reduce scope of transitively added annotation libraries
     val annotationLibrariesCompileTime =
         listOf("com.google.code.findbugs:jsr305", "org.jspecify:jspecify")
@@ -157,7 +162,11 @@ extraJavaModuleInfo {
     module(
         "com.carrotsearch.thirdparty:simple-xml-safe",
         "com.carrotsearch.thirdparty.simple.xml.safe",
-    )
+    ) {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.xml")
+    }
     module("com.github.spotbugs:spotbugs-annotations", "com.github.spotbugs.annotations")
     module("com.google.code.findbugs:jsr305", "java.annotation")
     module("com.google.protobuf:protobuf-javalite", "com.google.protobuf") {
@@ -176,8 +185,16 @@ extraJavaModuleInfo {
     module("com.google.dagger:dagger", "dagger")
     module("com.squareup:kotlinpoet-jvm", "com.squareup.kotlinpoet")
     module("com.squareup:kotlinpoet", "com.squareup.kotlinpoet")
-    module("com.squareup.okhttp3:okhttp", "okhttp3")
-    module("com.squareup.okio:okio-jvm", "okio")
+    module("com.squareup.okhttp3:okhttp", "okhttp3") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+    }
+    module("com.squareup.okio:okio-jvm", "okio") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+    }
     module("com.squareup.okio:okio", "okio")
     module("io.perfmark:perfmark-api", "io.perfmark")
     module("javax.inject:javax.inject", "javax.inject")
@@ -193,7 +210,12 @@ extraJavaModuleInfo {
     module("io.tmio:tuweni-units", "tuweni.units")
     module("io.tmio:tuweni-bytes", "tuweni.bytes")
     module("net.i2p.crypto:eddsa", "net.i2p.crypto.eddsa")
-    module("io.minio:minio", "io.minio")
+    module("io.minio:minio", "io.minio") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+        requiresStatic("com.github.spotbugs.annotations")
+    }
     module("org.antlr:antlr4-runtime", "org.antlr.antlr4.runtime")
     module("org.hyperledger.besu.internal:algorithms", "org.hyperledger.besu.internal.crypto")
     module("org.hyperledger.besu.internal:rlp", "org.hyperledger.besu.internal.rlp")
@@ -322,7 +344,15 @@ extraJavaModuleInfo {
     module("org.hamcrest:hamcrest", "org.hamcrest")
     module("org.objenesis:objenesis", "org.objenesis")
     module("org.rnorth.duct-tape:duct-tape", "org.rnorth.ducttape")
-    module("org.testcontainers:testcontainers", "org.testcontainers")
+    module("org.testcontainers:testcontainers", "org.testcontainers") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.management")
+        requires("java.sql")
+        uses("org.testcontainers.core.CreateContainerCmdModifier")
+        uses("org.testcontainers.dockerclient.DockerClientProviderStrategy")
+        uses("org.testcontainers.utility.ImageNameSubstitutor")
+    }
     module("org.testcontainers:junit-jupiter", "org.testcontainers.junit.jupiter")
 }
 

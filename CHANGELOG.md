@@ -2,7 +2,9 @@
 
 ## Version 0.4.0
 
+* activate org.gradlex.java-module-testing plugin
 * JPMS - remove patching rules: io.netty
+* JPMS - extend module patching rules to obtain working runtime modules
 
 ## Version 0.3.10
 
