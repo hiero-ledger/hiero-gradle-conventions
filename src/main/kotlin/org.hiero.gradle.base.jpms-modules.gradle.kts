@@ -268,6 +268,10 @@ extraJavaModuleInfo {
         "io.prometheus.metrics.shaded.protobuf",
     )
     module("io.prometheus:prometheus-metrics-tracer-common", "io.prometheus.metrics.tracer.common")
+    module(
+        "io.prometheus:prometheus-metrics-tracer-initializer",
+        "io.prometheus.metrics.tracer.initializer",
+    )
     module("io.prometheus:prometheus-metrics-tracer-otel", "io.prometheus.metrics.tracer.otel")
     module(
         "io.prometheus:prometheus-metrics-tracer-otel-agent",
