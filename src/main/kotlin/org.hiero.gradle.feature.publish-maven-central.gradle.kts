@@ -1,15 +1,23 @@
 // SPDX-License-Identifier: Apache-2.0
 plugins {
+    id("org.hiero.gradle.base.lifecycle")
     id("java")
     id("maven-publish")
-    id("org.hiero.gradle.base.lifecycle")
+    id("com.gradleup.nmcp")
+}
+
+val newPublishing = gradle.startParameter.taskNames.contains("publishAggregationToCentralPortal")
+
+configurations.nmcpProducer {
+    extendsFrom(configurations.implementation.get())
+    extendsFrom(configurations.runtimeOnly.get())
 }
 
 tasks.withType<PublishToMavenRepository>().configureEach {
     // Publishing tasks are only enabled if we publish to the matching group.
     // Otherwise, Nexus configuration and credentials do not fit.
     val publishingPackageGroup = providers.gradleProperty("publishingPackageGroup").orNull
-    enabled = publishingPackageGroup == project.group
+    enabled = newPublishing || publishingPackageGroup == project.group
 }
 
 publishing.publications.create<MavenPublication>("maven") { from(components["java"]) }
