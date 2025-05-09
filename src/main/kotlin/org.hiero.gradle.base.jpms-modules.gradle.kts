@@ -143,7 +143,11 @@ extraJavaModuleInfo {
         requires("java.logging")
     }
     module("io.grpc:grpc-context", "io.grpc.context")
-    module("io.grpc:grpc-inprocess", "io.grpc.inprocess")
+    module("io.grpc:grpc-inprocess", "io.grpc.inprocess") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+    }
     module("io.grpc:grpc-netty", "io.grpc.netty") {
         exportAllPackages()
         requireAllDefinedDependencies()
