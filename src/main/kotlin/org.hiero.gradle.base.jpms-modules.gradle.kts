@@ -283,7 +283,7 @@ extraJavaModuleInfo {
     module("io.prometheus:simpleclient_tracer_common", "simpleclient.tracer.common")
     module("io.micrometer:micrometer-commons", "micrometer.commons")
     module("io.micrometer:micrometer-core", "micrometer.core")
-    module("io.micrometer:micrometer-observation", "micrometer.observation")  {
+    module("io.micrometer:micrometer-observation", "micrometer.observation") {
         exportAllPackages()
         requireAllDefinedDependencies()
         // This is optional from io.micrometer:context-propagation and we do not use it

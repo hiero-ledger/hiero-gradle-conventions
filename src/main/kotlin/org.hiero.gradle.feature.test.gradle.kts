@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import org.hiero.gradle.services.TaskLockService
 
-plugins {
-    id("java")
-}
+plugins { id("java") }
 
 @Suppress("UnstableApiUsage")
 testing.suites {
