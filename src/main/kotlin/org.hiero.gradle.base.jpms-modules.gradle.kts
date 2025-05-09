@@ -122,6 +122,11 @@ extraJavaModuleInfo {
         requiresStatic("com.github.spotbugs.annotations")
         requiresStatic("com.google.errorprone.annotations")
     }
+    // WORKAROUND:
+    module("net.bytebuddy:byte-buddy", "net.bytebuddy") {
+        preserveExisting()
+        requiresStatic("com.github.spotbugs.annotations")
+    }
 
     module("io.grpc:grpc-api", "io.grpc") {
         exportAllPackages()
@@ -246,7 +251,12 @@ extraJavaModuleInfo {
     module("org.eclipse.collections:eclipse-collections", "org.eclipse.collections.impl")
     module("org.xerial.snappy:snappy-java", "org.xerial.snappy.java")
     module("io.prometheus:prometheus-metrics-config", "io.prometheus.metrics.config")
-    module("io.prometheus:prometheus-metrics-core", "io.prometheus.metrics.core")
+    module("io.prometheus:prometheus-metrics-core", "io.prometheus.metrics.core") {
+        exportAllPackages()
+        requires("io.prometheus.metrics.config")
+        requires("io.prometheus.metrics.model")
+        // io.prometheus:prometheus-metrics-tracer-initializer is excluded
+    }
     module(
         "io.prometheus:prometheus-metrics-exposition-formats",
         "io.prometheus.metrics.expositionformats",
@@ -258,26 +268,27 @@ extraJavaModuleInfo {
         "io.prometheus.metrics.shaded.protobuf",
     )
     module("io.prometheus:prometheus-metrics-tracer-common", "io.prometheus.metrics.tracer.common")
-    module(
-        "io.prometheus:prometheus-metrics-tracer-initializer",
-        "io.prometheus.metrics.tracer.initializer",
-    )
     module("io.prometheus:prometheus-metrics-tracer-otel", "io.prometheus.metrics.tracer.otel")
     module(
         "io.prometheus:prometheus-metrics-tracer-otel-agent",
         "io.prometheus.metrics.tracer.otel_agent",
     )
-    module("io.prometheus:simpleclient", "io.prometheus.simpleclient")
-    module("io.prometheus:simpleclient_common", "io.prometheus.simpleclient_common")
-    module("io.prometheus:simpleclient_httpserver", "io.prometheus.simpleclient.httpserver") {
+    module("io.prometheus:simpleclient", "simpleclient")
+    module("io.prometheus:simpleclient_common", "simpleclient.common")
+    module("io.prometheus:simpleclient_httpserver", "simpleclient.httpserver") {
         exportAllPackages()
         requireAllDefinedDependencies()
         requires("jdk.httpserver")
     }
-    module("io.prometheus:simpleclient_tracer_common", "io.prometheus.simpleclient.tracer.common")
+    module("io.prometheus:simpleclient_tracer_common", "simpleclient.tracer.common")
     module("io.micrometer:micrometer-commons", "micrometer.commons")
     module("io.micrometer:micrometer-core", "micrometer.core")
-    module("io.micrometer:micrometer-observation", "micrometer.observation")
+    module("io.micrometer:micrometer-observation", "micrometer.observation")  {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        // This is optional from io.micrometer:context-propagation and we do not use it
+        ignoreServiceProvider("io.micrometer.context.ThreadLocalAccessor")
+    }
     module("io.micrometer:micrometer-registry-prometheus", "micrometer.registry.prometheus")
     module(
         "io.micrometer:micrometer-registry-prometheus-simpleclient",
