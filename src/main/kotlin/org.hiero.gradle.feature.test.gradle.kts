@@ -3,7 +3,6 @@ import org.hiero.gradle.services.TaskLockService
 
 plugins {
     id("java")
-    id("org.gradlex.java-module-testing")
 }
 
 @Suppress("UnstableApiUsage")
