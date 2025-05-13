@@ -220,7 +220,7 @@ multiple times with different values for the `publishingPackageGroup` parameter.
 
 |                                    Task and Parameters                                    |                   Description                   |
 |-------------------------------------------------------------------------------------------|-------------------------------------------------|
-| `./gradlew releaseMavenCentral publishAggregationToCentralPortal`                         | Publish artifacts to Maven central (new Portal) |
+| `./gradlew publishAggregationToCentralPortal`                                             | Publish artifacts to Maven central (new Portal) |
 | `./gradlew releaseMavenCentral -PpublishingPackageGroup=<group> --no-configuration-cache` | Publish artifacts to Maven central (old OSSRH)  |
 | `./gradlew publishPlugins --no-configuration-cache`                                       | Publish plugin to Gradle plugin portal          |
 
