@@ -81,7 +81,7 @@ class MavenCentralPortalPublishTest {
             dependencies { published(project(":module-a")) }
             tasks.publishAggregationToCentralPortal {
                 actions.clear()
-                doLast { println("publicationType=" + inputs.properties["publicationType"]) }
+                doLast { println("publishingType=" + inputs.properties["publishingType"]) }
             }
         """
         )
@@ -99,7 +99,7 @@ class MavenCentralPortalPublishTest {
             .isEqualTo(TaskOutcome.SUCCESS)
         assertThat(result.task(":aggregation:zipAggregation")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(result.output).contains("publicationType=USER_MANAGED")
+        assertThat(result.output).contains("publishingType=USER_MANAGED")
     }
 
     @Test

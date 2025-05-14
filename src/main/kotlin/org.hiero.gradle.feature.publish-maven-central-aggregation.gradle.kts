@@ -16,10 +16,6 @@ val nonSnapshotRelease = !version.toString().endsWith("-SNAPSHOT")
 configurations {
     val published = dependencyScope("published")
     this.implementation { extendsFrom(published.get()) }
-    this.nmcpAggregation {
-        extendsFrom(published.get())
-        isTransitive = false
-    }
     resolvable("transitiveNmcpAggregation") {
         extendsFrom(published.get())
         attributes {
@@ -33,9 +29,6 @@ tasks.zipAggregation {
     enabled = nonSnapshotRelease
 
     val archiveOperations = serviceOf<ArchiveOperations>()
-
-    // Requires adjustment in plugin to simplify: https://github.com/GradleUp/nmcp/issues/61
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(
         configurations["transitiveNmcpAggregation"]
             .incoming
