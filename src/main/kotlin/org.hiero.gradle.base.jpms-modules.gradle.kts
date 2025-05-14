@@ -265,6 +265,10 @@ extraJavaModuleInfo {
         "io.prometheus:prometheus-metrics-exposition-formats",
         "io.prometheus.metrics.expositionformats",
     )
+    module(
+        "io.prometheus:prometheus-metrics-exposition-formats-no-protobuf",
+        "io.prometheus.metrics.expositionformats.noprotobuf",
+    )
     module("io.prometheus:prometheus-metrics-exposition-textformats", "io.prometheus.writer.text")
     module("io.prometheus:prometheus-metrics-model", "io.prometheus.metrics.model")
     module(
