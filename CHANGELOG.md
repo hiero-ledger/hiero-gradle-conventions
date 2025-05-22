@@ -1,5 +1,10 @@
 # Hiero Gradle Conventions - Changelog
 
+## Version 0.4.1
+
+* support publishing to new Maven Central portal (utilizing com.gradleup.nmcp plugin)
+* update jvm-dependency-conflict-resolution to 2.3
+
 ## Version 0.4.0
 
 * activate org.gradlex.java-module-testing plugin
