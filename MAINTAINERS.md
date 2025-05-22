@@ -19,7 +19,7 @@ Maintainers are assigned the following scopes in this repository:
 | Roger Barker     | rbarker-dev   |       |      | djbbot           |       | Hashgraph           |
 | Andrew Brandt    | andrewb1269hg |       |      | andrewb1269      |       | Hashgraph           |
 | Nathan Klick     | nathanklick   |       |      | nathan.hashgraph |       | Hashgraph           |
-| Jendrik Johannes | jjohannes     |       |      |                  |       | Gradle              |
+| Jendrik Johannes | jjohannes     |       |      |                  |       |                     |
 
 ## Emeritus Maintainers
 
