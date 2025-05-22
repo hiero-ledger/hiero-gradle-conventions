@@ -88,6 +88,7 @@ class GradleProject {
     }
 
     fun withEnv(env: Map<String, String>): GradleProject {
+        this.env["PATH"] = System.getenv("PATH") // some plugins use low-level commands like 'uname'
         this.env.putAll(env)
         return this
     }
@@ -121,6 +122,8 @@ class GradleProject {
                 it.writeText(content)
             }
         }
+
+    fun dir(path: String) = File(projectDir, path)
 
     fun help(): BuildResult = runner(listOf("help")).build()
 
