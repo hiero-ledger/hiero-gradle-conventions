@@ -241,8 +241,8 @@ extraJavaModuleInfo {
     module("org.hyperledger.besu:secp256k1", "org.hyperledger.besu.nativelib.secp256k1")
     module("org.hyperledger.besu:secp256r1", "org.hyperledger.besu.nativelib.secp256r1")
     module("org.hyperledger.besu:gnark", "org.hyperledger.besu.nativelib.gnark")
-    module("com.goterl:resource-loader", "resource.loader")
-    module("com.goterl:lazysodium-java", "lazysodium.java")
+    module("com.goterl:resource-loader", "com.goterl.resourceloader")
+    module("com.goterl:lazysodium-java", "com.goterl.lazysodium")
     // 'io.consensys.protocols' replaces 'tech.pegasys' in org.hyperledger.besu:evm:25.x
     // once 24.x is no longer used, 'tech.pegasys' rule can be removed.
     module("tech.pegasys:jc-kzg-4844", "tech.pegasys.jckzg4844")
