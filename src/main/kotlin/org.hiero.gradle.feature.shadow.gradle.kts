@@ -1,11 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
+import com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin
+import com.github.jengelman.gradle.plugins.shadow.ShadowJavaPlugin
 import com.github.jengelman.gradle.plugins.shadow.internal.DefaultDependencyFilter
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-plugins {
-    id("application")
-    id("com.gradleup.shadow")
-}
+plugins { id("java") }
+
+// Only apply selected plugins and not 'com.gradleup.shadow' to not have
+// ShadowApplicationPlugin that would add to the 'assemble' task
+plugins.apply(ShadowBasePlugin::class)
+
+plugins.apply(ShadowJavaPlugin::class)
 
 tasks.withType<ShadowJar>().configureEach {
     group = "shadow"
