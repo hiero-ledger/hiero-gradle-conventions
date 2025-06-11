@@ -43,8 +43,29 @@ class ShadowTest {
                 .trimIndent()
         )
 
-        val result = p.run("assemble")
+        val result = p.run("shadowJar")
 
         assertThat(result.task(":module-a:shadowJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
+    fun `shadowJar does not run as part of assemble when combined with application plugin`() {
+        val p = GradleProject().withMinimalStructure()
+        p.moduleBuildFile(
+            """
+            plugins {
+                id("org.hiero.gradle.feature.shadow")
+                id("application")
+            }
+            application {
+                mainClass = "org.hiero.product.module.a.ModuleA"
+            }
+        """
+                .trimIndent()
+        )
+
+        val result = p.run("assemble")
+
+        assertThat(result.task(":module-a:shadowJar")).isNull()
     }
 }
