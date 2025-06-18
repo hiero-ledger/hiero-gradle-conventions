@@ -16,7 +16,7 @@ class JpmsPatchTest {
             configurations.all { attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 21) }
             dependencies.components.withModule("com.goterl:resource-loader") { this.status = "release" }
             dependencies.components.withModule("com.goterl:lazysodium-java") { this.status = "release" }
-            dependencies.components.all { if(listOf("alpha", "beta", "rc", "cr").any { id.version.lowercase().contains(it) }) status = "integration" }
+            dependencies.components.all { if(listOf("alpha", "beta", "rc", "cr", ".m").any { id.version.lowercase().contains(it) }) status = "integration" }
             """
         p.aggregationBuildFile(
             """plugins { id("org.hiero.gradle.base.lifecycle") }

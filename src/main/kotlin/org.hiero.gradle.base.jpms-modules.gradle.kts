@@ -4,31 +4,11 @@ plugins {
     id("org.gradlex.extra-java-module-info")
 }
 
-// Dependencies that are missing in metadata because the 'compileOnlyApi' scope is not supported by
-// POM. We add these dependencies with a version to avoid maintaining versions in every single
-// project. These are "only" annotation libraries that are not included in the runtime classpath.
-// Because of this, they are not automatically visible to the consistent resolution. Therefore, we
-// need to explicitly add them to the version-providing Configuration (called mainRuntimeClasspath).
-val additionalTransitiveCompileOnlyApiDependencies =
-    listOf(
-        "biz.aQute.bnd:biz.aQute.bnd.annotation:7.1.0",
-        "com.google.errorprone:error_prone_annotations:2.36.0",
-        "org.jspecify:jspecify:1.0.0",
-    )
-
 // Fix or enhance the metadata of third-party Modules. This is about the metadata in the
 // repositories: '*.pom' and '*.module' files.
 jvmDependencyConflicts.patch {
     // WORKAROUND: https://github.com/hyperledger/besu/pull/8443
     module("org.hyperledger.besu:bom") { removeDependency("javax.inject:javax.inject") }
-
-    // WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
-    module("org.apache.logging.log4j:log4j-api") {
-        additionalTransitiveCompileOnlyApiDependencies.forEach { addCompileOnlyApiDependency(it) }
-    }
-    module("org.apache.logging.log4j:log4j-core") {
-        additionalTransitiveCompileOnlyApiDependencies.forEach { addCompileOnlyApiDependency(it) }
-    }
 
     // Register JARs with classifier as features
     module("io.netty:netty-transport-native-epoll") {
@@ -308,6 +288,8 @@ extraJavaModuleInfo {
     )
     module("org.hdrhistogram:HdrHistogram", "org.hdrhistogram")
     module("org.latencyutils:LatencyUtils", "org.latencyutils")
+    module("org.osgi:org.osgi.annotation.bundle", "org.osgi.annotation.bundle")
+    module("org.osgi:org.osgi.annotation.versioning", "org.osgi.annotation.versioning")
 
     // Annotation processing only
     module("com.google.auto.service:auto-service-annotations", "com.google.auto.service")
@@ -414,11 +396,6 @@ jvmDependencyConflicts.consistentResolution {
 
 configurations.getByName("mainRuntimeClasspath") {
     attributes.attribute(consistentResolutionAttribute, "global")
-}
-
-// WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
-additionalTransitiveCompileOnlyApiDependencies.forEach {
-    dependencies.add("mainRuntimeClasspath", it)
 }
 
 // In case published versions of a module are also available, always prefer the local one
