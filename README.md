@@ -35,10 +35,10 @@ Apply the entry point plugin `org.hiero.gradle.build` in the `settings.gradle.kt
 Modules (subprojects) are located in the directory hierarchy by using the `javaModules { ... }` notation
 (which is provided by the [org.gradlex.java-module-dependencies](https://github.com/gradlex-org/java-module-dependencies?tab=readme-ov-file#project-structure-definition-when-using-this-plugin-as-settings-plugin) plugin).
 
-```
+```kotlin
 // settings.gradle.kts
 plugins {
-    id("org.hiero.gradle.build") version "0.4.1"
+    id("org.hiero.gradle.build") version "0.4.2"
 }
 
 // Define location of Modules (subprojects)
@@ -55,7 +55,7 @@ In each Module (subproject), apply one of the `org.hiero.gradle.module.*` plugin
 For example, to define a Library Module that also provides _test fixtures_ and has _JMH benchmarks_, the plugins block
 should look like this:
 
-```
+```kotlin
 plugins {
     id("org.hiero.gradle.module.library")
     id("org.hiero.gradle.feature.test-fixtures")
@@ -291,7 +291,7 @@ If you add a module to an existing product, this is already done. If you are sta
 to add the entry and define the _group_ for all modules of the product. The _group_ is used in publishing modules
 to _Maven Central_.
 
-```
+```kotlin
 javaModules {
     directory("product") { group = "org.example.product" }
 }
@@ -300,7 +300,7 @@ javaModules {
 In the [build.gradle.kts](example/product-a/module-lib/build.gradle.kts) file, you define the type of the module by
 using a [_Module_ convention plugin](#list-of-convention-plugins).
 
-```
+```kotlin
 plugins { id("org.hiero.gradle.module.library") }
 ```
 
@@ -342,7 +342,7 @@ For such a setup you may omit the additional `module-info.java`. The tests are t
 Java tests without enforcing module encapsulation at test runtime. To still keep the dependency notations consistent,
 you define `requires` of the test code in the [build.gradle.kts](example/product-a/module-lib/build.gradle.kts) file.
 
-```
+```kotlin
 testModuleInfo {
     requires("org.junit.jupiter.api")
 }
@@ -423,7 +423,7 @@ Insert the line
 in the top of your `settings.gradle.kts`. For example, if this repository is cloned next to the project repository in
 your local file system, the top part of your `settings.gradle.kts` should look like this:
 
-```
+```kotlin
 // SPDX-License-Identifier: Apache-2.0
 pluginManagement { includeBuild("../hiero-gradle-conventions") }
 
