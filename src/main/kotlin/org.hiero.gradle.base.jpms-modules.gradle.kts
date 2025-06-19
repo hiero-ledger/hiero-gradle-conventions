@@ -7,9 +7,6 @@ plugins {
 // Fix or enhance the metadata of third-party Modules. This is about the metadata in the
 // repositories: '*.pom' and '*.module' files.
 jvmDependencyConflicts.patch {
-    // WORKAROUND: https://github.com/hyperledger/besu/pull/8443
-    module("org.hyperledger.besu:bom") { removeDependency("javax.inject:javax.inject") }
-
     // Register JARs with classifier as features
     module("io.netty:netty-transport-native-epoll") {
         addFeature("linux-x86_64") // refer to as 'io.netty.transport.epoll.linux.x86_64'
@@ -89,19 +86,6 @@ extraJavaModuleInfo {
     failOnAutomaticModules = true // Only allow Jars with 'module-info' on all module paths
     versionsProvidingConfiguration = "mainRuntimeClasspath"
 
-    // WORKAROUND: https://github.com/apache/logging-log4j2/issues/3437
-    module("org.apache.logging.log4j:log4j-api", "org.apache.logging.log4j") {
-        preserveExisting()
-        requiresStatic("biz.aQute.bnd.annotation")
-        requiresStatic("com.github.spotbugs.annotations")
-        requiresStatic("com.google.errorprone.annotations")
-    }
-    module("org.apache.logging.log4j:log4j-core", "org.apache.logging.log4j.core") {
-        preserveExisting()
-        requiresStatic("biz.aQute.bnd.annotation")
-        requiresStatic("com.github.spotbugs.annotations")
-        requiresStatic("com.google.errorprone.annotations")
-    }
     // WORKAROUND: https://github.com/raphw/byte-buddy/pull/1808
     module("net.bytebuddy:byte-buddy", "net.bytebuddy") {
         preserveExisting()
@@ -147,7 +131,10 @@ extraJavaModuleInfo {
     module("io.grpc:grpc-util", "io.grpc.util")
     module("io.grpc:grpc-protobuf", "io.grpc.protobuf")
     module("io.grpc:grpc-protobuf-lite", "io.grpc.protobuf.lite")
-    module("biz.aQute.bnd:biz.aQute.bnd.annotation", "biz.aQute.bnd.annotation")
+    module("biz.aQute.bnd:biz.aQute.bnd.annotation", "biz.aQute.bnd.annotation") {
+        exportAllPackages()
+        // https://github.com/gradlex-org/extra-java-module-info/issues/186
+    }
     module(
         "com.carrotsearch.thirdparty:simple-xml-safe",
         "com.carrotsearch.thirdparty.simple.xml.safe",
@@ -288,8 +275,15 @@ extraJavaModuleInfo {
     )
     module("org.hdrhistogram:HdrHistogram", "org.hdrhistogram")
     module("org.latencyutils:LatencyUtils", "org.latencyutils")
-    module("org.osgi:org.osgi.annotation.bundle", "org.osgi.annotation.bundle")
-    module("org.osgi:org.osgi.annotation.versioning", "org.osgi.annotation.versioning")
+    module("org.osgi:org.osgi.annotation.bundle", "org.osgi.annotation.bundle") {
+        exportAllPackages()
+        // https://github.com/gradlex-org/extra-java-module-info/issues/186
+        requires("org.osgi.annotation.versioning")
+    }
+    module("org.osgi:org.osgi.annotation.versioning", "org.osgi.annotation.versioning") {
+        exportAllPackages()
+        // https://github.com/gradlex-org/extra-java-module-info/issues/186
+    }
 
     // Annotation processing only
     module("com.google.auto.service:auto-service-annotations", "com.google.auto.service")
