@@ -86,12 +86,6 @@ extraJavaModuleInfo {
     failOnAutomaticModules = true // Only allow Jars with 'module-info' on all module paths
     versionsProvidingConfiguration = "mainRuntimeClasspath"
 
-    // WORKAROUND: https://github.com/raphw/byte-buddy/pull/1808
-    module("net.bytebuddy:byte-buddy", "net.bytebuddy") {
-        preserveExisting()
-        requiresStatic("com.github.spotbugs.annotations")
-    }
-
     module("io.grpc:grpc-api", "io.grpc") {
         exportAllPackages()
         requireAllDefinedDependencies()
