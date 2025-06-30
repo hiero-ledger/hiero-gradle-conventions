@@ -19,7 +19,7 @@ dependencyResolutionManagement {
         }
 
         mavenCentral()
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
+        maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
     }
 
     @Suppress("UnstableApiUsage")
