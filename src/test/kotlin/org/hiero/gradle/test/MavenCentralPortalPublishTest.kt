@@ -86,7 +86,6 @@ class MavenCentralPortalPublishTest {
         p.moduleBuildFile(
             """
             plugins { id("org.hiero.gradle.module.library") }
-            tasks.publishMavenPublicationToSonatypeRepository { actions.clear(); doLast {} }
             """
         )
         val result = p.run("publishAggregationToCentralPortal -PpublishTestRelease=true")
