@@ -1,6 +1,4 @@
 // SPDX-License-Identifier: Apache-2.0
-import org.gradle.kotlin.dsl.support.serviceOf
-
 plugins {
     id("java")
     id("org.hiero.gradle.base.lifecycle")
@@ -16,30 +14,7 @@ val nonSnapshotRelease = !version.toString().endsWith("-SNAPSHOT")
 configurations {
     val published = dependencyScope("published")
     this.implementation { extendsFrom(published.get()) }
-    resolvable("transitiveNmcpAggregation") {
-        extendsFrom(published.get())
-        attributes {
-            attribute(Attribute.of("com.gradleup.nmcp", Named::class.java), objects.named("bundle"))
-            attribute(Usage.USAGE_ATTRIBUTE, objects.named("nmcp"))
-        }
-    }
-}
-
-tasks.zipAggregation {
-    enabled = nonSnapshotRelease
-
-    val archiveOperations = serviceOf<ArchiveOperations>()
-    from(
-        configurations["transitiveNmcpAggregation"]
-            .incoming
-            .artifactView {
-                this.lenient(true)
-                this.componentFilter { it is ProjectComponentIdentifier }
-            }
-            .files
-            .elements
-            .map { it.map { zip -> archiveOperations.zipTree(zip) } }
-    )
+    this.nmcpAggregation { extendsFrom(published.get()) }
 }
 
 nmcpAggregation {
@@ -53,7 +28,7 @@ nmcpAggregation {
     }
 }
 
-tasks.publishAggregationToCentralPortal {
+tasks.named("publishAggregationToCentralPortal") {
     enabled = nonSnapshotRelease
     group = "release"
 }
