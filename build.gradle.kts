@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.gradle.kotlin.dsl.repositories
 import org.hiero.gradle.environment.EnvAccess
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
@@ -64,6 +65,17 @@ gradlePlugin {
     }
 
     plugins.configureEach { displayName = name }
+}
+
+publishing {
+    repositories.maven {
+        name = "MavenCentralSnapshots"
+        url = uri("https://central.sonatype.com/repository/maven-snapshots")
+        credentials {
+            username = providers.environmentVariable("NEXUS_USERNAME").orNull
+            password = providers.environmentVariable("NEXUS_PASSWORD").orNull
+        }
+    }
 }
 
 tasks.test {
