@@ -4,7 +4,6 @@ name: "Publish Snapshot Release"
 on:
   push:
     branches:
-      - 18-snapshot-publishing
       - main
 
 defaults:
