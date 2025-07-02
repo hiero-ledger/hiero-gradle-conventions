@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
+import java.time.Duration
+import java.time.temporal.ChronoUnit
+
 plugins {
     id("java")
     id("org.hiero.gradle.base.lifecycle")
@@ -25,6 +28,7 @@ nmcpAggregation {
         username = providers.environmentVariable("NEXUS_USERNAME")
         password = providers.environmentVariable("NEXUS_PASSWORD")
         publishingType = if (publishTestRelease) "USER_MANAGED" else "AUTOMATIC"
+        validationTimeout = Duration.of(30, ChronoUnit.MINUTES)
     }
 }
 
