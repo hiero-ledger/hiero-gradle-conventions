@@ -212,8 +212,6 @@ extraJavaModuleInfo {
         exportAllPackages()
         requires("java.logging")
     }
-    module("org.eclipse.collections:eclipse-collections-api", "org.eclipse.collections.api")
-    module("org.eclipse.collections:eclipse-collections", "org.eclipse.collections.impl")
     module("org.xerial.snappy:snappy-java", "org.xerial.snappy.java")
     module("io.prometheus:prometheus-metrics-config", "io.prometheus.metrics.config")
     module("io.prometheus:prometheus-metrics-core", "io.prometheus.metrics.core") {
