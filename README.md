@@ -216,15 +216,12 @@ Before doing the publishing, you may need to update the version (version.txt fil
 | `./gradlew versionAsSnapshot`                               | Add _-SNAPSHOT_ suffix to version.txt    |
 | `./gradlew versionAsPrefixedCommit -PcommitPrefix=<prefix>` | Set version based on current commit hash |
 
-To perform the actual publishing use one of the following.
-(If multiple _products_ with different _groups_ should be published, the `releaseMavenCentral` task needs to run
-multiple times with different values for the `publishingPackageGroup` parameter.)
+To perform the actual publishing use one of the following:
 
-|                                    Task and Parameters                                    |                   Description                   |
-|-------------------------------------------------------------------------------------------|-------------------------------------------------|
-| `./gradlew publishAggregationToCentralPortal`                                             | Publish artifacts to Maven central (new Portal) |
-| `./gradlew releaseMavenCentral -PpublishingPackageGroup=<group> --no-configuration-cache` | Publish artifacts to Maven central (old OSSRH)  |
-| `./gradlew publishPlugins --no-configuration-cache`                                       | Publish plugin to Gradle plugin portal          |
+|                 Task and Parameters                 |                   Description                   |
+|-----------------------------------------------------|-------------------------------------------------|
+| `./gradlew publishAggregationToCentralPortal`       | Publish artifacts to Maven central (new Portal) |
+| `./gradlew publishPlugins --no-configuration-cache` | Publish plugin to Gradle plugin portal          |
 
 The following parameters may be used to tune or test the publishing (default is `false` for all parameters).
 

@@ -30,14 +30,12 @@ class MavenCentralPortalPublishTest {
 
         // Creates the publication zip, but fails to upload due to bad credentials
         assertThat(
-                p.file(
-                    "product/module-a/build/nmcp/m2Maven/org/example/module-a/1.0/module-a-1.0.jar"
-                )
+                p.file("product/module-a/build/nmcp/m2/org/example/module-a/1.0/module-a-1.0.jar")
             )
             .exists()
         assertThat(
                 p.file(
-                    "product/module-a/build/nmcp/m2Maven/org/example/module-a/1.0/module-a-1.0.module"
+                    "product/module-a/build/nmcp/m2/org/example/module-a/1.0/module-a-1.0.module"
                 )
             )
             .exists()
@@ -45,9 +43,9 @@ class MavenCentralPortalPublishTest {
             .contains(
                 "> Cannot deploy to maven central (status='401'): {\"error\":{\"message\":\"Invalid token\"}}"
             )
-        assertThat(result.task(":module-a:zipMavenPublication")?.outcome)
+        assertThat(result.task(":aggregation:nmcpZipAggregation")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(result.task(":aggregation:publishAggregationToCentralPortal")?.outcome)
+        assertThat(result.task(":aggregation:nmcpPublishAggregationToCentralPortal")?.outcome)
             .isEqualTo(TaskOutcome.FAILED)
     }
 
@@ -59,7 +57,7 @@ class MavenCentralPortalPublishTest {
         val result = p.runAndFail("publishAggregationToCentralPortal --offline")
 
         // Does attempt actual publishing step of 'module-a' (fails only due to --offline)
-        assertThat(p.dir("product/module-a/build/nmcp/m2Maven")).isEmptyDirectory()
+        assertThat(p.dir("product/module-a/build/nmcp/m2")).doesNotExist()
         assertThat(result.output)
             .contains(
                 "> No cached resource 'https://central.sonatype.com/repository/maven-snapshots/"
@@ -68,7 +66,7 @@ class MavenCentralPortalPublishTest {
             .isEqualTo(TaskOutcome.SUCCESS)
         assertThat(result.task(":module-a:generatePomFileForMavenPublication")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(result.task(":module-a:publishMavenPublicationToNmcpMavenRepository")?.outcome)
+        assertThat(result.task(":module-a:publishMavenPublicationToNmcpRepository")?.outcome)
             .isEqualTo(TaskOutcome.FAILED)
     }
 
@@ -79,7 +77,7 @@ class MavenCentralPortalPublishTest {
             """
             plugins { id("org.hiero.gradle.feature.publish-maven-central-aggregation") }
             dependencies { published(project(":module-a")) }
-            tasks.publishAggregationToCentralPortal {
+            tasks.nmcpPublishAggregationToCentralPortal {
                 actions.clear()
                 doLast { println("publishingType=" + inputs.properties["publishingType"]) }
             }
@@ -88,16 +86,13 @@ class MavenCentralPortalPublishTest {
         p.moduleBuildFile(
             """
             plugins { id("org.hiero.gradle.module.library") }
-            tasks.publishMavenPublicationToSonatypeRepository { actions.clear(); doLast {} }
             """
         )
         val result = p.run("publishAggregationToCentralPortal -PpublishTestRelease=true")
 
-        assertThat(result.task(":module-a:publishMavenPublicationToNmcpMavenRepository")?.outcome)
+        assertThat(result.task(":module-a:publishMavenPublicationToNmcpRepository")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(result.task(":module-a:zipMavenPublication")?.outcome)
-            .isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(result.task(":aggregation:zipAggregation")?.outcome)
+        assertThat(result.task(":aggregation:nmcpZipAggregation")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
         assertThat(result.output).contains("publishingType=USER_MANAGED")
     }

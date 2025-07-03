@@ -23,8 +23,6 @@ tasks.register("qualityGate") {
 
 tasks.check { dependsOn(tasks.named("qualityCheck")) }
 
-tasks.register("releaseMavenCentral") { group = "release" }
-
 afterEvaluate {
     tasks.configureEach {
         if (name in listOf("buildDependents", "buildNeeded", "classes")) {

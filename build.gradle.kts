@@ -21,13 +21,12 @@ dependencies {
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.5")
     implementation("com.gradle.publish:plugin-publish-plugin:1.3.1")
     implementation("com.gradle:develocity-gradle-plugin:4.0.2")
-    implementation("com.gradleup.nmcp:nmcp:0.1.5")
+    implementation("com.gradleup.nmcp:nmcp:1.0.0-rc.1")
     implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.8")
     implementation(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
     )
     implementation("io.freefair.gradle:maven-plugin:8.14") // for POM validation
-    implementation("io.github.gradle-nexus:publish-plugin:2.0.0")
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.1.0")
     implementation("org.gradlex:extra-java-module-info:1.12")
