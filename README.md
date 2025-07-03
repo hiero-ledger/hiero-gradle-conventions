@@ -442,6 +442,44 @@ Each change done to the plugins should be covered by a test. The tests are locat
 Each test creates an artificial project that applies the plugin(s) under test, runs a build and asserts build results –
 such as: state of tasks executed, console logging, created files. Take a look at the existing tests for more details.
 
+#### Create a PR and get it merged to publish a SNAPSHOT
+
+Once you are satisfied with the changes and tested them locally, you can create a PR in this repository.
+Once the PR is merged, a new `SNAPSHOT` version will be published from the `main` branch automatically.
+
+#### Use SNAPSHOT in a PR of another repository
+
+Once the `SNAPSHOT` with the changes is available, you can use it in a PR in another repository.
+For that you need to add the Maven Central snapshot repository as a source for plugins.
+Temporarily adjust the `settings.gradle.kts` so that the top looks like this:
+
+```kotlin
+// SPDX-License-Identifier: Apache-2.0
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://central.sonatype.com/repository/maven-snapshots")
+    }
+}
+
+buildscript {
+    configurations.classpath { resolutionStrategy.cacheDynamicVersionsFor(0, "seconds") }
+}
+
+plugins { id("org.hiero.gradle.build") version "<<next-version>>-SNAPSHOT" }
+```
+
+#### Get a new version of the plugins published
+
+Once you are satisified with the changes, ping a maintainer of this reposiotry to perform a release.
+When the release is ready, you can remove the snapshot repository again from the PR in the other repository and
+switch `org.hiero.gradle.build` to the newly released version.
+
+```kotlin
+// SPDX-License-Identifier: Apache-2.0
+plugins { id("org.hiero.gradle.build") version "<<new-version>>" }
+```
+
 ## Help/Community
 
 Join our [community discussions](https://discord.lfdecentralizedtrust.org/) on discord.
