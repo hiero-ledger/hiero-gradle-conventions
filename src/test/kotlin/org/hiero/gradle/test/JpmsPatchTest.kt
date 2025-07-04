@@ -34,7 +34,12 @@ class JpmsPatchTest {
                 api(platform("org.hyperledger.besu:bom:24.+")) // Keep Besu on 24 versions, updating to 25 requires changes to module coordinates
             }
             dependencies.constraints {
-                modules.forEach { if (!it.startsWith("org.hyperledger.besu")) api("${'$'}it:latest.release") }
+                modules.forEach {
+                    if (!it.startsWith("org.hyperledger.besu") && !it.startsWith("com.squareup.okhttp3")) {
+                        api("${'$'}it:latest.release")
+                    }
+                }
+                api("com.squareup.okhttp3:okhttp:4.+") // Keep okhttp on 4.x as this is currently only used transitively
                 api("org.jetbrains:annotations:latest.release")
                 api("org.mockito:mockito-core:latest.release")
                 api("org.mockito:mockito-junit-jupiter:latest.release")
