@@ -1,15 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 plugins { id("maven-publish") }
 
-if (
-    gradle.startParameter.taskNames.any { it.startsWith("release") && !it.contains("MavenCentral") }
-) {
-    // We apply the 'artifactregistry' plugin conditionally, as there are two issues:
-    // 1. It does not support configuration cache.
+if (gradle.startParameter.taskNames.any { it.startsWith("release") }) {
+    // We apply the 'artifactregistry' plugin conditionally, as there is the following issue:
+    // - It does not support configuration cache.
     //    https://github.com/GoogleCloudPlatform/artifact-registry-maven-tools/issues/85
-    // 2. It does not interact well with the 'gradle-nexus.publish-plugin' plugin, causing:
-    //    'No staging repository with name sonatype created' during IDE import
-    publishing.repositories.remove(publishing.repositories.getByName("sonatype"))
     apply(plugin = "com.google.cloud.artifactregistry.gradle-plugin")
 }
 
