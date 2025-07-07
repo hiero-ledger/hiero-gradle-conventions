@@ -57,7 +57,9 @@ class JpmsPatchTest {
             val modules = extraJavaModuleInfo.moduleSpecs.get().values.map { it.moduleName }.distinct().filter { it !in listOf(
                 "tech.pegasys.jckzg4844",
                 "org.hyperledger.besu.nativelib.bls12_381",
-                "org.hyperledger.besu.nativelib.common"
+                "org.hyperledger.besu.nativelib.common",
+                // Cannot use both 'prometheus-metrics-exposition-formats' and 'prometheus-metrics-exposition-formats-no-protobuf' together
+                "io.prometheus.metrics.expositionformats.noprotobuf"
             ) }
             file("src/main/java/module-info.java").writeText(
                 "module org.example.module.a {\n${'$'}{modules.joinToString("") { "  requires ${'$'}it;\n"}}\n}")
