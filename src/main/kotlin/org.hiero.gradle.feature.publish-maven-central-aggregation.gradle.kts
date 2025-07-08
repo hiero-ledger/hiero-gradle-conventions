@@ -28,7 +28,11 @@ nmcpAggregation {
         username = providers.environmentVariable("NEXUS_USERNAME")
         password = providers.environmentVariable("NEXUS_PASSWORD")
         publishingType = if (publishTestRelease) "USER_MANAGED" else "AUTOMATIC"
-        validationTimeout = Duration.of(30, ChronoUnit.MINUTES)
+        validationTimeout =
+            Duration.of(
+                providers.gradleProperty("mavenCentralTimeout").getOrElse("60").toLong(),
+                ChronoUnit.MINUTES,
+            )
     }
 }
 
