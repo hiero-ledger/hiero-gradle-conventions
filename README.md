@@ -1,7 +1,7 @@
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhiero-ledger%2Fhiero-gradle-conventions%2Fbadge%3Fref%3Dmain&style=flat)](https://actions-badge.atrox.dev/hiero-ledger/hiero-gradle-conventions/goto?ref=main)
 [![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v?label=Plugin%20Portal&metadataUrl=https%3A%2F%2Fplugins.gradle.org%2Fm2%2Forg%2Fhiero%2Fgradle%2Fhiero-gradle-conventions%2Fmaven-metadata.xml)](https://plugins.gradle.org/plugin/org.hiero.gradle.build)
 [![License](https://img.shields.io/badge/license-apache2-blue.svg)](LICENSE)
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/hiero-ledger/hiero-gradle-conventions/badge)](https://api.scorecard.dev/projects/github.com/hiero-ledger/hiero-gradle-conventions)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/hiero-ledger/hiero-gradle-conventions/badge)](https://scorecard.dev/viewer/?uri=github.com/hiero-ledger/hiero-gradle-conventions)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/10697/badge)](https://bestpractices.coreinfrastructure.org/projects/10697)
 
 # Hiero Gradle Conventions
