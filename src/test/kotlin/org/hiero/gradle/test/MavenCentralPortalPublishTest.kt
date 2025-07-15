@@ -26,7 +26,7 @@ class MavenCentralPortalPublishTest {
 
     @Test
     fun `attempts to upload a single archive for non-snapshot releases`() {
-        val result = p.runAndFail("publishAggregationToCentralPortal")
+        val result = p.runAndFail("nmcpPublishAggregationToCentralPortal")
 
         // Creates the publication zip, but fails to upload due to bad credentials
         assertThat(
@@ -54,7 +54,7 @@ class MavenCentralPortalPublishTest {
         p.versionFile.writeText("1.0-SNAPSHOT")
 
         // Finishes successfully even though we did not provide credentials
-        val result = p.runAndFail("publishAggregationToCentralPortal --offline")
+        val result = p.runAndFail("nmcpPublishAggregationToCentralPortal --offline --continue")
 
         // Does attempt actual publishing step of 'module-a' (fails only due to --offline)
         assertThat(p.dir("product/module-a/build/nmcp/m2")).doesNotExist()
@@ -88,7 +88,7 @@ class MavenCentralPortalPublishTest {
             plugins { id("org.hiero.gradle.module.library") }
             """
         )
-        val result = p.run("publishAggregationToCentralPortal -PpublishTestRelease=true")
+        val result = p.run("nmcpPublishAggregationToCentralPortal -PpublishTestRelease=true")
 
         assertThat(result.task(":module-a:publishMavenPublicationToNmcpRepository")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)

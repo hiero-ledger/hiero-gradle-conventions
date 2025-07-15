@@ -36,7 +36,7 @@ nmcpAggregation {
     }
 }
 
-tasks.named("publishAggregationToCentralPortal") {
+tasks.named("nmcpPublishAggregationToCentralPortal") {
     enabled = nonSnapshotRelease
     group = "release"
 }
