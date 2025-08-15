@@ -22,7 +22,7 @@ dependencies {
     implementation("com.gradle.publish:plugin-publish-plugin:1.3.1")
     implementation("com.gradle:develocity-gradle-plugin:4.1")
     implementation("com.gradleup.nmcp:nmcp:1.0.1")
-    implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.8")
+    implementation("com.gradleup.shadow:shadow-gradle-plugin:9.0.2")
     implementation(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
     )
