@@ -291,7 +291,7 @@ extraJavaModuleInfo {
     module("com.google.errorprone:javac-shaded", "com.google.errorprone.javac.shaded")
     module("com.google.googlejavaformat:google-java-format", "com.google.googlejavaformat")
     module("net.ltgt.gradle.incap:incap", "net.ltgt.gradle.incap")
-    module("org.jetbrains.kotlinx:kotlinx-metadata-jvm", "kotlinx.metadata.jvm")
+    module("org.jetbrains.kotlin:kotlin-metadata-jvm", "kotlin.metadata.jvm")
 
     // Testing only
     module("io.grpc:grpc-netty-shaded", "io.grpc.netty.shaded") {
