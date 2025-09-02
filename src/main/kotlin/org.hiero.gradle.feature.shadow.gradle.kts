@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin
 import com.github.jengelman.gradle.plugins.shadow.ShadowJavaPlugin
-import com.github.jengelman.gradle.plugins.shadow.internal.DefaultDependencyFilter
+import com.github.jengelman.gradle.plugins.shadow.tasks.DependencyFilter
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins { id("java") }
@@ -12,6 +12,12 @@ plugins.apply(ShadowBasePlugin::class)
 
 plugins.apply(ShadowJavaPlugin::class)
 
+// https://github.com/gradle/gradle/issues/6875
+configurations.named("shadow") { isVisible = false }
+
+// https://github.com/gradle/gradle/issues/6875
+configurations.named("shadowRuntimeElements") { isVisible = false }
+
 tasks.withType<ShadowJar>().configureEach {
     group = "shadow"
     mergeServiceFiles()
@@ -21,11 +27,28 @@ tasks.withType<ShadowJar>().configureEach {
     // There is an issue in the shadow plugin that it automatically accesses the
     // files in 'runtimeClasspath' while Gradle is building the task graph.
     // See: https://github.com/GradleUp/shadow/issues/882
-    dependencyFilter = NoResolveDependencyFilter()
+    dependencyFilter = NoResolveDependencyFilter(project)
 }
 
-class NoResolveDependencyFilter : DefaultDependencyFilter(project) {
-    override fun resolve(configuration: FileCollection): FileCollection {
+class NoResolveDependencyFilter(p: Project) : DependencyFilter.AbstractDependencyFilter(p) {
+
+    override fun resolve(configuration: Configuration): FileCollection {
+        // override, to not do early dependency resolution
         return configuration
+    }
+
+    override fun resolve(
+        dependencies: Set<ResolvedDependency>,
+        includedDependencies: MutableSet<ResolvedDependency>,
+        excludedDependencies: MutableSet<ResolvedDependency>,
+    ) {
+        // implementation is copied from DefaultDependencyFilter
+        dependencies.forEach {
+            if (
+                if (it.isIncluded()) includedDependencies.add(it) else excludedDependencies.add(it)
+            ) {
+                resolve(it.children, includedDependencies, excludedDependencies)
+            }
+        }
     }
 }
