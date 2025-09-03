@@ -23,7 +23,7 @@ class CheckTest {
             """
             plugins { id("org.hiero.gradle.module.library") }
             
-            testModuleInfo { requires("org.junit.jupiter.api") }
+            testModuleInfo { requiresStatic("org.junit.jupiter.api") }
             """
                 .trimIndent()
         )
@@ -53,7 +53,7 @@ class CheckTest {
             }
             
             """
-                .trimIndent()
+                .trimIndent(),
         )
 
         val result = p.check()
