@@ -345,6 +345,7 @@ extraJavaModuleInfo {
         uses("org.testcontainers.utility.ImageNameSubstitutor")
     }
     module("org.testcontainers:junit-jupiter", "org.testcontainers.junit.jupiter")
+    module("eu.rekawek.toxiproxy:toxiproxy-java", "eu.rekawek.toxiproxy.java")
 }
 
 // Configure consistent resolution across the whole project
