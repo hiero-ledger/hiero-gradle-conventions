@@ -29,7 +29,7 @@ dependencies {
     implementation("io.freefair.gradle:maven-plugin:8.14.2") // for POM validation
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.1.0")
-    implementation("org.gradlex:extra-java-module-info:1.13")
+    implementation("org.gradlex:extra-java-module-info:1.13.1")
     implementation("org.gradlex:java-module-dependencies:1.9.2")
     implementation("org.gradlex:java-module-testing:1.7")
     implementation("org.gradlex:jvm-dependency-conflict-resolution:2.4")
