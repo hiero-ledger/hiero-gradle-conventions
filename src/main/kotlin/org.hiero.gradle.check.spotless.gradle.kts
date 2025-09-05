@@ -24,7 +24,7 @@ spotless {
 tasks.withType<JavaCompile>().configureEach {
     // When doing a 'qualityGate' run, make sure spotlessApply is done before doing compilation and
     // other checks based on compiled code
-    mustRunAfter(tasks.spotlessApply)
+    shouldRunAfter(tasks.spotlessApply)
 }
 
 tasks.named("qualityCheck") { dependsOn(tasks.spotlessCheck) }
