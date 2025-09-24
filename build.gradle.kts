@@ -38,7 +38,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:${embeddedKotlinVersion}"))
 
     testImplementation(platform("org.junit:junit-bom:5.13.4"))
-    testImplementation("org.assertj:assertj-core:3.27.4")
+    testImplementation("org.assertj:assertj-core:3.27.6")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
 }
 
