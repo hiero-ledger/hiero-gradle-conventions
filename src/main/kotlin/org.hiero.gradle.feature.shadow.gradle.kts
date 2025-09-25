@@ -20,6 +20,9 @@ configurations.named("shadowRuntimeElements") { isVisible = false }
 
 tasks.withType<ShadowJar>().configureEach {
     group = "shadow"
+
+    // https://gradleup.com/shadow/changes/#migration-example
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     mergeServiceFiles()
 
     manifest { attributes("Multi-Release" to "true") }
