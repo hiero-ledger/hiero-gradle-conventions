@@ -74,8 +74,8 @@ class SortModuleInfoRequiresStep {
 
                     (blockStart +
                             nonRequiresLines +
-                            requiresTransitive +
                             requires +
+                            requiresTransitive +
                             requiresStaticTransitive +
                             requiresStatic +
                             blockEnd)

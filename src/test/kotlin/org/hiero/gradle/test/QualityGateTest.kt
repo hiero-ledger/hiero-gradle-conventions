@@ -68,7 +68,7 @@ class QualityGateTest {
             package org.hiero.product.module.a;
             public class ModuleA {
                 private com.fasterxml.jackson.databind.ObjectMapper om;
-                private org.apache.commons.lang3.CharUtils cu;
+                public org.apache.commons.lang3.CharUtils cu;
             }"""
                 .trimIndent()
         )
@@ -78,7 +78,7 @@ class QualityGateTest {
                 "product/module-a/src/main/java/module-info.java",
                 """
                 module org.hiero.product.module.a   {    
-                    requires org.apache.commons.lang3;  
+                    requires transitive org.apache.commons.lang3;  
                     requires    com.fasterxml.jackson.databind;
                     
                     exports       org.hiero.product.module.a;
@@ -109,7 +109,7 @@ class QualityGateTest {
             // SPDX-License-Identifier: Apache-2.0
             module org.hiero.product.module.a {
                 requires com.fasterxml.jackson.databind;
-                requires org.apache.commons.lang3;
+                requires transitive org.apache.commons.lang3;
             
                 exports org.hiero.product.module.a;
             }
