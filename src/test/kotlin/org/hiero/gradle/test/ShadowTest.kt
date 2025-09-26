@@ -68,4 +68,62 @@ class ShadowTest {
 
         assertThat(result.task(":module-a:shadowJar")).isNull()
     }
+
+    @Test
+    fun `shadowJar merges service files`() {
+        val p = GradleProject().withMinimalStructure()
+        p.dependencyVersionsFile(
+            """
+            plugins {
+                id("org.hiero.gradle.base.lifecycle")
+                id("org.hiero.gradle.base.jpms-modules")
+            }
+            dependencies.constraints {
+                api("com.fasterxml.jackson.core:jackson-core:2.20.0")
+                api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.0")
+            }
+            """
+                .trimIndent()
+        )
+        p.moduleInfoFile(
+            """
+            module org.hiero.product.module.a {
+                requires com.fasterxml.jackson.core;
+                requires com.fasterxml.jackson.dataformat.yaml;
+            }"""
+                .trimIndent()
+        )
+        p.moduleBuildFile(
+            """
+            plugins {
+                id("org.hiero.gradle.module.application")
+                id("org.hiero.gradle.feature.shadow")
+            }
+            application {
+                mainClass = "org.hiero.product.module.a.ModuleA"
+            }
+            // unzip result of shadowJar for assertions in test
+            tasks.register<Copy>("unzipShadowJar") {
+                from(zipTree(tasks.shadowJar.flatMap { it.archiveFile }))
+                into(layout.buildDirectory.dir("shadowContent"))
+            }
+        """
+                .trimIndent()
+        )
+
+        val result = p.run(":module-a:unzipShadowJar")
+
+        assertThat(result.task(":module-a:shadowJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(
+                p.file(
+                    "product/module-a/build/shadowContent/META-INF/services/com.fasterxml.jackson.core.JsonFactory"
+                )
+            )
+            .hasContent(
+                """
+                com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+                com.fasterxml.jackson.core.JsonFactory"""
+                    .trimIndent()
+            )
+    }
 }
