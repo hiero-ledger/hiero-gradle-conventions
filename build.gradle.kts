@@ -21,7 +21,7 @@ dependencies {
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.5")
     implementation("com.gradle.publish:plugin-publish-plugin:2.0.0")
     implementation("com.gradle:develocity-gradle-plugin:4.2")
-    implementation("com.gradleup.nmcp:nmcp:1.1.0")
+    implementation("com.gradleup.nmcp:nmcp:1.2.0")
     implementation("com.gradleup.shadow:shadow-gradle-plugin:9.1.0")
     implementation(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
