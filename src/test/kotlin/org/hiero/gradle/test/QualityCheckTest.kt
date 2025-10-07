@@ -89,4 +89,62 @@ class QualityCheckTest {
                     .trimIndent()
             )
     }
+
+    @Test
+    fun `qualityCheck detects inconsistend and unused versions`() {
+        val p = GradleProject().withMinimalStructure()
+        p.dependencyVersionsFile(
+            """
+            plugins {
+                id("org.hiero.gradle.base.lifecycle")
+                id("org.hiero.gradle.base.jpms-modules")
+                id("org.hiero.gradle.check.versions")
+            }
+            dependencies.constraints {
+                api("com.fasterxml.jackson.core:jackson-databind:2.16.0")
+                api("com.fasterxml.jackson.core:jackson-core:2.15.0")
+                api("org.apache.commons:commons-lang3:3.14.0")
+                api("com.google.protobuf:protoc:4.31.1")
+            }
+            tasks.checkVersionConsistency {
+                excludes.add("com.google.protobuf:protoc") // protoc tool
+            }"""
+                .trimIndent()
+        )
+        p.aggregationBuildFile(
+            """
+            plugins { id("java") }
+            dependencies { implementation(project(":module-a")) }
+        """
+                .trimIndent()
+        )
+        p.moduleBuildFile("""plugins { id("org.hiero.gradle.module.library") }""")
+        p.moduleInfoFile(
+            """
+            module org.hiero.product.module.a {
+                requires com.fasterxml.jackson.databind;
+            }"""
+                .trimIndent()
+        )
+        p.javaSourceFile(
+            """
+            package foo;
+            import com.fasterxml.jackson.databind.ObjectMapper;
+            public class ModuleA { private ObjectMapper om; }"""
+                .trimIndent()
+        )
+
+        val result = p.failQualityCheck()
+
+        assertThat(result.task(":hiero-dependency-versions:checkVersionConsistency")?.outcome)
+            .isEqualTo(TaskOutcome.FAILED)
+        assertThat(result.output)
+            .contains(
+                """
+                > Wrong version: com.fasterxml.jackson.core:jackson-core (declared=2.15.0; used=2.16.0)
+                  Not used: org.apache.commons:commons-lang3:3.14.0
+                """
+                    .trimIndent()
+            )
+    }
 }

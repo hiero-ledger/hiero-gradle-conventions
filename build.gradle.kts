@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: Apache-2.0
-import org.gradle.kotlin.dsl.repositories
 import org.hiero.gradle.environment.EnvAccess
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
