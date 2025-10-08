@@ -8,7 +8,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 
 /**
- * Access to a minimal project inside a temporary folder. The project contain files that are
+ * Access to a minimal project inside a temporary folder. The project contains files that are
  * expected to exist in our setup.
  */
 class GradleProject(
@@ -52,13 +52,6 @@ class GradleProject(
             
             javaModules { directory("product") { group = "org.example" } }
         """
-                .trimIndent()
-        )
-        dependencyVersionsFile(
-            """plugins {
-            id("org.hiero.gradle.base.lifecycle")
-            id("org.hiero.gradle.base.jpms-modules")
-        }"""
                 .trimIndent()
         )
         aggregation.writeFormatted("""plugins { id("org.hiero.gradle.base.lifecycle") }""")
@@ -132,6 +125,8 @@ class GradleProject(
     fun failQualityCheck(): BuildResult = runner(listOf("qualityCheck")).buildAndFail()
 
     fun qualityGate(): BuildResult = runner(listOf("qualityGate")).build()
+
+    fun noTask(): BuildResult = runner(emptyList()).build()
 
     fun run(params: String): BuildResult = runner(params.split(" ")).build()
 

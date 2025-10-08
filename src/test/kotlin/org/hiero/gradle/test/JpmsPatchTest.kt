@@ -19,7 +19,7 @@ class JpmsPatchTest {
             dependencies.components.all { if(listOf("alpha", "beta", "rc", "cr", ".m").any { id.version.lowercase().contains(it) }) status = "integration" }
             """
         p.aggregationBuildFile(
-            """plugins { id("org.hiero.gradle.base.lifecycle") }
+            """
             dependencies { implementation(project(":module-a")) }
             $versionPatching
         """
@@ -27,7 +27,6 @@ class JpmsPatchTest {
         )
         p.dependencyVersionsFile(
             """
-            plugins { id("org.hiero.gradle.base.jpms-modules") }
             val modules = extraJavaModuleInfo.moduleSpecs.get().values.map { it.identifier }
             dependencies {
                 api(platform("io.netty:netty-bom:latest.release"))
@@ -69,7 +68,7 @@ class JpmsPatchTest {
         )
         p.help() // generate 'module-info.java' through code above
 
-        val result = p.run("build")
+        val result = p.run("assemble")
 
         assertThat(result.task(":module-a:compileJava")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     }
