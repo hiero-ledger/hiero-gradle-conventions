@@ -9,7 +9,7 @@ spotless {
 
         licenseHeader(
                 LicenseHeader.javaFormat(project),
-                "(import|plugins|pluginManagement|dependencyResolutionManagement|repositories|tasks|allprojects|subprojects|buildCache|version)"
+                "(import|plugins|pluginManagement|dependencyResolutionManagement|repositories|tasks|allprojects|subprojects|buildCache|version|dependencies)",
             )
             .updateYearWithLatest(true)
     }

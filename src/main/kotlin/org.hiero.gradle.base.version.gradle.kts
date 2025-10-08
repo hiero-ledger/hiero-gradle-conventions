@@ -8,7 +8,10 @@ version =
                 if (project.parent == null) {
                     ""
                 } else {
-                    throw RuntimeException("version.txt file not found")
+                    val message =
+                        "version.txt file not found! Run: ./gradlew versionAsSpecified -PnewVersion=<version>"
+                    logger.warn("WARN: $message")
+                    "0.1.0-SNAPSHOT" // fallback value
                 }
             }
         )
