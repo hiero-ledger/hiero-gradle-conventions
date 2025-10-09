@@ -10,6 +10,15 @@ plugins {
     id("org.hiero.gradle.report.develocity")
 }
 
+val minGradleVersion = "9.1"
+
+if (GradleVersion.current() < GradleVersion.version(minGradleVersion)) {
+    logger.warn(
+        "WARN: The hiero plugins are not fully compatible with the current Gradle version." +
+            "\n - Run: ./gradlew wrapper --gradle-version $minGradleVersion"
+    )
+}
+
 configure<RootPluginsExtension> {
     // Global plugins, that are applied to the "root project" instead of "settings".
     // Having this here, we do not require a "build.gradle.kts" in the repository roots.

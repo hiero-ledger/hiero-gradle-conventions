@@ -18,10 +18,10 @@ class GradleProject(
     val problemsReport = file("build/reports/problems/problems-report.html")
     private val gradlePropertiesFile = file("gradle.properties")
     val settingsFile = file("settings.gradle.kts")
-    private val dependencyVersions = file("hiero-dependency-versions/build.gradle.kts")
-    private val aggregation = file("gradle/aggregation/build.gradle.kts")
+    val dependencyVersions = file("hiero-dependency-versions/build.gradle.kts")
+    val aggregation = file("gradle/aggregation/build.gradle.kts")
     val versionFile = file("version.txt")
-    private val toolchainVersionsFile = file("gradle/toolchain-versions.properties")
+    val toolchainVersionsFile = file("gradle/toolchain-versions.properties")
 
     val descriptionTxt = file("product/description.txt")
     val moduleBuildFile = file("product/module-a/build.gradle.kts")
@@ -54,7 +54,6 @@ class GradleProject(
         """
                 .trimIndent()
         )
-        aggregation.writeFormatted("""plugins { id("org.hiero.gradle.base.lifecycle") }""")
         versionFile.writeText("1.0")
         toolchainVersionsFile.writeText(
             """
@@ -131,6 +130,8 @@ class GradleProject(
     fun run(params: String): BuildResult = runner(params.split(" ")).build()
 
     fun runAndFail(params: String): BuildResult = runner(params.split(" ")).buildAndFail()
+
+    fun runWithOldGradle(): BuildResult = runner(emptyList()).withGradleVersion("8.14.3").build()
 
     private fun File.writeFormatted(content: String) {
         writeText("$expectedHeader$content\n")

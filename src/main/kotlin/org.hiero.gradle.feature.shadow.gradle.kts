@@ -12,12 +12,6 @@ plugins.apply(ShadowBasePlugin::class)
 
 plugins.apply(ShadowJavaPlugin::class)
 
-// https://github.com/gradle/gradle/issues/6875
-configurations.named("shadow") { isVisible = false }
-
-// https://github.com/gradle/gradle/issues/6875
-configurations.named("shadowRuntimeElements") { isVisible = false }
-
 tasks.withType<ShadowJar>().configureEach {
     group = "shadow"
 
