@@ -13,7 +13,6 @@ plugins {
 // In case of SNAPSHOT, do nothing as the upload is done directly by each module individually
 val nonSnapshotRelease = !version.toString().endsWith("-SNAPSHOT")
 
-@Suppress("UnstableApiUsage")
 configurations {
     val published = dependencyScope("published")
     this.implementation { extendsFrom(published.get()) }

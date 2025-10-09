@@ -33,7 +33,7 @@ tasks.register<RustToolchainInstallTask>("installRustToolchains") {
     hostOperatingSystem.set(os)
     hostArchitecture.set(System.getProperty("os.arch"))
 
-    toolchains.convention(CargoToolchain.values().asList())
+    toolchains.convention(CargoToolchain.entries)
     destinationDirectory.convention(layout.buildDirectory.dir("rust-toolchains"))
 
     if (EnvAccess.isCiServer(providers)) {
