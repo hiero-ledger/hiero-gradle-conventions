@@ -15,16 +15,3 @@ configurations {
 }
 
 dependencies { antlr("org.antlr:antlr4") }
-
-// See: https://github.com/gradle/gradle/issues/25885
-java { withSourcesJar() }
-
-tasks.named("sourcesJar") { dependsOn(tasks.generateGrammarSource) }
-
-tasks.withType<com.autonomousapps.tasks.CodeSourceExploderTask>().configureEach {
-    dependsOn(tasks.withType<AntlrTask>())
-}
-
-tasks.withType<com.diffplug.gradle.spotless.SpotlessTask>().configureEach {
-    dependsOn(tasks.withType<AntlrTask>())
-}

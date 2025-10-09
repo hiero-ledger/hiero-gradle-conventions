@@ -1,0 +1,1 @@
+Configuration for an aggregation project for aggregating artifacts (publishing, code coverage) and consistent dependency resolution

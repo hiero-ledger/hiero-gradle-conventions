@@ -38,17 +38,11 @@ class QualityCheckTest {
         val p = GradleProject().withMinimalStructure()
         p.dependencyVersionsFile(
             """
-            plugins {
-                id("org.hiero.gradle.base.lifecycle")
-                id("org.hiero.gradle.base.jpms-modules")
-            }
             dependencies.constraints {
                 api("com.fasterxml.jackson.core:jackson-databind:2.16.0") {
                     because("com.fasterxml.jackson.databind")
                 }
-                api("org.apache.commons:commons-lang3:3.14.0") {
-                    because("org.apache.commons.lang3")
-                }
+                api("org.apache.commons:commons-lang3:3.14.0") { because("org.apache.commons.lang3") }
             }"""
                 .trimIndent()
         )

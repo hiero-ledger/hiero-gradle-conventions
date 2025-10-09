@@ -13,8 +13,6 @@ class CheckTest {
         val p = GradleProject().withMinimalStructure()
         p.aggregationBuildFile(
             """
-            plugins { id("org.hiero.gradle.report.code-coverage") }
-
             dependencies { implementation(project(":module-a")) }
         """
                 .trimIndent()
@@ -29,10 +27,6 @@ class CheckTest {
         )
         p.dependencyVersionsFile(
             """
-            plugins {
-                id("org.hiero.gradle.base.lifecycle")
-                id("org.hiero.gradle.base.jpms-modules")
-            }
             dependencies.constraints {
                 api("org.junit.jupiter:junit-jupiter-api:5.10.2") { because("org.junit.jupiter.api") }
                 api("org.junit.jupiter:junit-jupiter-engine:5.10.2") { because("org.junit.jupiter.engine") }
