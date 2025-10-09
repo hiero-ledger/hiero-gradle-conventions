@@ -31,16 +31,12 @@ class WarningsAndErrorsTest {
         val p = GradleProject()
         p.settingsFile("plugins { id(\"org.hiero.gradle.build\") }")
 
-        val result = p.runWithOldGradle()
+        p.runWithOldGradle()
 
-        assertThat(result.output)
-            .contains(
-                """
-                WARN: The hiero plugins are not fully compatible with the current Gradle version.
-                 - Run: ./gradlew wrapper --gradle-version 9.1
-        """
-                    .trimIndent()
-            )
+        assertThat(p.problemsReport)
+            .content()
+            .contains("The hiero plugins are not fully compatible with the current Gradle version")
+            .contains("Run: ./gradlew wrapper --gradle-version ")
     }
 
     @Test
@@ -48,16 +44,12 @@ class WarningsAndErrorsTest {
         val p = GradleProject()
         p.settingsFile("plugins { id(\"org.hiero.gradle.build\") }")
 
-        val result = p.noTask()
+        p.noTask()
 
-        assertThat(result.output)
-            .contains(
-                """
-                WARN: Build cache disabled
-                 - Add org.gradle.caching=true to gradle.properties
-        """
-                    .trimIndent()
-            )
+        assertThat(p.problemsReport)
+            .content()
+            .contains("Build Cache Disabled")
+            .contains("Add org.gradle.caching=true to gradle.properties")
     }
 
     @Test
@@ -65,16 +57,12 @@ class WarningsAndErrorsTest {
         val p = GradleProject()
         p.settingsFile("plugins { id(\"org.hiero.gradle.build\") }")
 
-        val result = p.noTask()
+        p.noTask()
 
-        assertThat(result.output)
-            .contains(
-                """
-                WARN: No version pinned in version.txt file (using: 0.1.0-SNAPSHOT)
-                 - Run: ./gradlew versionAsSpecified -PnewVersion=0.1.0
-        """
-                    .trimIndent()
-            )
+        assertThat(p.problemsReport)
+            .content()
+            .contains("No version pinned in version.txt file (using: 0.1.0-SNAPSHOT)")
+            .contains("Run: ./gradlew versionAsSpecified -PnewVersion=0.1.0")
     }
 
     @Test
@@ -107,16 +95,12 @@ class WarningsAndErrorsTest {
         p.moduleBuildFile("""plugins { id("org.hiero.gradle.module.library") }""")
         p.toolchainVersionsFile.delete()
 
-        val result = p.qualityCheck()
+        p.qualityCheck()
 
-        assertThat(result.output)
-            .contains(
-                """
-                WARN: No 'jdk' version pinned (using: 17.0.16)
-                 - Add jdk=17.0.16 to gradle/toolchain-versions.properties
-        """
-                    .trimIndent()
-            )
+        assertThat(p.problemsReport)
+            .content()
+            .contains("No 'jdk' version pinned (using: ")
+            .contains("to gradle/toolchain-versions.properties")
     }
 
     @Test
@@ -133,16 +117,11 @@ class WarningsAndErrorsTest {
                 .trimIndent()
         )
 
-        val result = p.qualityCheck()
+        p.qualityCheck()
 
-        assertThat(result.output)
-            .contains(
-                """
-                WARN: Gradle runs with Java 17.0.16. This project works best running with Java 17.0.99. 
-                 - From commandline: change JAVA_HOME and/or PATH to point at Java 17.0.99 installation.
-                 - From IntelliJ: change 'Gradle JVM' in 'Gradle Settings' to point at Java 17.0.99 installation.
-        """
-                    .trimIndent()
-            )
+        assertThat(p.problemsReport)
+            .content()
+            .contains("This project works best running with Java 17.0.99")
+            .contains("'Gradle JVM' in 'Gradle Settings'")
     }
 }
