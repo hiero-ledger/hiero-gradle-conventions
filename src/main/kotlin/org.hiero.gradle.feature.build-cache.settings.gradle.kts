@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
 import org.hiero.gradle.environment.EnvAccess
 
+if (!gradle.startParameter.isBuildCacheEnabled) {
+    logger.warn(
+        "WARN: Build cache disabled" + "\n - Add org.gradle.caching=true to gradle.properties"
+    )
+}
+
 buildCache {
     remote<HttpBuildCache> {
         url = uri("https://cache.gradle.hedera.svcs.eng.swirldslabs.io/cache/")

@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: Apache-2.0
-import org.gradle.kotlin.dsl.repositories
 import org.hiero.gradle.environment.EnvAccess
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
@@ -74,6 +73,22 @@ publishing {
             username = providers.environmentVariable("NEXUS_USERNAME").orNull
             password = providers.environmentVariable("NEXUS_PASSWORD").orNull
         }
+    }
+}
+
+tasks.wrapper {
+    doLast {
+        // ensure the Gradle version the plugins are built with is defined as the minimal version
+        // for users
+        val buildPluginFile = File("src/main/kotlin/org.hiero.gradle.build.settings.gradle.kts")
+        buildPluginFile.writeText(
+            buildPluginFile
+                .readText()
+                .replace(
+                    Regex("minGradleVersion = \".+\""),
+                    "minGradleVersion = \"${GradleVersion.current().version}\"",
+                )
+        )
     }
 }
 
