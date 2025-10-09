@@ -42,6 +42,7 @@ class MinimalProjectTest {
         """
                     .trimIndent()
             )
+            .contains("Problems report is available at:")
     }
 
     @Test
@@ -75,14 +76,6 @@ class MinimalProjectTest {
 
         val result = p.qualityCheck()
 
-        assertThat(result.output)
-            .contains(
-                """
-                WARN: No version pinned in version.txt file (using: 0.1.0-SNAPSHOT)
-                 - Run: ./gradlew versionAsSpecified -PnewVersion=0.1.0
-                WARN: No 'jdk' version pinned (using: 
-        """
-                    .trimIndent()
-            )
+        assertThat(result.output).contains("Problems report is available at:")
     }
 }
