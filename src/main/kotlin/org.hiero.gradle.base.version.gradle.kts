@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 version =
+    @Suppress("UnstableApiUsage")
     providers
         .fileContents(isolated.rootProject.projectDirectory.file("version.txt"))
         .asText
