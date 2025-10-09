@@ -16,7 +16,8 @@ val fullJavaVersion =
         .orElse(
             provider {
                 val message =
-                    "No 'jdk' version defined in 'gradle/toolchain-versions.properties'. Using: $currentJavaVersion"
+                    "No 'jdk' version pinned (using: $currentJavaVersion)" +
+                        "\n - Add jdk=$currentJavaVersion to gradle/toolchain-versions.properties"
                 logger.warn("WARN: $message")
                 currentJavaVersion
             }

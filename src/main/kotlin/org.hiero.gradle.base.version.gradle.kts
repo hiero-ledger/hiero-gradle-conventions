@@ -10,7 +10,8 @@ version =
                     ""
                 } else {
                     val message =
-                        "version.txt file not found! Run: ./gradlew versionAsSpecified -PnewVersion=<version>"
+                        "No version pinned in version.txt file (using: 0.1.0-SNAPSHOT)" +
+                            "\n - Run: ./gradlew versionAsSpecified -PnewVersion=0.1.0"
                     logger.warn("WARN: $message")
                     "0.1.0-SNAPSHOT" // fallback value
                 }
