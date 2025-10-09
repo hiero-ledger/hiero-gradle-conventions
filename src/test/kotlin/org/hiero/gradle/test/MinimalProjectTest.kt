@@ -65,8 +65,9 @@ class MinimalProjectTest {
         assertThat(result.output)
             .contains(
                 """
-            WARN: version.txt file not found! Run: ./gradlew versionAsSpecified -PnewVersion=<version>
-            WARN: No 'jdk' version defined in 'gradle/toolchain-versions.properties'. Using:
+                WARN: No version pinned in version.txt file (using: 0.1.0-SNAPSHOT)
+                 - Run: ./gradlew versionAsSpecified -PnewVersion=0.1.0
+                WARN: No 'jdk' version pinned (using: 
         """
                     .trimIndent()
             )
