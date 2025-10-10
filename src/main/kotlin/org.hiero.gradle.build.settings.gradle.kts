@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import org.gradlex.javamodule.dependencies.initialization.JavaModulesExtension
 import org.gradlex.javamodule.dependencies.initialization.RootPluginsExtension
+import org.hiero.gradle.extensions.PluginVersionsExtensionCreateAction
 
 plugins {
     id("org.gradlex.java-module-dependencies")
@@ -41,3 +42,10 @@ configure<JavaModulesExtension> {
         versions("hiero-dependency-versions")
     }
 }
+
+// Export the plugin versions to be used for dependencies when needed.
+val pluginVersions =
+    buildscript.configurations["classpath"].dependencies.associate { it.group!! to it.version!! }
+
+@Suppress("UnstableApiUsage")
+gradle.lifecycle.beforeProject(PluginVersionsExtensionCreateAction(pluginVersions))
