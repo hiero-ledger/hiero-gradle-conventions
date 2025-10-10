@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.hiero.gradle.environment.EnvAccess
+
 plugins {
     id("org.hiero.gradle.base.lifecycle")
     id("com.diffplug.spotless")
@@ -8,17 +10,10 @@ spotless {
     // Disable the automatic application of Spotless to all source sets when the check task is run.
     isEnforceCheck = false
 
-    // limit format enforcement to just the files changed by this feature branch
-    @Suppress("UnstableApiUsage")
-    ratchetFrom(
-        "origin/" +
-            providers
-                .fileContents(
-                    isolated.rootProject.projectDirectory.file("gradle/development-branch.txt")
-                )
-                .asText
-                .getOrElse("main")
-    )
+    if (EnvAccess.isGitRepositoryWithMainBranch(layout.projectDirectory, providers)) {
+        // limit format enforcement to just the files changed by this feature branch
+        ratchetFrom("origin/main")
+    }
 }
 
 tasks.withType<JavaCompile>().configureEach {

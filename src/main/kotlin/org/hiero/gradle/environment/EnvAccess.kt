@@ -40,4 +40,15 @@ object EnvAccess {
         providers.environmentVariable("CI").getOrElse("false").let {
             if (it.isBlank()) true else it.toBoolean()
         }
+
+    fun isGitRepositoryWithMainBranch(projectDirectory: Directory, providers: ProviderFactory) =
+        providers
+            .exec {
+                isIgnoreExitValue = true
+                commandLine("git", "rev-parse", "origin/main")
+                workingDir = projectDirectory.asFile
+            }
+            .result
+            .get()
+            .exitValue == 0
 }

@@ -11,9 +11,9 @@ import org.gradle.testkit.runner.GradleRunner
  * Access to a minimal project inside a temporary folder. The project contain files that are
  * expected to exist in our setup.
  */
-class GradleProject {
-
-    private val projectDir = File("build/test-projects/${UUID.randomUUID()}")
+class GradleProject(
+    private val projectDir: File = File("build/test-projects/${UUID.randomUUID()}")
+) {
 
     val problemsReport = file("build/reports/problems/problems-report.html")
     private val gradlePropertiesFile = file("gradle.properties")

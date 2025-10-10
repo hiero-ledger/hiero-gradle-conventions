@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.hiero.gradle.environment.EnvAccess
+
 plugins { id("java") }
 
 tasks.register<WriteProperties>("writeGitProperties") {
@@ -29,7 +31,9 @@ tasks.register<WriteProperties>("writeGitProperties") {
     destinationFile = layout.buildDirectory.file("generated/git/git.properties")
 }
 
-tasks.processResources { from(tasks.named("writeGitProperties")) }
+if (EnvAccess.isGitRepositoryWithMainBranch(layout.projectDirectory, providers)) {
+    tasks.processResources { from(tasks.named("writeGitProperties")) }
+}
 
 // ignore the content of 'git.properties' when using a classpath as task input
 normalization.runtimeClasspath { ignore("git.properties") }
