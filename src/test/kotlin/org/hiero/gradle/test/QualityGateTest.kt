@@ -185,6 +185,7 @@ class QualityGateTest {
             .hasContent(
                 """
             // SPDX-License-Identifier: Apache-2.0
+            
             pub fn public_api() {}
         """
                     .trimIndent()

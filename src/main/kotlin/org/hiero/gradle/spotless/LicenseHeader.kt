@@ -21,6 +21,11 @@ object LicenseHeader {
                 .joinToString("\n")
     }
 
+    fun rustFormat(project: Project): String {
+        val plainHeader = plainHeader(project).lines()
+        return "// " + plainHeader.single() + "\n\n"
+    }
+
     fun yamlFormat(project: Project): String {
         val plainHeader = plainHeader(project).lines()
         return if (plainHeader.size == 1) "# " + plainHeader.single()

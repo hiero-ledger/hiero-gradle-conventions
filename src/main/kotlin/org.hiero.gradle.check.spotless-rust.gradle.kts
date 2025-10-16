@@ -5,12 +5,13 @@ plugins { id("com.diffplug.spotless") }
 
 spotless {
     format("rust") {
-        target("**/*.rs")
+        target("src/**/*.rs")
 
         trimTrailingWhitespace()
         leadingTabsToSpaces()
         endWithNewline()
 
-        licenseHeader(LicenseHeader.javaFormat(project), "(use|#|pub)").updateYearWithLatest(true)
+        licenseHeader(LicenseHeader.rustFormat(project), "^(?!\\/\\/ SPDX).")
+            .updateYearWithLatest(true)
     }
 }
