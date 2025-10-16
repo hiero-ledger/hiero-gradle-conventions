@@ -165,4 +165,32 @@ class QualityGateTest {
 
         assertThat(result.task(":qualityGate")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     }
+
+    @Test
+    fun `spotlessApply formats rust files`() {
+        val p = GradleProject().withMinimalStructure()
+        p.moduleBuildFile(
+            """plugins {
+            id("org.hiero.gradle.module.library")
+            id("org.hiero.gradle.feature.rust") 
+            }"""
+                .trimIndent()
+        )
+
+        val rustLib = p.file("product/module-a/src/main/rust/lib.rs", "pub fn public_api() {}")
+
+        val result = p.run("spotlessApply")
+
+        assertThat(rustLib)
+            .hasContent(
+                """
+            // SPDX-License-Identifier: Apache-2.0
+            
+            pub fn public_api() {}
+        """
+                    .trimIndent()
+            )
+
+        assertThat(result.task(":spotlessApply")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
 }
