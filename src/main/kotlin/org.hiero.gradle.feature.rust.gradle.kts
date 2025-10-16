@@ -2,7 +2,10 @@
 import org.hiero.gradle.extensions.CargoExtension
 import org.hiero.gradle.extensions.CargoToolchain
 
-plugins { id("java") }
+plugins {
+    id("java")
+    id("org.hiero.gradle.check.spotless-rust")
+}
 
 val cargo = project.extensions.create<CargoExtension>("cargo")
 
