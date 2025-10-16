@@ -68,7 +68,7 @@ class GradleProject {
             """
             # SPDX-License-Identifier: Apache-2.0
             
-            jdk=17.0.13
+            jdk=17.0.16
             
         """
                 .trimIndent()
