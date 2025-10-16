@@ -4,6 +4,7 @@ plugins {
     id("org.hiero.gradle.base.jpms-modules")
     id("org.hiero.gradle.check.spotless")
     id("org.hiero.gradle.check.spotless-kotlin")
+    id("org.hiero.gradle.check.versions")
 }
 
 dependencies.constraints {

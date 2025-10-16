@@ -1,0 +1,1 @@
+Adds a task that checks the consistency between declared and resolved versions of a java-platform.
