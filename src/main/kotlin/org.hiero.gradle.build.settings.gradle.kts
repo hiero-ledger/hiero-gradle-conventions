@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.gradle.kotlin.dsl.support.serviceOf
 import org.gradlex.javamodule.dependencies.initialization.JavaModulesExtension
 import org.gradlex.javamodule.dependencies.initialization.RootPluginsExtension
 import org.hiero.gradle.extensions.PluginVersionsExtensionCreateAction
+import org.hiero.gradle.problems.ProblemReporter
 
 plugins {
     id("org.gradlex.java-module-dependencies")
@@ -13,10 +15,14 @@ plugins {
 val minGradleVersion = "9.1"
 
 if (GradleVersion.current() < GradleVersion.version(minGradleVersion)) {
-    logger.warn(
-        "WARN: The hiero plugins are not fully compatible with the current Gradle version." +
-            "\n - Run: ./gradlew wrapper --gradle-version $minGradleVersion"
-    )
+    serviceOf<ObjectFactory>()
+        .newInstance<ProblemReporter>()
+        .warn(
+            "Wrong Gradle version",
+            "The hiero plugins are not fully compatible with the current Gradle version",
+            "gradle/wrapper/gradle-wrapper.properties",
+            " Run: ./gradlew wrapper --gradle-version $minGradleVersion",
+        )
 }
 
 configure<RootPluginsExtension> {
