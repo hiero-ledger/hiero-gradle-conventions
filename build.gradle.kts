@@ -32,7 +32,7 @@ dependencies {
     implementation("org.gradlex:java-module-dependencies:1.11")
     implementation("org.gradlex:java-module-testing:1.7")
     implementation("org.gradlex:jvm-dependency-conflict-resolution:2.4")
-    implementation("org.gradlex:reproducible-builds:1.0")
+    implementation("org.gradlex:reproducible-builds:1.1")
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:${embeddedKotlinVersion}"))
 
