@@ -92,8 +92,7 @@ tasks.withType<KotlinJvmCompile>().configureEach {
 spotless {
     // Format '*.kts' and '*.kt' in 'src/main/kotlin'
     val header = "// SPDX-License-Identifier: Apache-2.0\n"
-    val delimiter =
-        "(import|package|plugins|pluginManagement|dependencyResolutionManagement|repositories|tasks|allprojects|subprojects|buildCache|version)"
+    val delimiter = "^(?!\\/\\/ SPDX)."
     kotlin {
         ktfmt().kotlinlangStyle()
         targetExclude("build/**")

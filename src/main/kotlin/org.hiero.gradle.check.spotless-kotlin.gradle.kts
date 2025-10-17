@@ -6,11 +6,6 @@ plugins { id("com.diffplug.spotless") }
 spotless {
     kotlinGradle {
         ktfmt().kotlinlangStyle()
-
-        licenseHeader(
-                LicenseHeader.javaFormat(project),
-                "(import|plugins|pluginManagement|dependencyResolutionManagement|repositories|tasks|allprojects|subprojects|buildCache|version)"
-            )
-            .updateYearWithLatest(true)
+        licenseHeader(LicenseHeader.HEADER_STYLE_C, LicenseHeader.FIRST_LINE_REGEX_STYLE_C)
     }
 }

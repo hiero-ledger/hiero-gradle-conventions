@@ -11,7 +11,7 @@ spotless {
         leadingTabsToSpaces()
         endWithNewline()
 
-        licenseHeader(LicenseHeader.rustFormat(project), "^(?!\\/\\/ SPDX).")
-            .updateYearWithLatest(true)
+        // additional newline after header in 'rs' files
+        licenseHeader(LicenseHeader.HEADER_STYLE_C + "\n", LicenseHeader.FIRST_LINE_REGEX_STYLE_C)
     }
 }
