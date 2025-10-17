@@ -4,7 +4,7 @@ plugins {
     id("org.hiero.gradle.base.jpms-modules")
 }
 
-configurations.create("publishDependencyConstraint") {
+configurations.register("publishDependencyConstraint") {
     extendsFrom(configurations["internal"])
     dependencies.all {
         val constraint = this
@@ -19,7 +19,7 @@ configurations.create("publishDependencyConstraint") {
                     .selected
                     .moduleVersion
                     .toString()
-            }
+            },
         )
     }
 }

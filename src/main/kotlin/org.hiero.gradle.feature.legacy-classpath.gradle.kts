@@ -14,4 +14,4 @@ extraJavaModuleInfo {
     failOnAutomaticModules = false
 }
 
-javaModuleTesting { classpath(testing.suites["test"]) }
+javaModuleTesting { @Suppress("UnstableApiUsage") classpath(testing.suites["test"]) }

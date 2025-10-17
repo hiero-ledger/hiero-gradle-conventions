@@ -9,4 +9,4 @@ plugins {
 
 val cargo = project.extensions.create<CargoExtension>("cargo")
 
-cargo.targets(*CargoToolchain.values())
+cargo.targets(*CargoToolchain.entries.toTypedArray())

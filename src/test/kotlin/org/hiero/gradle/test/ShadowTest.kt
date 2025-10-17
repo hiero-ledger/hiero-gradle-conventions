@@ -13,10 +13,6 @@ class ShadowTest {
         val p = GradleProject().withMinimalStructure()
         p.dependencyVersionsFile(
             """
-            plugins {
-                id("org.hiero.gradle.base.lifecycle")
-                id("org.hiero.gradle.base.jpms-modules")
-            }
             dependencies.constraints {
                 api("org.apache.commons:commons-lang3:3.14.0") { because("org.apache.commons.lang3") }
             }
@@ -74,10 +70,6 @@ class ShadowTest {
         val p = GradleProject().withMinimalStructure()
         p.dependencyVersionsFile(
             """
-            plugins {
-                id("org.hiero.gradle.base.lifecycle")
-                id("org.hiero.gradle.base.jpms-modules")
-            }
             dependencies.constraints {
                 api("com.fasterxml.jackson.core:jackson-core:2.20.0")
                 api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.0")
