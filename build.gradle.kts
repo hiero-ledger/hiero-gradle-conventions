@@ -8,6 +8,9 @@ plugins {
     `kotlin-dsl`
 }
 
+// TODO disable due to change in properties formatting, remove with update to 0.6.0
+tasks.spotlessMiscCheck { enabled = false }
+
 group = "org.hiero.gradle"
 
 description = "Gradle convention plugins used by Hiero projects"
