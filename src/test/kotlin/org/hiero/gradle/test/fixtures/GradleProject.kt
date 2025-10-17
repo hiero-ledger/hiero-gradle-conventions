@@ -37,7 +37,6 @@ class GradleProject(
         gradlePropertiesFile.writeText(
             """
             # SPDX-License-Identifier: Apache-2.0
-            
             org.gradle.configuration-cache=true
             # org.gradle.unsafe.isolated-projects=true
             # org.gradle.caching=true
@@ -67,7 +66,6 @@ class GradleProject(
         toolchainVersionsFile.writeText(
             """
             # SPDX-License-Identifier: Apache-2.0
-            
             jdk=17.0.16
             
         """

@@ -149,7 +149,7 @@ class QualityGateTest {
     @Test
     fun `qualityGate formats property files`() {
         val p = GradleProject().withMinimalStructure()
-        val props1 = p.file("props1.properties", "\nfoo=bar    ")
+        val props1 = p.file("props1.properties", "\n\n\nfoo=bar    ")
 
         val result = p.qualityGate()
 
@@ -157,7 +157,6 @@ class QualityGateTest {
             .hasContent(
                 """
             # SPDX-License-Identifier: Apache-2.0
-            
             foo=bar
         """
                     .trimIndent()

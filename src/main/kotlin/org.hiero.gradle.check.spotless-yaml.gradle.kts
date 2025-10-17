@@ -29,7 +29,7 @@ spotless {
         leadingTabsToSpaces()
         endWithNewline()
 
-        licenseHeader(LicenseHeader.yamlFormat(project), "\\w+\\:").updateYearWithLatest(true)
+        licenseHeader(LicenseHeader.HEADER_STYLE_SHELL, LicenseHeader.FIRST_LINE_REGEX_STYLE_SHELL)
     }
 }
 

@@ -16,8 +16,7 @@ spotless {
         // apply flavor of google-java-format
         palantirJavaFormat()
 
-        licenseHeader(LicenseHeader.javaFormat(project), "(package|import)")
-            .updateYearWithLatest(true)
+        licenseHeader(LicenseHeader.HEADER_STYLE_C, LicenseHeader.FIRST_LINE_REGEX_STYLE_C)
     }
     format("javaInfoFiles") {
         // separate extension due to https://github.com/diffplug/spotless/issues/532
@@ -26,8 +25,7 @@ spotless {
         // sort the 'requires' entries in 'module-info' files
         addStep(SortModuleInfoRequiresStep.create())
 
-        licenseHeader(LicenseHeader.javaFormat(project), "(package|import|module|open|@|/\\*\\*)")
-            .updateYearWithLatest(true)
+        licenseHeader(LicenseHeader.HEADER_STYLE_C, LicenseHeader.FIRST_LINE_REGEX_STYLE_C)
     }
 }
 
