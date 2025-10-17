@@ -11,6 +11,15 @@ class WarningsAndErrorsTest {
     fun `no warnings or errors in a well configured project`() {
         val p = GradleProject()
         p.withMinimalStructure()
+        p.gradlePropertiesFile(
+            """
+            # SPDX-License-Identifier: Apache-2.0
+            org.gradle.configuration-cache=true
+            org.gradle.caching=true
+            
+        """
+                .trimIndent()
+        )
 
         val result = p.qualityCheck()
 
@@ -118,7 +127,6 @@ class WarningsAndErrorsTest {
         p.toolchainVersionsFile(
             """
             # SPDX-License-Identifier: Apache-2.0
-            
             jdk=17.0.99
             
         """

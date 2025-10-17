@@ -89,6 +89,8 @@ class GradleProject(
         return this
     }
 
+    fun gradlePropertiesFile(content: String) = gradlePropertiesFile.also { it.writeText(content) }
+
     fun settingsFile(content: String) = settingsFile.also { it.writeFormatted(content) }
 
     fun moduleBuildFile(content: String) = moduleBuildFile.also { it.writeFormatted(content) }
