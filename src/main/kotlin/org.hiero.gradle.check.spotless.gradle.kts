@@ -7,9 +7,6 @@ plugins {
 }
 
 spotless {
-    // Disable the automatic application of Spotless to all source sets when the check task is run.
-    isEnforceCheck = false
-
     if (EnvAccess.isGitRepositoryWithMainBranch(layout.projectDirectory, providers)) {
         // limit format enforcement to just the files changed by this feature branch
         ratchetFrom("origin/main")
