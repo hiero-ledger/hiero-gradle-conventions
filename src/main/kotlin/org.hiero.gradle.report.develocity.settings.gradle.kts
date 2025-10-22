@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 import org.hiero.gradle.environment.EnvAccess
 
-plugins { id("com.gradle.develocity") }
+plugins {
+    id("com.gradle.develocity")
+    id("com.gradle.common-custom-user-data-gradle-plugin")
+}
 
 develocity {
     buildScan {
