@@ -16,10 +16,6 @@ class LegacyClasspathTest {
         p.settingsFile.appendText("""javaModules { module("product/module-a") }""")
         p.dependencyVersionsFile(
             """
-            plugins {
-                id("org.hiero.gradle.base.lifecycle")
-                id("org.hiero.gradle.base.jpms-modules")
-            }
             dependencies { api(platform("com.google.cloud:libraries-bom:26.49.0")) }
             """
                 .trimIndent()
@@ -40,7 +36,7 @@ class LegacyClasspathTest {
             com.google.cloud.core=com.google.cloud:google-cloud-core
             com.google.cloud.storage=com.google.cloud:google-cloud-storage
         """
-                .trimIndent()
+                .trimIndent(),
         )
         p.moduleBuildFile(
             """

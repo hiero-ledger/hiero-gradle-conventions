@@ -79,6 +79,22 @@ publishing {
     }
 }
 
+tasks.wrapper {
+    doLast {
+        // ensure the Gradle version the plugins are built with is defined as the minimal version
+        // for users
+        val buildPluginFile = File("src/main/kotlin/org.hiero.gradle.build.settings.gradle.kts")
+        buildPluginFile.writeText(
+            buildPluginFile
+                .readText()
+                .replace(
+                    Regex("minGradleVersion = \".+\""),
+                    "minGradleVersion = \"${GradleVersion.current().version}\"",
+                )
+        )
+    }
+}
+
 tasks.test {
     // If success, delete all test projects
     doLast { File("build/test-projects").deleteRecursively() }

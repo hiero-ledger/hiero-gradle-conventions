@@ -72,10 +72,6 @@ class ProtobufTest {
 
     private fun dependencyVersions(protocVersion: String) =
         """
-                plugins {
-                    id("org.hiero.gradle.base.lifecycle")
-                    id("org.hiero.gradle.base.jpms-modules")
-                }
                 dependencies.constraints {
                     api("com.google.protobuf:protobuf-java:4.29.0")
                     api("com.google.protobuf:protoc:$protocVersion")

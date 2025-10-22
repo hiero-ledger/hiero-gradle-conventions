@@ -9,9 +9,21 @@ plugins {
 @Suppress("UnstableApiUsage") val rootDir = project.isolated.rootProject.projectDirectory
 val versions = EnvAccess.toolchainVersions(rootDir, providers, objects)
 
-val fullJavaVersion = versions.getting("jdk").get()
-val majorJavaVersion = JavaVersion.toVersion(fullJavaVersion)
 val currentJavaVersion = providers.systemProperty("java.version").get()
+val fullJavaVersion =
+    versions
+        .getting("jdk")
+        .orElse(
+            provider {
+                val message =
+                    "No 'jdk' version pinned (using: $currentJavaVersion)" +
+                        "\n - Add jdk=$currentJavaVersion to gradle/toolchain-versions.properties"
+                logger.warn("WARN: $message")
+                currentJavaVersion
+            }
+        )
+        .get()
+val majorJavaVersion = JavaVersion.toVersion(fullJavaVersion)
 
 if (currentJavaVersion != fullJavaVersion) {
     val message =
@@ -19,7 +31,7 @@ if (currentJavaVersion != fullJavaVersion) {
             "\n - From commandline: change JAVA_HOME and/or PATH to point at Java $fullJavaVersion installation." +
             "\n - From IntelliJ: change 'Gradle JVM' in 'Gradle Settings' to point at Java $fullJavaVersion installation."
 
-    logger.lifecycle("WARN: $message")
+    logger.warn("WARN: $message")
 }
 
 java {

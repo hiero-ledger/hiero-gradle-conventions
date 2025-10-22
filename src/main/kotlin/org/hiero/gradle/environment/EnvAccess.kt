@@ -17,18 +17,7 @@ object EnvAccess {
         val versionsFile = rootDir.file("gradle/toolchain-versions.properties")
         val properties =
             Properties().also {
-                it.load(
-                    providers
-                        .fileContents(versionsFile)
-                        .asText
-                        .orElse(
-                            providers.provider {
-                                throw RuntimeException("${versionsFile.asFile} does not exist")
-                            }
-                        )
-                        .get()
-                        .reader()
-                )
+                it.load(providers.fileContents(versionsFile).asText.getOrElse("").reader())
             }
 
         val versions = objects.mapProperty(String::class.java, String::class.java)

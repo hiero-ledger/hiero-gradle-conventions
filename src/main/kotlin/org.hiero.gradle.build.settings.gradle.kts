@@ -10,6 +10,15 @@ plugins {
     id("org.hiero.gradle.report.develocity")
 }
 
+val minGradleVersion = "9.1"
+
+if (GradleVersion.current() < GradleVersion.version(minGradleVersion)) {
+    logger.warn(
+        "WARN: The hiero plugins are not fully compatible with the current Gradle version." +
+            "\n - Run: ./gradlew wrapper --gradle-version $minGradleVersion"
+    )
+}
+
 configure<RootPluginsExtension> {
     // Global plugins, that are applied to the "root project" instead of "settings".
     // Having this here, we do not require a "build.gradle.kts" in the repository roots.
@@ -33,13 +42,24 @@ configure<JavaModulesExtension> {
     if (layout.rootDirectory.dir("gradle/aggregation").asFile.isDirectory) {
         // Project to aggregate code coverage data for the whole repository into one report
         module("gradle/aggregation") {
-            plugin("java")
-            plugin("org.hiero.gradle.base.jpms-modules")
+            plugin("org.hiero.gradle.base.lifecycle")
+            plugin("org.hiero.gradle.base.version")
+            plugin("org.hiero.gradle.feature.aggregation")
+            plugin("org.hiero.gradle.feature.publish-maven-central-aggregation")
+            plugin("org.hiero.gradle.report.code-coverage")
+            plugin("org.hiero.gradle.check.spotless")
+            plugin("org.hiero.gradle.check.spotless-kotlin")
         }
     }
     if (layout.rootDirectory.dir("hiero-dependency-versions").asFile.isDirectory) {
         // "BOM" with versions of 3rd party dependencies
-        versions("hiero-dependency-versions")
+        versions("hiero-dependency-versions") {
+            plugin("org.hiero.gradle.base.lifecycle")
+            plugin("org.hiero.gradle.base.jpms-modules")
+            plugin("org.hiero.gradle.check.spotless")
+            plugin("org.hiero.gradle.check.spotless-kotlin")
+            plugin("org.hiero.gradle.check.versions")
+        }
     }
 }
 

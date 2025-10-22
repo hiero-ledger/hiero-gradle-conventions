@@ -75,7 +75,6 @@ class MavenCentralPortalPublishTest {
         // Modify some tasks to do nothing, because we cannot actually publish to Maven Central
         p.aggregationBuildFile(
             """
-            plugins { id("org.hiero.gradle.feature.publish-maven-central-aggregation") }
             dependencies { published(project(":module-a")) }
             tasks.nmcpPublishAggregationToCentralPortal {
                 actions.clear()
