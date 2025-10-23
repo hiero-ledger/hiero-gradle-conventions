@@ -25,7 +25,7 @@ dependencies {
     implementation("com.gradle:common-custom-user-data-gradle-plugin:2.4.0")
     implementation("com.gradle:develocity-gradle-plugin:4.2.2")
     implementation("com.gradleup.nmcp:nmcp:1.2.0")
-    implementation("com.gradleup.shadow:shadow-gradle-plugin:9.1.0")
+    implementation("com.gradleup.shadow:shadow-gradle-plugin:9.2.2")
     implementation(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
     )
