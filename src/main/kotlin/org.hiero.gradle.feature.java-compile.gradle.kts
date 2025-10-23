@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import org.hiero.gradle.environment.EnvAccess
+import org.hiero.gradle.problems.ProblemReporter
 
 plugins {
     id("java")
@@ -15,10 +16,14 @@ val fullJavaVersion =
         .getting("jdk")
         .orElse(
             provider {
-                val message =
-                    "No 'jdk' version pinned (using: $currentJavaVersion)" +
-                        "\n - Add jdk=$currentJavaVersion to gradle/toolchain-versions.properties"
-                logger.warn("WARN: $message")
+                objects
+                    .newInstance<ProblemReporter>()
+                    .warn(
+                        "Java Version not Pinned",
+                        "No 'jdk' version pinned (using: $currentJavaVersion)",
+                        "gradle/toolchain-versions.properties",
+                        "Add jdk=$currentJavaVersion to gradle/toolchain-versions.properties",
+                    )
                 currentJavaVersion
             }
         )
@@ -26,12 +31,16 @@ val fullJavaVersion =
 val majorJavaVersion = JavaVersion.toVersion(fullJavaVersion)
 
 if (currentJavaVersion != fullJavaVersion) {
-    val message =
-        "Gradle runs with Java $currentJavaVersion. This project works best running with Java $fullJavaVersion. " +
-            "\n - From commandline: change JAVA_HOME and/or PATH to point at Java $fullJavaVersion installation." +
-            "\n - From IntelliJ: change 'Gradle JVM' in 'Gradle Settings' to point at Java $fullJavaVersion installation."
-
-    logger.warn("WARN: $message")
+    objects
+        .newInstance<ProblemReporter>()
+        .warn(
+            "Wrong Java Version",
+            "Gradle runs with Java $currentJavaVersion. This project works best running with Java $fullJavaVersion",
+            "gradle/toolchain-versions.properties",
+            "Point at Java $fullJavaVersion installation: " +
+                "JAVA_HOME and/or PATH (command line), " +
+                "'Gradle JVM' in 'Gradle Settings' (IntelliJ)",
+        )
 }
 
 java {

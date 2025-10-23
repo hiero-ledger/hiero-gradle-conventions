@@ -1,10 +1,17 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.gradle.kotlin.dsl.support.serviceOf
 import org.hiero.gradle.environment.EnvAccess
+import org.hiero.gradle.problems.ProblemReporter
 
 if (!gradle.startParameter.isBuildCacheEnabled) {
-    logger.warn(
-        "WARN: Build cache disabled" + "\n - Add org.gradle.caching=true to gradle.properties"
-    )
+    serviceOf<ObjectFactory>()
+        .newInstance<ProblemReporter>()
+        .warn(
+            "Build Cache Disabled",
+            "",
+            "gradle.properties",
+            "Add org.gradle.caching=true to gradle.properties",
+        )
 }
 
 buildCache {
