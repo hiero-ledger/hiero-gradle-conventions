@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 plugins {
-    id("org.hiero.gradle.build") version "0.5.1"
+    id("org.hiero.gradle.build") version "0.6.0"
     `kotlin-dsl` apply false
 }
 
