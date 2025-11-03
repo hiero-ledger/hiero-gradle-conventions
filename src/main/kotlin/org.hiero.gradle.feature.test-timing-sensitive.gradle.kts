@@ -20,11 +20,3 @@ testing.suites {
         }
     }
 }
-
-// Link 'main' dependency scopes similar as they are linked for 'test'
-// https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_configurations_graph
-configurations {
-    getByName("timingSensitiveCompileOnly") { extendsFrom(configurations.compileOnly.get()) }
-    getByName("timingSensitiveImplementation") { extendsFrom(configurations.implementation.get()) }
-    getByName("timingSensitiveRuntimeOnly") { extendsFrom(configurations.runtimeOnly.get()) }
-}
