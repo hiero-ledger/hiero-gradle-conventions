@@ -27,7 +27,7 @@ publishing.publications.withType<MavenPublication>().configureEach {
         // Everything published takes the versions from the resolution result.
         // These are the versions we define in 'hiero-dependency-versions'
         // and use consistently in all modules.
-        allVariants { fromResolutionResult() }
+        versionMapping { allVariants { fromResolutionOf("mainRuntimeClasspath") } }
     }
 
     suppressAllPomMetadataWarnings()
