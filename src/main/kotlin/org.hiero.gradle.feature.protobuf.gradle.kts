@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
+import com.google.protobuf.gradle.GenerateProtoTask
+
 plugins {
     id("java")
     id("com.google.protobuf")
@@ -11,12 +13,7 @@ protobuf {
     // Add GRPC plugin as we need to generate GRPC services
     plugins { register("grpc") { artifact = "io.grpc:protoc-gen-grpc-java" } }
     generateProtoTasks {
-        all().configureEach {
-            plugins.register("grpc") { option("@generated=omit") }
-            // Track all tools as input to react if version changes for the tools
-            inputs.files(configurations["protobufToolsLocator_protoc"])
-            inputs.files(configurations["protobufToolsLocator_grpc"])
-        }
+        all().configureEach { plugins.register("grpc") { option("@generated=omit") } }
     }
 }
 
@@ -29,6 +26,11 @@ configurations.configureEach {
         withDependencies {
             isTransitive = true
             extendsFrom(configurations["internal"])
+        }
+        if (name.startsWith("protobufToolsLocator")) {
+            // Track all tools as input to react to version changes for the tools
+            val protobufToolsLocator = this
+            tasks.withType<GenerateProtoTask>().configureEach { inputs.files(protobufToolsLocator) }
         }
     }
 }
