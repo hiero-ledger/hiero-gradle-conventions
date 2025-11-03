@@ -460,7 +460,7 @@ pluginManagement {
 }
 
 buildscript {
-    configurations.classpath { resolutionStrategy.cacheDynamicVersionsFor(0, "seconds") }
+    configurations.classpath { resolutionStrategy.cacheChangingModulesFor(0, "seconds") }
 }
 
 plugins { id("org.hiero.gradle.build") version "<<next-version>>-SNAPSHOT" }
