@@ -16,12 +16,12 @@ Maintainers are assigned the following scopes in this repository:
 
 <!-- Please keep this sorted alphabetically by github -->
 
-|       Name       |   GitHub ID   | Scope | LFID |    Discord ID    | Email | Company Affiliation |
-|------------------|---------------|-------|------|------------------|-------|---------------------|
-| Roger Barker     | rbarker-dev   |       |      | djbbot           |       | Hashgraph           |
-| Andrew Brandt    | andrewb1269hg |       |      | andrewb1269      |       | Hashgraph           |
-| Nathan Klick     | nathanklick   |       |      | nathan.hashgraph |       | Hashgraph           |
-| Jendrik Johannes | jjohannes     |       |      |                  |       | Onepiece Software   |
+|       Name       |  GitHub ID  | Scope | LFID |    Discord ID    | Email | Company Affiliation |
+|------------------|-------------|-------|------|------------------|-------|---------------------|
+| Roger Barker     | rbarker-dev |       |      | djbbot           |       | Hashgraph           |
+| Andrew Brandt    | andrewb1269 |       |      | andrewb1269      |       | Hashgraph           |
+| Nathan Klick     | nathanklick |       |      | nathan.hashgraph |       | Hashgraph           |
+| Jendrik Johannes | jjohannes   |       |      |                  |       | Onepiece Software   |
 
 ## Emeritus Maintainers
 
