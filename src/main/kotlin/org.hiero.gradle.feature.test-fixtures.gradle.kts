@@ -18,6 +18,11 @@ plugins {
 // https://github.com/gradle/gradle/blob/d9303339298e6206182fd1f5c7e51f11e4bdff30/subprojects/plugins/src/main/java/org/gradle/api/plugins/JavaTestFixturesPlugin.java#L68
 configurations {
     testFixturesApi {
-        withDependencies { remove(find { it is ProjectDependency && it.name == project.name }) }
+        // Only do this when main does not exist. Otherwise, it breaks compile time visibility in
+        // IDEA which does not know about the whitebox testing in the test task that makes 'main'
+        // automatically visible in the Gradle build.
+        if (sourceSets.main.get().java.srcDirs.all { !it.exists() }) {
+            withDependencies { remove(find { it is ProjectDependency && it.name == project.name }) }
+        }
     }
 }
