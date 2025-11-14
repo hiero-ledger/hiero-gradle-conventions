@@ -252,7 +252,11 @@ extraJavaModuleInfo {
         requires("jdk.httpserver")
     }
     module("io.prometheus:simpleclient_tracer_common", "simpleclient.tracer.common")
-    module("io.micrometer:micrometer-commons", "micrometer.commons")
+    module("io.micrometer:micrometer-commons", "micrometer.commons") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+    }
     module("io.micrometer:micrometer-core", "micrometer.core")
     module("io.micrometer:micrometer-observation", "micrometer.observation") {
         exportAllPackages()
