@@ -17,7 +17,7 @@ dependencies {
     implementation("com.autonomousapps:dependency-analysis-gradle-plugin:3.5.1")
     implementation("com.diffplug.spotless:spotless-plugin-gradle:8.1.0")
     implementation("com.github.node-gradle:gradle-node-plugin:7.1.0") // install NPM for prettier
-    implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.5")
+    implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.6")
     implementation("com.gradle.publish:plugin-publish-plugin:2.0.0")
     implementation("com.gradle:common-custom-user-data-gradle-plugin:2.4.0")
     implementation("com.gradle:develocity-gradle-plugin:4.3")
