@@ -9,9 +9,9 @@ plugins {
 
 // Configure Protobuf Plugin to download protoc executable rather than using local installed version
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc" }
+    protoc { artifact = "com.google.protobuf:protoc:" }
     // Add GRPC plugin as we need to generate GRPC services
-    plugins { register("grpc") { artifact = "io.grpc:protoc-gen-grpc-java" } }
+    plugins { register("grpc") { artifact = "io.grpc:protoc-gen-grpc-java:" } }
     generateProtoTasks {
         all().configureEach { plugins.register("grpc") { option("@generated=omit") } }
     }
