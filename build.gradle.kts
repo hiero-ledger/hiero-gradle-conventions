@@ -20,13 +20,13 @@ dependencies {
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.6")
     implementation("com.gradle.publish:plugin-publish-plugin:2.0.0")
     implementation("com.gradle:common-custom-user-data-gradle-plugin:2.4.0")
-    implementation("com.gradle:develocity-gradle-plugin:4.3")
+    implementation("com.gradle:develocity-gradle-plugin:4.3.1")
     implementation("com.gradleup.nmcp:nmcp:1.2.1")
     implementation("com.gradleup.shadow:shadow-gradle-plugin:9.1.0")
     implementation(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
     )
-    implementation("io.freefair.gradle:maven-plugin:9.1.0") // for POM validation
+    implementation("io.freefair.gradle:maven-plugin:9.2.0") // for POM validation
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.1.0")
     implementation("org.gradlex:extra-java-module-info:1.13.1")
@@ -37,7 +37,7 @@ dependencies {
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:${embeddedKotlinVersion}"))
 
-    testImplementation(platform("org.junit:junit-bom:6.0.1"))
+    testImplementation(platform("org.junit:junit-bom:6.0.2"))
     testImplementation("org.assertj:assertj-core:3.27.6")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
 }
