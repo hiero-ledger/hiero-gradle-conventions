@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 plugins {
-    id("org.gradlex.jvm-dependency-conflict-resolution")
     id("org.gradlex.extra-java-module-info")
+    id("org.gradlex.java-module-dependencies")
+    id("org.gradlex.jvm-dependency-conflict-resolution")
 }
 
 // Fix or enhance the metadata of third-party Modules. This is about the metadata in the
@@ -350,6 +351,10 @@ extraJavaModuleInfo {
     }
     module("org.testcontainers:junit-jupiter", "org.testcontainers.junit.jupiter")
 }
+
+// Generate service provider configuration files in `META_INF/services` for all
+// `provides ... with ...` directives in module-info files.
+javaModuleDependencies { generateMetaInfServices() }
 
 // Configure consistent resolution across the whole project
 val consistentResolutionAttribute = Attribute.of("consistent-resolution", String::class.java)
