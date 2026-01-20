@@ -15,9 +15,32 @@ plugins.apply(ShadowJavaPlugin::class)
 tasks.withType<ShadowJar>().configureEach {
     group = "shadow"
 
+    // allow shadow Jar files to have more than 64k entries
+    isZip64 = true
+
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+
+    // For entries for which duplications is expected, add only the first (and EXCLUDE others)
+    filesMatching("*") { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+    filesMatching("META-INF/*") { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+    filesMatching("META-INF/helidon/*") { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+
+    // For service registrations include dupllicates as they are merged into one
     // https://gradleup.com/shadow/changes/#migration-example
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    filesMatching("META-INF/services/**") { duplicatesStrategy = DuplicatesStrategy.INCLUDE }
     mergeServiceFiles()
+
+    // Standard excludes (same as tasks.shadowJar has by default)
+    exclude(
+        "META-INF/INDEX.LIST",
+        "META-INF/*.SF",
+        "META-INF/*.DSA",
+        "META-INF/*.RSA",
+        "META-INF/versions/**/module-info.class",
+        "module-info.class",
+        "META-INF/versions/**/OSGI-INF/MANIFEST.MF",
+        "META-INF/maven/**",
+    )
 
     manifest { attributes("Multi-Release" to "true") }
 
