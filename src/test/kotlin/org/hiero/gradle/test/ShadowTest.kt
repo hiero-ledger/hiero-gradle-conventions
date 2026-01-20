@@ -23,7 +23,8 @@ class ShadowTest {
             """
             module org.hiero.product.module.a {
                 requires org.apache.commons.lang3;
-            }"""
+            }
+            """
                 .trimIndent()
         )
         p.moduleBuildFile(
@@ -35,7 +36,7 @@ class ShadowTest {
             application {
                 mainClass = "org.hiero.product.module.a.ModuleA"
             }
-        """
+            """
                 .trimIndent()
         )
 
@@ -56,7 +57,7 @@ class ShadowTest {
             application {
                 mainClass = "org.hiero.product.module.a.ModuleA"
             }
-        """
+            """
                 .trimIndent()
         )
 
@@ -82,7 +83,8 @@ class ShadowTest {
             module org.hiero.product.module.a {
                 requires com.fasterxml.jackson.core;
                 requires com.fasterxml.jackson.dataformat.yaml;
-            }"""
+            }
+            """
                 .trimIndent()
         )
         p.moduleBuildFile(
@@ -99,7 +101,7 @@ class ShadowTest {
                 from(zipTree(tasks.shadowJar.flatMap { it.archiveFile }))
                 into(layout.buildDirectory.dir("shadowContent"))
             }
-        """
+            """
                 .trimIndent()
         )
 
@@ -114,8 +116,30 @@ class ShadowTest {
             .hasContent(
                 """
                 com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-                com.fasterxml.jackson.core.JsonFactory"""
+                com.fasterxml.jackson.core.JsonFactory
+                """
                     .trimIndent()
             )
+    }
+
+    @Test
+    fun `fails for duplicated files`() {
+        val p = GradleProject().withMinimalStructure()
+        p.file("product/module-a/src/main/resources/org/hiero/product/test.txt", "H")
+        p.moduleBuildFile(
+            """
+            plugins { id("org.hiero.gradle.feature.shadow") }
+
+            tasks.shadowJar {
+                // include the same file from two different places
+                from(tasks.processResources)
+                from("src/main/resources")
+            }
+            """
+                .trimIndent()
+        )
+
+        val result = p.runAndFail("shadowJar")
+        assertThat(result.output).contains("> Cannot copy file ")
     }
 }
