@@ -21,7 +21,7 @@ env:
 jobs:
   publish-maven-central:
     name: Publish Maven Central
-    runs-on: hiero-network-node-linux-medium
+    runs-on: hl-gc-gradle-lin
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9 # v2.14.1
