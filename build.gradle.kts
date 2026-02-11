@@ -13,33 +13,43 @@ group = "org.hiero.gradle"
 description = "Gradle convention plugins used by Hiero projects"
 
 dependencies {
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:${embeddedKotlinVersion}"))
+
+    api("com.diffplug.spotless:spotless-lib")
+    api("com.gradleup.shadow:shadow-gradle-plugin:9.1.0")
+
     implementation("com.adarshr:gradle-test-logger-plugin:4.0.0")
     implementation("com.autonomousapps:dependency-analysis-gradle-plugin:3.5.1")
     implementation("com.diffplug.spotless:spotless-plugin-gradle:8.2.1")
     implementation("com.github.node-gradle:gradle-node-plugin:7.1.0") // install NPM for prettier
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.6")
     implementation("com.gradle.publish:plugin-publish-plugin:2.0.0")
-    implementation("com.gradle:common-custom-user-data-gradle-plugin:2.4.0")
     implementation("com.gradle:develocity-gradle-plugin:4.3.2")
     implementation("com.gradleup.nmcp:nmcp:1.2.1")
-    implementation("com.gradleup.shadow:shadow-gradle-plugin:9.1.0")
-    implementation(
-        "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
-    )
-    implementation("io.freefair.gradle:maven-plugin:9.2.0") // for POM validation
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.1.0")
     implementation("org.gradlex:extra-java-module-info:1.14")
     implementation("org.gradlex:java-module-dependencies:1.12")
     implementation("org.gradlex:java-module-testing:1.8")
     implementation("org.gradlex:jvm-dependency-conflict-resolution:2.5")
-    implementation("org.gradlex:reproducible-builds:1.1")
 
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:${embeddedKotlinVersion}"))
+    runtimeOnly("com.gradle:common-custom-user-data-gradle-plugin:2.4.0")
+    runtimeOnly(
+        "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
+    )
+    runtimeOnly("io.freefair.gradle:maven-plugin:9.2.0") // for POM validation
+    runtimeOnly("org.gradlex:reproducible-builds:1.1")
 
-    testImplementation(platform("org.junit:junit-bom:6.0.2"))
     testImplementation("org.assertj:assertj-core:3.27.7")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.2")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
+}
+
+// https://github.com/autonomousapps/dependency-analysis-gradle-plugin/pull/1640
+jvmDependencyConflicts {
+    patch.module("com.autonomousapps:dependency-analysis-gradle-plugin") {
+        removeDependency("javax.inject:javax.inject")
+    }
 }
 
 gradlePlugin {
