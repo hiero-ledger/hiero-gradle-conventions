@@ -17,6 +17,7 @@ import org.hiero.gradle.tasks.CargoVersions
 @Suppress("LeakingThis")
 abstract class CargoExtension {
     abstract val libname: Property<String>
+    abstract val appname: Property<String>
     abstract val javaPackage: Property<String>
     abstract val release: Property<Boolean>
 
@@ -41,7 +42,10 @@ abstract class CargoExtension {
             xwinVersion.convention(versions.getting("xwin"))
         }
 
+        // By default, assume we only build a library:
         libname.convention(project.name)
+        appname.convention("")
+
         javaPackage.convention("com.hedera.nativelib")
         release.convention(true)
 
@@ -79,6 +83,7 @@ abstract class CargoExtension {
 
                     cargoToml.convention(layout.projectDirectory.file("Cargo.toml"))
                     libname.convention(this@CargoExtension.libname)
+                    appname.convention(this@CargoExtension.appname)
                     javaPackage.convention(this@CargoExtension.javaPackage)
                     release.convention(this@CargoExtension.release)
                     rustInstallFolder.convention(installDir)
