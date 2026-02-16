@@ -41,7 +41,7 @@ class MavenCentralPortalPublishTest {
             .exists()
         assertThat(result.output)
             .contains(
-                "> Cannot deploy to maven central (status='401'): {\"error\":{\"message\":\"Invalid token\"}}"
+                "> Cannot upload deployment to maven central: (HTTP error 401: '{\"error\":{\"message\":\"Invalid token\"}}')}"
             )
         assertThat(result.task(":aggregation:nmcpZipAggregation")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
@@ -52,6 +52,9 @@ class MavenCentralPortalPublishTest {
     @Test
     fun `publishes each module directly for snapshot releases`() {
         p.versionFile.writeText("1.0-SNAPSHOT")
+
+        // Required to make sure NMCP downloaded all its dependencies before running with --offline
+        p.run("cleanupDirectory")
 
         // Finishes successfully even though we did not provide credentials
         val result = p.runAndFail("nmcpPublishAggregationToCentralPortal --offline --continue")
