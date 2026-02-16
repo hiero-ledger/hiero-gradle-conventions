@@ -11,11 +11,11 @@ class RustTasksTest {
 
     private val toolchainVersions =
         """
-            jdk=17.0.12
-            rust=1.81.0
-            cargo-zigbuild=0.19.5
-            zig=0.13.0
-            xwin=0.6.5
+        jdk=17.0.12
+        rust=1.81.0
+        cargo-zigbuild=0.19.5
+        zig=0.13.0
+        xwin=0.6.5
         """
             .trimIndent()
 
@@ -28,7 +28,7 @@ class RustTasksTest {
         [lib]
         path = "src/main/rust/lib.rs"
         crate-type = ["cdylib"]
-    """
+        """
             .trimIndent()
 
     // Test asserts multiple things in one method as installing the toolchains is expensive.
@@ -53,8 +53,11 @@ class RustTasksTest {
 
         val rustToolchainsDir = push.file("build/rust-toolchains/rustup/toolchains")
 
-        val pushResult = push.run("assemble --build-cache")
-        val pullResult = pull.run("assemble --build-cache -PskipInstallRustToolchains=true")
+        val pushResult = push.run("assemble -PpackageAllTargets=true --build-cache")
+        val pullResult =
+            pull.run(
+                "assemble -PpackageAllTargets=true --build-cache -PskipInstallRustToolchains=true"
+            )
 
         // installRustToolchains installs all toolchains defined in CargoToolchain
         assertThat(pushResult.output)

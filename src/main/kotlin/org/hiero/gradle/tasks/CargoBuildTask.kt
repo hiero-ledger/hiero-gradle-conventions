@@ -20,6 +20,7 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.nativeplatform.OperatingSystemFamily.WINDOWS
 import org.gradle.process.ExecOperations
+import org.hiero.gradle.extensions.CargoExtension
 import org.hiero.gradle.extensions.CargoToolchain
 
 @CacheableTask
@@ -52,9 +53,10 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
 
     @TaskAction
     fun build() {
+        val matchesHostOs = toolchain.get().os == CargoExtension.hostOs()
         val buildsForWindows = toolchain.get().os == WINDOWS
 
-        buildForTarget(buildsForWindows)
+        buildForTarget(matchesHostOs, buildsForWindows)
 
         val profile = if (release.get()) "release" else "debug"
         val cargoOutputDir =
@@ -76,11 +78,11 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
         }
     }
 
-    private fun buildForTarget(buildsForWindows: Boolean) {
+    private fun buildForTarget(matchesHostOs: Boolean, buildsForWindows: Boolean) {
         val rustupHome = rustInstallFolder.dir("rustup").get().asFile.absolutePath
         val cargoHome = rustInstallFolder.dir("cargo").get().asFile
         val zigPath = rustInstallFolder.file("zig/zig").get().asFile.absolutePath
-        val buildCommand = "build"
+        val buildCommand = if (matchesHostOs || buildsForWindows) "build" else "zigbuild"
 
         exec.exec {
             workingDir = cargoToml.get().asFile.parentFile
