@@ -10,6 +10,12 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
+import org.gradle.nativeplatform.MachineArchitecture.ARM64
+import org.gradle.nativeplatform.MachineArchitecture.X86
+import org.gradle.nativeplatform.MachineArchitecture.X86_64
+import org.gradle.nativeplatform.OperatingSystemFamily.LINUX
+import org.gradle.nativeplatform.OperatingSystemFamily.MACOS
+import org.gradle.nativeplatform.OperatingSystemFamily.WINDOWS
 import org.hiero.gradle.environment.EnvAccess
 import org.hiero.gradle.tasks.CargoBuildTask
 import org.hiero.gradle.tasks.CargoVersions
@@ -44,18 +50,15 @@ abstract class CargoExtension {
         libname.convention(project.name)
         javaPackage.convention("com.hedera.nativelib")
         release.convention(true)
-
-        // Lifecycle task to only do all carg build tasks (mainly for testing)
-        project.tasks.register("cargoBuild") {
-            group = "rust"
-            description = "Build library (all targets)"
-        }
     }
 
     fun targets(vararg targets: CargoToolchain) {
         val installTask = ":installRustToolchains" // in root project
         @Suppress("UnstableApiUsage")
         val installDir = project.isolated.rootProject.projectDirectory.dir("build/rust-toolchains")
+
+        val packageAllTargets =
+            providers.gradleProperty("packageAllTargets").getOrElse("false").toBoolean()
         val skipInstall =
             providers.gradleProperty("skipInstallRustToolchains").getOrElse("false").toBoolean()
 
@@ -84,8 +87,39 @@ abstract class CargoExtension {
                     rustInstallFolder.convention(installDir)
                 }
 
-            tasks.named("cargoBuild") { dependsOn(targetBuildTask) }
-            sourceSets.getByName("main").resources.srcDir(targetBuildTask)
+            if (packageAllTargets || isHostTarget(target)) {
+                sourceSets.getByName("main").resources.srcDir(targetBuildTask)
+            }
+        }
+    }
+
+    // inspired by 'org.gradlex.javamodule.packaging.internal.HostIdentification'
+    fun isHostTarget(target: CargoToolchain): Boolean {
+        return target.os == hostOs() && target.arch == hostArch()
+    }
+
+    companion object {
+        fun hostOs(): String {
+            val os = System.getProperty("os.name").lowercase().replace(" ", "")
+            if (os.contains("windows")) {
+                return WINDOWS
+            }
+            if (os.contains("macos") || os.contains("darwin") || os.contains("osx")) {
+                return MACOS
+            }
+            return LINUX
+        }
+
+        fun hostArch(): String {
+            val arch = System.getProperty("os.arch").lowercase()
+            if (arch.contains("aarch")) {
+                @Suppress("UnstableApiUsage")
+                return ARM64
+            }
+            if (arch.contains("64")) {
+                return X86_64
+            }
+            return X86
         }
     }
 }

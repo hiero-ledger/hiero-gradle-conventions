@@ -18,6 +18,7 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.nativeplatform.OperatingSystemFamily.WINDOWS
 import org.gradle.process.ExecOperations
 import org.hiero.gradle.extensions.CargoToolchain
 
@@ -51,7 +52,7 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
 
     @TaskAction
     fun build() {
-        val buildsForWindows = toolchain.get() == CargoToolchain.x86Windows
+        val buildsForWindows = toolchain.get().os == WINDOWS
 
         buildForTarget(buildsForWindows)
 
@@ -79,7 +80,7 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
         val rustupHome = rustInstallFolder.dir("rustup").get().asFile.absolutePath
         val cargoHome = rustInstallFolder.dir("cargo").get().asFile
         val zigPath = rustInstallFolder.file("zig/zig").get().asFile.absolutePath
-        val buildCommand = if (buildsForWindows) "build" else "zigbuild"
+        val buildCommand = "build"
 
         exec.exec {
             workingDir = cargoToml.get().asFile.parentFile
