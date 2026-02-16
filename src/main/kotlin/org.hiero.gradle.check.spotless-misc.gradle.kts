@@ -6,6 +6,7 @@ plugins { id("com.diffplug.spotless") }
 spotless {
     format("misc") {
         target("**/*.properties")
+        targetExclude("gradle/wrapper/gradle-wrapper.properties")
 
         trimTrailingWhitespace()
         leadingTabsToSpaces()
