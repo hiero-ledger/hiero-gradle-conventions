@@ -63,7 +63,7 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
                 "target/${toolchain.get().targetWithoutVersion()}/${profile}",
             )
 
-        if (!libname.get().equals("")) {
+        if (libname.get().isNotBlank()) {
             files.sync {
                 val baseFolder = javaPackage.get().replace('.', '/')
                 val targetFolder = baseFolder + "/" + libname.get() + "/" + toolchain.get().folder
@@ -77,7 +77,7 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
             }
         }
 
-        if (!appname.get().equals("")) {
+        if (appname.get().isNotBlank()) {
             files.sync {
                 val baseFolder = javaPackage.get().replace('.', '/')
                 val targetFolder = baseFolder + "/" + appname.get() + "/" + toolchain.get().folder
