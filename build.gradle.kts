@@ -41,7 +41,7 @@ dependencies {
     runtimeOnly("org.gradlex:reproducible-builds:1.1")
 
     testImplementation("org.assertj:assertj-core:3.27.7")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
 }
 
