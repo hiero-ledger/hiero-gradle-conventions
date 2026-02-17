@@ -25,6 +25,7 @@ import org.hiero.gradle.extensions.CargoToolchain
 abstract class CargoBuildTask : CargoVersions, DefaultTask() {
 
     @get:Input abstract val libname: Property<String>
+    @get:Input abstract val appname: Property<String>
 
     @get:Input abstract val javaPackage: Property<String>
 
@@ -62,16 +63,31 @@ abstract class CargoBuildTask : CargoVersions, DefaultTask() {
                 "target/${toolchain.get().targetWithoutVersion()}/${profile}",
             )
 
-        files.sync {
-            val baseFolder = javaPackage.get().replace('.', '/')
-            val targetFolder = baseFolder + "/" + libname.get() + "/" + toolchain.get().folder
+        if (libname.get().isNotBlank()) {
+            files.sync {
+                val baseFolder = javaPackage.get().replace('.', '/')
+                val targetFolder = baseFolder + "/" + libname.get() + "/" + toolchain.get().folder
 
-            from(cargoOutputDir)
-            into(destinationDirectory.dir(targetFolder))
+                from(cargoOutputDir)
+                into(destinationDirectory.dir(targetFolder))
 
-            include("lib${libname.get()}.so")
-            include("lib${libname.get()}.dylib")
-            include("${libname.get()}.dll")
+                include("lib${libname.get()}.so")
+                include("lib${libname.get()}.dylib")
+                include("${libname.get()}.dll")
+            }
+        }
+
+        if (appname.get().isNotBlank()) {
+            files.sync {
+                val baseFolder = javaPackage.get().replace('.', '/')
+                val targetFolder = baseFolder + "/" + appname.get() + "/" + toolchain.get().folder
+
+                from(cargoOutputDir)
+                into(destinationDirectory.dir(targetFolder))
+
+                include("${appname.get()}")
+                include("${appname.get()}.exe")
+            }
         }
     }
 
