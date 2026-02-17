@@ -222,6 +222,14 @@ extraJavaModuleInfo {
         // io.prometheus:prometheus-metrics-tracer-initializer is excluded
     }
     module(
+        "io.prometheus:prometheus-metrics-exporter-common",
+        "io.prometheus.metrics.exporter.common",
+    )
+    module(
+        "io.prometheus:prometheus-metrics-exporter-httpserver",
+        "io.prometheus.metrics.exporter.httpserver",
+    )
+    module(
         "io.prometheus:prometheus-metrics-exposition-formats",
         "io.prometheus.metrics.expositionformats",
     )
