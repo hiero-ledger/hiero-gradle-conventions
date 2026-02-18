@@ -312,7 +312,11 @@ extraJavaModuleInfo {
         requires("java.logging")
     }
     module("io.github.json-snapshot:json-snapshot", "json.snapshot")
-    module("org.awaitility:awaitility", "awaitility")
+    module("org.awaitility:awaitility", "awaitility") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.management")
+    }
     module("uk.org.webcompere:system-stubs-core", "uk.org.webcompere.systemstubs.core") {
         exportAllPackages()
         requireAllDefinedDependencies()
