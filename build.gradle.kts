@@ -25,7 +25,7 @@ dependencies {
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.6")
     implementation("com.gradle.publish:plugin-publish-plugin:2.0.0")
     implementation("com.gradle:develocity-gradle-plugin:4.3.2")
-    implementation("com.gradleup.nmcp:nmcp:1.4.4")
+    implementation("com.gradleup.nmcp:nmcp:1.2.1")
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.1.0")
     implementation("org.gradlex:extra-java-module-info:1.14")
