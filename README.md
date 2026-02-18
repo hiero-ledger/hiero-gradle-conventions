@@ -242,17 +242,14 @@ The following environment variables should be populated from _secrets_ to ensure
 | `GRADLE_PUBLISH_KEY`    | Gradle plugin portal publish _username_ |
 | `GRADLE_PUBLISH_SECRET` | Gradle plugin portal publish _password_ |
 
-### Building and testing Rust code on multiple operating systems
+### Testing Rust code on multiple operating systems
 
-If `feature.rust` and `feature.test-multios` are used, you should use `-PpackageAllTargets=true` in the CI build that
-assembles the software. Only with this setting all native library artifacts for all operating systems are built and
-packaged into the Jars. Also, to configure a matrix pipeline to run `test` on multiple agents with different operating
-systems, you can use `-PskipInstallRustToolchains=true` to skip the rust installation on the test-only agents where
-compiled code is retrieved from the remote build cache.
+If `feature.rust` and `feature.test-multios` is used, you can configure a matrix pipeline to run `test` on multiple
+agents with different operating systems. In this case, you can use the following parameter to skip the rust installation
+on the test-only agents where compiled code is retrieved from the remote build cache.
 
 |                 Parameters                  |                                 Description                                 |
 |---------------------------------------------|-----------------------------------------------------------------------------|
-| `-PpackageAllTargets=<true\|false>`         | Build rust code for all configured targets for multi-target Jars            |
 | `-PskipInstallRustToolchains=<true\|false>` | Skip `installRustToolchains` task if all `cargoBuild*` tasks are FROM-CACHE |
 
 <a name="modules"></a>
