@@ -30,16 +30,16 @@ class MinimalProjectTest {
         assertThat(result.output)
             .contains(
                 """
-            
-            Build tasks
-            -----------
-            assemble - Assembles the outputs of this project.
-            build - Assembles and tests this project.
-            clean - Deletes the build directory.
-            qualityGate - Apply spotless rules and run all quality checks.
-            test - Runs the test suite.
-            
-        """
+
+                Build tasks
+                -----------
+                assemble - Assembles the outputs of this project.
+                build - Assembles and tests this project.
+                clean - Deletes the build directory.
+                qualityGate - Apply spotless rules and run all quality checks.
+                test - Runs the test suite.
+
+                """
                     .trimIndent()
             )
             .contains("Problems report is available at:")
@@ -51,8 +51,9 @@ class MinimalProjectTest {
         p.settingsFile(
             """
             plugins { id("org.hiero.gradle.build") }
-            
-            javaModules { directory("product") }"""
+
+            javaModules { directory("product") }
+            """
                 .trimIndent()
         )
 
@@ -60,7 +61,7 @@ class MinimalProjectTest {
         p.moduleBuildFile(
             """
             plugins { id("org.hiero.gradle.module.library") }
-            
+
             description = "A module that is now described"
             """
                 .trimIndent()
@@ -68,14 +69,27 @@ class MinimalProjectTest {
         p.javaSourceFile(
             """
             package org.hiero.product.module.a;
-            
+
             public class ModuleA {}
-        """
+            """
                 .trimIndent()
         )
 
         val result = p.qualityCheck()
 
         assertThat(result.output).contains("Problems report is available at:")
+    }
+
+    @Test
+    fun `does not fail for a module without java packages`() {
+        val p = GradleProject().withMinimalStructure()
+        p.moduleBuildFile("""plugins { id("org.hiero.gradle.module.library") }""")
+        p.file("product/module-a/src/main/java/org").deleteRecursively()
+
+        val result = p.qualityCheck()
+
+        assertThat(result.task(":module-a:javadoc")?.outcome).isEqualTo(TaskOutcome.SKIPPED)
+        assertThat(result.task(":module-a:javadocJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(result.task(":module-a:jar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     }
 }
