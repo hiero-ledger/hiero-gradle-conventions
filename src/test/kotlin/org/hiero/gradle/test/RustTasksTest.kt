@@ -53,11 +53,8 @@ class RustTasksTest {
 
         val rustToolchainsDir = push.file("build/rust-toolchains/rustup/toolchains")
 
-        val pushResult = push.run("assemble -PpackageAllTargets=true --build-cache")
-        val pullResult =
-            pull.run(
-                "assemble -PpackageAllTargets=true --build-cache -PskipInstallRustToolchains=true"
-            )
+        val pushResult = push.run("assemble --build-cache")
+        val pullResult = pull.run("assemble --build-cache -PskipInstallRustToolchains=true")
 
         // installRustToolchains installs all toolchains defined in CargoToolchain
         assertThat(pushResult.output)

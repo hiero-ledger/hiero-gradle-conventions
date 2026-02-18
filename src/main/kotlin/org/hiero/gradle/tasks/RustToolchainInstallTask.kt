@@ -15,9 +15,6 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectories
 import org.gradle.api.tasks.TaskAction
-import org.gradle.nativeplatform.MachineArchitecture.X86_64
-import org.gradle.nativeplatform.OperatingSystemFamily.MACOS
-import org.gradle.nativeplatform.OperatingSystemFamily.WINDOWS
 import org.gradle.process.ExecOperations
 import org.hiero.gradle.extensions.CargoToolchain
 
@@ -25,8 +22,6 @@ import org.hiero.gradle.extensions.CargoToolchain
 abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
     @get:Input abstract val hostOperatingSystem: Property<String>
     @get:Input abstract val hostArchitecture: Property<String>
-
-    @get:Input abstract val packageAllTargets: Property<Boolean>
 
     @get:Input abstract val toolchains: ListProperty<CargoToolchain>
 
@@ -57,21 +52,13 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
     @TaskAction
     fun install() {
         destinationDirectory.get().asFile.listFiles()?.forEach { files.delete(it) }
-        if (!packageAllTargets.get() && hostOperatingSystem.get() == MACOS) {
-            if (hostArchitecture.get() == X86_64) {
-                installRust(listOf(CargoToolchain.x86Darwin), false)
-            } else {
-                installRust(listOf(CargoToolchain.aarch64Darwin), false)
-            }
-        } else {
-            installZig()
-            installRust(toolchains.get(), true)
-        }
+        installZig()
+        installRust()
     }
 
     private fun installZig() {
-        val isWindows = hostOperatingSystem.get() == WINDOWS
-        val arch = hostArchitecture.get().replace('-', '_')
+        val isWindows = hostOperatingSystem.get() == "windows"
+        val arch = hostArchitecture.get().let { if (it == "amd64") "x86_64" else it }
         val zigArchiveName = "zig-${hostOperatingSystem.get()}-$arch-${zigVersion.get()}"
         val fileExtension = if (isWindows) "zip" else "tar.xz"
 
@@ -110,7 +97,7 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
         files.delete(zigArchive)
     }
 
-    private fun installRust(toolchains: List<CargoToolchain>, withZigAndXwin: Boolean) {
+    private fun installRust() {
         val url = URI("https://sh.rustup.rs").toURL()
         val rustupInstall = destinationDirectory.file("rustup-install.sh").get().asFile
         rustupInstall.writeText(url.readText())
@@ -120,7 +107,7 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
         val xwinCmd = destinationDirectory.dir("cargo/bin/xwin").get().asFile.absolutePath
         val xwinFolder = destinationDirectory.dir("xwin").get().asFile.absolutePath
 
-        val targets = toolchains.flatMap { listOf("-t", it.targetWithoutVersion()) }
+        val targets = toolchains.get().flatMap { listOf("-t", it.targetWithoutVersion()) }
 
         execute(
             listOf(
@@ -131,32 +118,28 @@ abstract class RustToolchainInstallTask : CargoVersions, DefaultTask() {
                 "--default-toolchain=${rustVersion.get()}",
             ) + targets
         )
-
-        if (withZigAndXwin) {
-            execute(
-                listOf(
-                    cargoCmd,
-                    "+${rustVersion.get()}",
-                    "install",
-                    "--locked",
-                    "--ignore-rust-version",
-                    "--profile=release",
-                    "cargo-zigbuild@${cargoZigbuildVersion.get()}",
-                )
+        execute(
+            listOf(
+                cargoCmd,
+                "+${rustVersion.get()}",
+                "install",
+                "--locked",
+                "--ignore-rust-version",
+                "--profile=release",
+                "cargo-zigbuild@${cargoZigbuildVersion.get()}",
             )
-            execute(
-                listOf(
-                    cargoCmd,
-                    "+${rustVersion.get()}",
-                    "install",
-                    "--locked",
-                    "--profile=release",
-                    "xwin@${xwinVersion.get()}",
-                )
+        )
+        execute(
+            listOf(
+                cargoCmd,
+                "+${rustVersion.get()}",
+                "install",
+                "--locked",
+                "--profile=release",
+                "xwin@${xwinVersion.get()}",
             )
-            execute(listOf(xwinCmd, "--accept-license", "splat", "--output", xwinFolder))
-        }
-
+        )
+        execute(listOf(xwinCmd, "--accept-license", "splat", "--output", xwinFolder))
         files.delete(rustupInstall)
     }
 

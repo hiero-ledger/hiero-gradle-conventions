@@ -1,1 +1,0 @@
-Conventions for 'org.gradlex.java-module-packaging' to build installable packages with jpackage
