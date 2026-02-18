@@ -5,7 +5,6 @@ import me.champeau.jmh.JMHTask
 plugins {
     id("java")
     id("org.hiero.gradle.base.jpms-modules")
-    id("org.hiero.gradle.feature.shadow")
     id("me.champeau.jmh")
 }
 
@@ -28,10 +27,32 @@ dependencies {
 val jmhJarWithMergedServiceFiles =
     tasks.register<ShadowJar>("jmhJarWithMergedServiceFiles") {
         archiveClassifier.set("jmh-merged")
-        manifest.attributes("Main-Class" to "org.openjdk.jmh.Main")
+        isZip64 = true
+        manifest { attributes("Main-Class" to "org.openjdk.jmh.Main", "Multi-Release" to "true") }
         from(project.sourceSets.jmh.get().output)
         configurations = setOf(project.configurations.jmhRuntimeClasspath.get())
-        exclude("module-info.class", "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+
+        // For entries for which duplications is expected, add only the first (and EXCLUDE others)
+        filesMatching("*") { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+        filesMatching("META-INF/*") { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+        filesMatching("META-INF/helidon/*") { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+
+        // For service registrations include duplicates as they are merged into one
+        // https://gradleup.com/shadow/changes/#migration-example
+        filesMatching("META-INF/services/**") { duplicatesStrategy = DuplicatesStrategy.INCLUDE }
+        mergeServiceFiles()
+
+        // Standard excludes (same as tasks.shadowJar has by default)
+        exclude(
+            "META-INF/INDEX.LIST",
+            "META-INF/*.SF",
+            "META-INF/*.DSA",
+            "META-INF/*.RSA",
+            "META-INF/versions/**/module-info.class",
+            "module-info.class",
+            "META-INF/versions/**/OSGI-INF/MANIFEST.MF",
+            "META-INF/maven/**",
+        )
     }
 
 tasks.withType<JMHTask>().configureEach {
