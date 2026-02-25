@@ -29,6 +29,13 @@ jvmDependencyConflicts.patch {
         removeDependency("org.osgi:org.osgi.resource") // split package
         removeDependency("org.osgi:org.osgi.service.serviceloader") // split package
     }
+    module("io.github.json-snapshot:json-snapshot") {
+        removeDependency("org.junit.jupiter:junit-jupiter-engine")
+        removeDependency("org.junit.platform:junit-platform-runner")
+        removeDependency("org.junit.vintage:junit-vintage-engine")
+        removeDependency("org.mockito:mockito-junit-jupiter")
+        addRuntimeOnlyDependency("junit:junit") // needed, was provided through junit-vintage-engine
+    }
 
     // Add missing compile time dependencies
     module("org.hyperledger.besu:secp256k1") {
