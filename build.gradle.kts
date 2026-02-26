@@ -19,7 +19,7 @@ dependencies {
     api("com.gradleup.shadow:shadow-gradle-plugin:9.1.0")
 
     implementation("com.adarshr:gradle-test-logger-plugin:4.0.0")
-    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:3.5.1")
+    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:3.6.1")
     implementation("com.diffplug.spotless:spotless-plugin-gradle:8.2.1")
     implementation("com.github.node-gradle:gradle-node-plugin:7.1.0") // install NPM for prettier
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.6")
