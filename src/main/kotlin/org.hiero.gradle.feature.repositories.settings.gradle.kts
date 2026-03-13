@@ -2,6 +2,11 @@
 dependencyResolutionManagement {
     @Suppress("UnstableApiUsage")
     repositories {
+        maven(
+            "https://artifacts.hashgraph.io/artifactory/hyperledger-besu-maven-external/"
+        ) {
+            content { includeGroupByRegex("org\\.hyperledger\\..*") }
+        }
         maven("https://hyperledger.jfrog.io/artifactory/besu-maven") {
             content { includeGroupByRegex("org\\.hyperledger\\..*") }
         }
