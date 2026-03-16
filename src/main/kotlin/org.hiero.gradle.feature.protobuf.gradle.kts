@@ -15,6 +15,8 @@ protobuf {
     generateProtoTasks {
         all().configureEach { plugins.register("grpc") { option("@generated=omit") } }
     }
+    // https://github.com/google/protobuf-gradle-plugin/issues/785
+    javaExecutablePath = ""
 }
 
 configurations.configureEach {
