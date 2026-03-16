@@ -12,8 +12,10 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
+import org.gradle.work.DisableCachingByDefault
 
 @Suppress("LeakingThis")
+@DisableCachingByDefault(because = "processes large amount of data")
 abstract class GitClone : DefaultTask() {
 
     @get:Input abstract val url: Property<String>
