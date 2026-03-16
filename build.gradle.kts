@@ -29,7 +29,7 @@ dependencies {
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.1.0")
     implementation("org.gradlex:extra-java-module-info:1.14")
-    implementation("org.gradlex:java-module-dependencies:1.12")
+    implementation("org.gradlex:java-module-dependencies:1.12.1")
     implementation("org.gradlex:java-module-testing:1.8")
     implementation("org.gradlex:jvm-dependency-conflict-resolution:2.5")
 
@@ -43,6 +43,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation("org.junit-pioneer:junit-pioneer:2.3.0")
 }
 
 // https://github.com/autonomousapps/dependency-analysis-gradle-plugin/pull/1640
