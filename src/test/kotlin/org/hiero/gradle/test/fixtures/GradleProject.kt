@@ -40,18 +40,20 @@ class GradleProject(
             org.gradle.configuration-cache=true
             # org.gradle.unsafe.isolated-projects=true
             # org.gradle.caching=true
-            
-        """
+
+            """
                 .trimIndent()
         )
         settingsFile(
             """
             plugins { id("org.hiero.gradle.build") }
-            
+
             rootProject.name = "test-project"
-            
+
             javaModules { directory("product") { group = "org.example" } }
-        """
+
+            buildCache.remote<HttpBuildCache> { isEnabled = false }
+            """
                 .trimIndent()
         )
         versionFile.writeText("1.0")
@@ -59,8 +61,8 @@ class GradleProject(
             """
             # SPDX-License-Identifier: Apache-2.0
             jdk=17.0.16
-            
-        """
+
+            """
                 .trimIndent()
         )
         descriptionTxt.writeText("A module to test hiero-gradle-conventions")
@@ -68,9 +70,9 @@ class GradleProject(
         javaSourceFile(
             """
             package org.hiero.product.module.a;
-            
+
             class ModuleA {}
-        """
+            """
                 .trimIndent()
         )
 

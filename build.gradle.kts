@@ -43,6 +43,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation("org.junit-pioneer:junit-pioneer:2.3.0")
 }
 
 // https://github.com/autonomousapps/dependency-analysis-gradle-plugin/pull/1640
