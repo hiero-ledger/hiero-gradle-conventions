@@ -23,7 +23,7 @@ dependencies {
     implementation("com.diffplug.spotless:spotless-plugin-gradle:8.3.0")
     implementation("com.github.node-gradle:gradle-node-plugin:7.1.0") // install NPM for prettier
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.6")
-    implementation("com.gradle.publish:plugin-publish-plugin:2.0.0")
+    implementation("com.gradle.publish:plugin-publish-plugin:2.1.0")
     implementation("com.gradle:develocity-gradle-plugin:4.3.2")
     implementation("com.gradleup.nmcp:nmcp:1.2.1")
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
