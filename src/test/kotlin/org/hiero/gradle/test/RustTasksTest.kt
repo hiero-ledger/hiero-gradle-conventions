@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.hiero.gradle.extensions.CargoToolchain
 import org.hiero.gradle.test.fixtures.GradleProject
-import org.junit.jupiter.api.Test
 import org.junitpioneer.jupiter.RetryingTest
 
 class RustTasksTest {
@@ -33,7 +32,6 @@ class RustTasksTest {
             .trimIndent()
 
     // Test asserts multiple things in one method as installing the toolchains is expensive.
-    @Test
     @RetryingTest(3) // test uses external resources
     fun `rust toolchain installation and caching works`() {
         val push = GradleProject().withMinimalStructure()
