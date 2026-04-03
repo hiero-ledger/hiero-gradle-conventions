@@ -33,7 +33,7 @@ dependencies {
     implementation("org.gradlex:java-module-testing:1.8.1")
     implementation("org.gradlex:jvm-dependency-conflict-resolution:2.5")
 
-    runtimeOnly("com.gradle:common-custom-user-data-gradle-plugin:2.4.0")
+    runtimeOnly("com.gradle:common-custom-user-data-gradle-plugin:2.5.0")
     runtimeOnly(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
     )
