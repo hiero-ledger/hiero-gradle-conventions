@@ -37,7 +37,7 @@ dependencies {
     runtimeOnly(
         "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.2"
     )
-    runtimeOnly("io.freefair.gradle:maven-plugin:9.2.0") // for POM validation
+    runtimeOnly("io.freefair.gradle:maven-plugin:9.4.0") // for POM validation
     runtimeOnly("org.gradlex:reproducible-builds:1.1")
 
     testImplementation("org.assertj:assertj-core:3.27.7")
