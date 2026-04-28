@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 import org.hiero.gradle.services.TaskLockService
 
-plugins { id("java") }
+plugins {
+    id("java")
+    id("org.hiero.gradle.feature.run-until-failure")
+}
 
 @Suppress("UnstableApiUsage")
 testing.suites {
@@ -43,4 +46,13 @@ if (activeProcessorCount.isPresent) {
         )
         jvmArgs("-XX:ActiveProcessorCount=${activeProcessorCount.get()}")
     }
+}
+
+// Also register the "run until failure" task on the root project (once) so it can be
+// invoked with absolute task paths:
+//   ./gradlew :runUntilFailure --testTaskName :submodule:taskName
+// Subprojects get the task via the plugin applied above, supporting relative paths:
+//   ./gradlew :submodule:runUntilFailure --testTaskName taskName
+if (rootProject.extensions.findByName("runUntilFailure") == null) {
+    rootProject.plugins.apply("org.hiero.gradle.feature.run-until-failure")
 }

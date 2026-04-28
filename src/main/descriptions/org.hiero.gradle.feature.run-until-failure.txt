@@ -1,0 +1,1 @@
+Registers a task that runs a test task repeatedly until it fails, useful for identifying flaky tests
