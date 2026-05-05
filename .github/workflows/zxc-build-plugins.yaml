@@ -52,7 +52,7 @@ jobs:
         run: ./gradlew check
 
       - name: Publish JUnit Test Report
-        uses: step-security/publish-unit-test-result-action@7dff603bf17ef13dee847147bef8d7cd1728b566 # v2.22.0
+        uses: step-security/publish-unit-test-result-action@681100d67b09305624c089873f12c545ee7cbc24 # v2.23.0
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
           check_name: JUnit Test Report
