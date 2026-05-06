@@ -52,11 +52,7 @@ publishing.publications.withType<MavenPublication>().configureEach {
 
         @Suppress("UnstableApiUsage") val repoName = isolated.rootProject.name
         val gitHubOrg =
-            providers
-                .environmentVariable("GITHUB_REPOSITORY")
-                .map { it.substringBefore("/") }
-                .orElse(providers.gradleProperty("publishGitHubOrg"))
-                .orElse("hiero-ledger")
+            providers.environmentVariable("GITHUB_REPOSITORY_OWNER").getOrElse("hiero-ledger")
 
         issueManagement {
             system = "GitHub"
