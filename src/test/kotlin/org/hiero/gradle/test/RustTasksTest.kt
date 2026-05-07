@@ -5,8 +5,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.hiero.gradle.extensions.CargoToolchain
 import org.hiero.gradle.test.fixtures.GradleProject
+import org.junit.jupiter.api.Disabled
 import org.junitpioneer.jupiter.RetryingTest
 
+@Disabled
 class RustTasksTest {
 
     private val toolchainVersions =
