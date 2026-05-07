@@ -51,23 +51,25 @@ publishing.publications.withType<MavenPublication>().configureEach {
         }
 
         @Suppress("UnstableApiUsage") val repoName = isolated.rootProject.name
+        val gitHubOrg =
+            providers.environmentVariable("GITHUB_REPOSITORY_OWNER").getOrElse("hiero-ledger")
 
         issueManagement {
             system = "GitHub"
-            url = "https://github.com/hiero-ledger/$repoName/issues"
+            url = "https://github.com/$gitHubOrg/$repoName/issues"
         }
 
         licenses {
             license {
                 name = "Apache License, Version 2.0"
-                url = "https://raw.githubusercontent.com/hiero-ledger/$repoName/main/LICENSE"
+                url = "https://raw.githubusercontent.com/$gitHubOrg/$repoName/main/LICENSE"
             }
         }
 
         scm {
-            connection = "scm:git:git://github.com/hiero-ledger/$repoName.git"
-            developerConnection = "scm:git:ssh://github.com:hiero-ledger/$repoName.git"
-            url = "https://github.com/hiero-ledger/$repoName"
+            connection = "scm:git:git://github.com/$gitHubOrg/$repoName.git"
+            developerConnection = "scm:git:ssh://github.com:$gitHubOrg/$repoName.git"
+            url = "https://github.com/$gitHubOrg/$repoName"
         }
 
         developers {
