@@ -105,6 +105,8 @@ tasks.wrapper {
 }
 
 tasks.test {
+    // Allow tests that take some time downloading resources to run in parallel
+    maxParallelForks = 2
     // If success, delete all test projects
     doLast { File("build/test-projects").deleteRecursively() }
 }

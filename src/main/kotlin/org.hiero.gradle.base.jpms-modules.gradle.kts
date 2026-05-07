@@ -18,6 +18,7 @@ jvmDependencyConflicts.patch {
     module("io.prometheus:simpleclient") {
         removeDependency("io.prometheus:simpleclient_tracer_otel") // not needed
         removeDependency("io.prometheus:simpleclient_tracer_otel_agent") // not needed
+        addRuntimeOnlyDependency("io.prometheus:simpleclient_tracer_common")
     }
     module("junit:junit") {
         removeDependency("org.hamcrest:hamcrest-core") // not needed
@@ -272,11 +273,13 @@ extraJavaModuleInfo {
         // This is optional from io.micrometer:context-propagation and we do not use it
         ignoreServiceProvider("io.micrometer.context.ThreadLocalAccessor")
     }
+    module("io.micrometer:micrometer-registry-otlp", "micrometer.registry.otlp")
     module("io.micrometer:micrometer-registry-prometheus", "micrometer.registry.prometheus")
     module(
         "io.micrometer:micrometer-registry-prometheus-simpleclient",
         "micrometer.registry.prometheus.simpleclient",
     )
+    module("io.opentelemetry.proto:opentelemetry-proto", "io.opentelemetry.proto")
     module("org.hdrhistogram:HdrHistogram", "org.hdrhistogram")
     module("org.latencyutils:LatencyUtils", "org.latencyutils")
     module("org.osgi:org.osgi.annotation.bundle", "org.osgi.annotation.bundle") {
