@@ -4,27 +4,32 @@ package org.hiero.gradle.test
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.hiero.gradle.test.fixtures.GradleProject
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ProtobufTest {
 
-    @Test
-    fun `task re-runs if protobuf plugin version changes`() {
+    val push = GradleProject().withMinimalStructure()
+    val pull = GradleProject().withMinimalStructure()
+
+    @BeforeEach
+    fun setup() {
         val testProto =
             """
             syntax = "proto3";
             package org.hiero.product.module.a;
+            option java_package = "org.hiero.product.module.a.proto";
             message Test {
               bytes test_id = 1;
             }
-        """
+            """
                 .trimIndent()
         val moduleInfo =
             """
             module org.hiero.product.module.a {
                 requires com.google.protobuf;
             }
-        """
+            """
                 .trimIndent()
         val aggregation =
             """
@@ -36,8 +41,6 @@ class ProtobufTest {
             """
                 .trimIndent()
 
-        val push = GradleProject().withMinimalStructure()
-        val pull = GradleProject().withMinimalStructure()
         push.aggregationBuildFile(aggregation)
         pull.aggregationBuildFile(aggregation)
         push.settingsFile.appendText(
@@ -54,7 +57,10 @@ class ProtobufTest {
 
         push.file("product/module-a/src/main/proto/test.proto", testProto)
         pull.file("product/module-a/src/main/proto/test.proto", testProto)
+    }
 
+    @Test
+    fun `task re-runs if protobuf plugin version changes`() {
         push.dependencyVersionsFile(dependencyVersions("4.29.0"))
         pull.dependencyVersionsFile(dependencyVersions("4.29.3"))
 
@@ -68,6 +74,46 @@ class ProtobufTest {
         assertThat(pullResult.task(":module-a:generateProto")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
         assertThat(pullResult.task(":module-a:compileJava")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
+    fun `task does not re-run if operating system changes`() {
+        // version does not change
+        push.dependencyVersionsFile(dependencyVersions("4.29.3"))
+        pull.dependencyVersionsFile(dependencyVersions("4.29.3"))
+
+        val pushResult = push.run("assemble --build-cache")
+        // simulate different OS
+        val pullResult = pull.run("assemble --build-cache -Dos.arch=x86 -Dos.name=Windows")
+
+        // make sure second run is FROM-CACHE
+        assertThat(pushResult.task(":module-a:generateProto")?.outcome)
+            .isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(pushResult.task(":module-a:compileJava")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(pullResult.task(":module-a:generateProto")?.outcome)
+            .isEqualTo(TaskOutcome.FROM_CACHE)
+        assertThat(pullResult.task(":module-a:compileJava")?.outcome)
+            .isEqualTo(TaskOutcome.FROM_CACHE)
+    }
+
+    @Test
+    fun `sourcesJar does not fail in proejct that combines protobuf and pbj`() {
+        // https://github.com/google/protobuf-gradle-plugin/issues/812
+        push.moduleBuildFile(
+            """
+            plugins {
+                id("org.hiero.gradle.feature.protobuf")
+                id("com.hedera.pbj.pbj-compiler") version "0.9.0"
+            }
+            java.withSourcesJar()
+            """
+                .trimIndent()
+        )
+        push.dependencyVersionsFile(dependencyVersions("4.29.3"))
+
+        val pushResult = push.run("sourcesJar")
+
+        assertThat(pushResult.task(":module-a:sourcesJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     }
 
     private fun dependencyVersions(protocVersion: String) =

@@ -9,8 +9,9 @@ plugins {
 
 // Configure Protobuf Plugin to download protoc executable rather than using local installed version
 protobuf {
+    // The artifacts below contain unused versions due to
+    // https://github.com/google/protobuf-gradle-plugin/issues/798
     protoc { artifact = "com.google.protobuf:protoc:2.5.0" }
-    // Add GRPC plugin as we need to generate GRPC services
     plugins { register("grpc") { artifact = "io.grpc:protoc-gen-grpc-java:1.0.0" } }
     generateProtoTasks {
         all().configureEach { plugins.register("grpc") { option("@generated=omit") } }
@@ -32,7 +33,16 @@ configurations.configureEach {
         if (name.startsWith("protobufToolsLocator")) {
             // Track all tools as input to react to version changes for the tools
             val protobufToolsLocator = this
-            tasks.withType<GenerateProtoTask>().configureEach { inputs.files(protobufToolsLocator) }
+            tasks.withType<GenerateProtoTask>().configureEach {
+                inputs.property(
+                    protobufToolsLocator.name,
+                    provider {
+                        protobufToolsLocator.incoming.resolutionResult.allComponents.map {
+                            it.moduleVersion
+                        }
+                    },
+                )
+            }
         }
     }
 }
@@ -43,4 +53,13 @@ tasks.javadoc {
         // There are violations in the generated protobuf code
         addStringOption("Xdoclint:-reference,-html", "-quiet")
     }
+}
+
+plugins.withId("com.hedera.pbj.pbj-compiler") {
+    // Allow using the same 'proto' files twice as sources for both plugins
+    // See also: https://github.com/google/protobuf-gradle-plugin/issues/812
+    tasks
+        .withType<Jar>()
+        .named { it == "sourcesJar" }
+        .configureEach { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
 }
