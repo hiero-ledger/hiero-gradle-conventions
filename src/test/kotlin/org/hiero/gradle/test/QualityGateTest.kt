@@ -21,25 +21,25 @@ class QualityGateTest {
         assertThat(flow1)
             .hasContent(
                 """
-            # SPDX-License-Identifier: Apache-2.0
-            name: Flow 1
-        """
+                # SPDX-License-Identifier: Apache-2.0
+                name: Flow 1
+                """
                     .trimIndent()
             )
         assertThat(flow2)
             .hasContent(
                 """
-            # SPDX-License-Identifier: Apache-2.0
-            name: Flow 2
-        """
+                # SPDX-License-Identifier: Apache-2.0
+                name: Flow 2
+                """
                     .trimIndent()
             )
         assertThat(bot)
             .hasContent(
                 """
-            # SPDX-License-Identifier: Apache-2.0
-            updates:
-        """
+                # SPDX-License-Identifier: Apache-2.0
+                updates:
+                """
                     .trimIndent()
             )
         assertThat(txtFile).hasContent("name: Flow 3    ") // unchanged
@@ -56,7 +56,8 @@ class QualityGateTest {
             dependencies.constraints {
                 api("com.fasterxml.jackson.core:jackson-databind:2.16.0") { because("com.fasterxml.jackson.databind") }
                 api("org.apache.commons:commons-lang3:3.14.0") { because("org.apache.commons.lang3") }
-            }"""
+            }
+            """
                 .trimIndent()
         )
         p.javaSourceFile(
@@ -65,7 +66,8 @@ class QualityGateTest {
             public class ModuleA {
                 private com.fasterxml.jackson.databind.ObjectMapper om;
                 private org.apache.commons.lang3.CharUtils cu;
-            }"""
+            }
+            """
                 .trimIndent()
         )
 
@@ -78,7 +80,8 @@ class QualityGateTest {
                     requires    com.fasterxml.jackson.databind;
                     
                     exports       org.hiero.product.module.a;
-                  }    """
+                  }    
+                """
                     .trimIndent(),
             )
         val packageInfoA =
@@ -102,40 +105,40 @@ class QualityGateTest {
         assertThat(moduleInfo)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            module org.hiero.product.module.a {
-                requires com.fasterxml.jackson.databind;
-                requires org.apache.commons.lang3;
-            
-                exports org.hiero.product.module.a;
-            }
-        """
+                // SPDX-License-Identifier: Apache-2.0
+                module org.hiero.product.module.a {
+                    requires com.fasterxml.jackson.databind;
+                    requires org.apache.commons.lang3;
+
+                    exports org.hiero.product.module.a;
+                }
+                """
                     .trimIndent()
             )
         assertThat(packageInfoA)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            package org.hiero.product.module.a;
-        """
+                // SPDX-License-Identifier: Apache-2.0
+                package org.hiero.product.module.a;
+                """
                     .trimIndent()
             )
         assertThat(packageInfoB)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            /** some comment */
-            package org.hiero.product.module.b;
-        """
+                // SPDX-License-Identifier: Apache-2.0
+                /** some comment */
+                package org.hiero.product.module.b;
+                """
                     .trimIndent()
             )
         assertThat(packageInfoC)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            @Deprecated
-            package org.hiero.product.module.c;
-        """
+                // SPDX-License-Identifier: Apache-2.0
+                @Deprecated
+                package org.hiero.product.module.c;
+                """
                     .trimIndent()
             )
 
@@ -152,9 +155,55 @@ class QualityGateTest {
         assertThat(props1)
             .hasContent(
                 """
-            # SPDX-License-Identifier: Apache-2.0
-            foo=bar
-        """
+                # SPDX-License-Identifier: Apache-2.0
+                foo=bar
+                """
+                    .trimIndent()
+            )
+
+        assertThat(result.task(":qualityGate")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
+    fun `qualityGate formats markdown files with frontmatter`() {
+        val p = GradleProject().withMinimalStructure()
+        val md =
+            p.file(
+                "README.md",
+                """
+                ---
+                title: Some Title
+                date: 2026-05-04
+                tags: [test, autoformat, md]
+                ---
+
+                ##     Options Table   
+                | Foo   |  Bar             |    
+                |---|
+                |     One |  `abc` |
+                | Two                 | `def`            |
+                """
+                    .trimIndent(),
+            )
+
+        val result = p.qualityGate()
+
+        assertThat(md)
+            .hasContent(
+                """
+                ---
+                title: Some Title
+                date: 2026-05-04
+                tags: [test, autoformat, md]
+                ---
+
+                ## Options Table
+
+                | Foo |  Bar  |
+                |-----|-------|
+                | One | `abc` |
+                | Two | `def` |
+                """
                     .trimIndent()
             )
 
@@ -165,10 +214,12 @@ class QualityGateTest {
     fun `spotlessApply formats rust files`() {
         val p = GradleProject().withMinimalStructure()
         p.moduleBuildFile(
-            """plugins {
-            id("org.hiero.gradle.module.library")
-            id("org.hiero.gradle.feature.rust") 
-            }"""
+            """
+            plugins {
+                        id("org.hiero.gradle.module.library")
+                        id("org.hiero.gradle.feature.rust") 
+                        }
+            """
                 .trimIndent()
         )
 
@@ -179,10 +230,10 @@ class QualityGateTest {
         assertThat(rustLib)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            
-            pub fn public_api() {}
-        """
+                // SPDX-License-Identifier: Apache-2.0
+
+                pub fn public_api() {}
+                """
                     .trimIndent()
             )
 
