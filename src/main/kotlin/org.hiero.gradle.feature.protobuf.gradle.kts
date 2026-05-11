@@ -10,7 +10,7 @@ plugins {
 // Configure Protobuf Plugin to download protoc executable rather than using local installed version
 protobuf {
     // The artifacts below contain unused versions due to
-    // https://github.com/google/protobuf-gradle-plugin/pull/799
+    // https://github.com/google/protobuf-gradle-plugin/issues/798
     protoc { artifact = "com.google.protobuf:protoc:2.5.0" }
     plugins { register("grpc") { artifact = "io.grpc:protoc-gen-grpc-java:1.0.0" } }
     generateProtoTasks {
@@ -56,7 +56,7 @@ tasks.javadoc {
 }
 
 plugins.withId("com.hedera.pbj.pbj-compiler") {
-    // Allow duplicated use of the same 'proto' files as sources for both plugins
+    // Allow using the same 'proto' files twice as sources for both plugins
     // See also: https://github.com/google/protobuf-gradle-plugin/issues/812
     tasks
         .withType<Jar>()
