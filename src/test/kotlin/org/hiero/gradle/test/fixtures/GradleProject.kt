@@ -32,6 +32,7 @@ class GradleProject(
     private val expectedHeader = "// SPDX-License-Identifier: Apache-2.0\n"
 
     private val env = mutableMapOf<String, String>()
+    private val systemProperties = mutableMapOf<String, String>()
 
     fun withMinimalStructure(): GradleProject {
         gradlePropertiesFile.writeText(
@@ -82,6 +83,11 @@ class GradleProject(
     fun withEnv(env: Map<String, String>): GradleProject {
         this.env["PATH"] = System.getenv("PATH") // some plugins use low-level commands like 'uname'
         this.env.putAll(env)
+        return this
+    }
+
+    fun withSystemProperties(systemProperties: Map<String, String>): GradleProject {
+        this.systemProperties.putAll(systemProperties)
         return this
     }
 
