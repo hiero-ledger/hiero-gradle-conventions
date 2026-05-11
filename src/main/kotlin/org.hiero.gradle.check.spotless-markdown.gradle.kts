@@ -5,7 +5,7 @@ spotless {
     flexmark {
         target("**/*.md")
         targetExclude("platform-sdk/sdk/**", "node_modules/**")
-        flexmark()
+        flexmark().extensions("YamlFrontMatter")
         trimTrailingWhitespace()
         leadingTabsToSpaces()
         endWithNewline()
