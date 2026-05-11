@@ -18,6 +18,7 @@ class ProtobufTest {
             """
             syntax = "proto3";
             package org.hiero.product.module.a;
+            option java_package = "org.hiero.product.module.a.proto";
             message Test {
               bytes test_id = 1;
             }
@@ -96,23 +97,23 @@ class ProtobufTest {
     }
 
     @Test
-    fun `sourcesJar does not fail in protobuf project`() {
-        // version does not change
+    fun `sourcesJar does not fail in proejct that combines protobuf and pbj`() {
+        // https://github.com/google/protobuf-gradle-plugin/issues/812
+        push.moduleBuildFile(
+            """
+            plugins {
+                id("org.hiero.gradle.feature.protobuf")
+                id("com.hedera.pbj.pbj-compiler") version "0.9.0"
+            }
+            java.withSourcesJar()
+            """
+                .trimIndent()
+        )
         push.dependencyVersionsFile(dependencyVersions("4.29.3"))
-        pull.dependencyVersionsFile(dependencyVersions("4.29.3"))
 
-        val pushResult = push.run("assemble --build-cache")
-        // simulate different OS
-        val pullResult = pull.run("assemble --build-cache -Dos.arch=x86 -Dos.name=Windows")
+        val pushResult = push.run("sourcesJar")
 
-        // make sure second run is FROM-CACHE
-        assertThat(pushResult.task(":module-a:generateProto")?.outcome)
-            .isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(pushResult.task(":module-a:compileJava")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(pullResult.task(":module-a:generateProto")?.outcome)
-            .isEqualTo(TaskOutcome.FROM_CACHE)
-        assertThat(pullResult.task(":module-a:compileJava")?.outcome)
-            .isEqualTo(TaskOutcome.FROM_CACHE)
+        assertThat(pushResult.task(":module-a:sourcesJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     }
 
     private fun dependencyVersions(protocVersion: String) =

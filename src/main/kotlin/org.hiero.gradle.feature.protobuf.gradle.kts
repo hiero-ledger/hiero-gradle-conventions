@@ -54,3 +54,12 @@ tasks.javadoc {
         addStringOption("Xdoclint:-reference,-html", "-quiet")
     }
 }
+
+plugins.withId("com.hedera.pbj.pbj-compiler") {
+    // Allow duplicated use of the same 'proto' files as sources for both plugins
+    // See also: https://github.com/google/protobuf-gradle-plugin/issues/812
+    tasks
+        .withType<Jar>()
+        .named { it == "sourcesJar" }
+        .configureEach { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
+}
