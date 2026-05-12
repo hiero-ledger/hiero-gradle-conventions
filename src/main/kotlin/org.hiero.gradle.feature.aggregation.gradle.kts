@@ -25,6 +25,11 @@ tasks.compileJava {
     enabled = false
 }
 
+// Be lenient wrt. empty Jars for projects where 'main' is empty.
+// Without this, IDEA import may fail:
+// https://youtrack.jetbrains.com/issue/IDEA-359946/isolated-Projects-sync-fails-on-org.gradlex.extra-java-module-info
+extraJavaModuleInfo.failOnMissingModuleInfo = false
+
 tasks.processResources { enabled = false }
 
 tasks.jar { enabled = false }
