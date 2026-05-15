@@ -50,6 +50,12 @@ jvmDependencyConflicts.patch {
     module("org.rnorth.duct-tape:duct-tape") {
         addRuntimeOnlyDependency("org.slf4j:slf4j-api") // wrongly marked as provided
     }
+    module("org.testcontainers:testcontainers") {
+        // transitive dependencies of 'commons-compress' that are used directly
+        addRuntimeOnlyDependency("commons-codec:commons-codec")
+        addRuntimeOnlyDependency("commons-io:commons-io")
+        addRuntimeOnlyDependency("org.apache.commons:commons-lang3")
+    }
 
     // Reduce scope of transitively added annotation libraries
     val annotationLibrariesCompileTime =
