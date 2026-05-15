@@ -3,10 +3,25 @@ import org.hiero.gradle.spotless.LicenseHeader
 
 plugins { id("com.diffplug.spotless") }
 
+val subDirectories =
+    layout.settingsDirectory.asFile.listFiles()!!.filter {
+        it.isDirectory && !it.name.startsWith(".") && !it.name.startsWith("build")
+    }
+
 spotless {
     format("misc") {
-        target("**/*.properties")
-        targetExclude("gradle/wrapper/gradle-wrapper.properties")
+        // do not use "**/" pattern as it is not compatible with project isolation
+        target(
+            *listOf("*.properties")
+                .plus(subDirectories.map { dir -> "${dir.name}/**/*.properties" })
+                .toTypedArray()
+        )
+        targetExclude(
+            "**/.*/**",
+            "**/build/**",
+            "**/node_modules/**",
+            "gradle/wrapper/gradle-wrapper.properties",
+        )
 
         trimTrailingWhitespace()
         leadingTabsToSpaces()

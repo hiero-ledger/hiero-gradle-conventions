@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.gradle.security.internal.gnupg.GnupgSettings
+import org.gradle.security.internal.gnupg.GnupgSignatory
+
 plugins {
     id("java")
     id("maven-publish")
@@ -15,12 +18,14 @@ java {
 val publishSigningEnabled =
     providers.gradleProperty("publishSigningEnabled").getOrElse("false").toBoolean()
 
-tasks.withType<Sign>().configureEach { enabled = publishSigningEnabled }
-
-signing {
-    sign(publishing.publications)
-    useGpgCmd()
+tasks.withType<Sign>().configureEach {
+    enabled = publishSigningEnabled
+    // the following replaces 'signing.useGpgCmd()' for project isolation compatibility
+    // https://github.com/gradle/gradle/issues/37871
+    signatory(GnupgSignatory(project, "default", GnupgSettings()))
 }
+
+signing { sign(publishing.publications) }
 
 publishing.publications.withType<MavenPublication>().configureEach {
     versionMapping {

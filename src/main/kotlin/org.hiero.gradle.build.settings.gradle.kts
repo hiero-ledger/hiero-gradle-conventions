@@ -41,7 +41,10 @@ configure<RootPluginsExtension> {
 // Allow projects inside a build to be addressed by dependency coordinates notation.
 // https://docs.gradle.org/current/userguide/composite_builds.html#included_build_declaring_substitutions
 // Some functionality of the 'java-module-dependencies' plugin relies on this.
-includeBuild(".")
+// If condition due to: https://github.com/gradle/gradle/issues/37869
+if (rootProject.name != "hiero-gradle-conventions") {
+    includeBuild(".")
+}
 
 @Suppress("UnstableApiUsage")
 configure<JavaModulesExtension> {
