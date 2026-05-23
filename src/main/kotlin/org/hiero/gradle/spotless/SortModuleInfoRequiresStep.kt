@@ -19,33 +19,61 @@ class SortModuleInfoRequiresStep {
         fun toFormatter(): FormatterFunc {
             return FormatterFunc { unixStr ->
                 val lines = unixStr.split('\n')
-                val blockStartIndex = lines.indexOfFirst { it.trim().startsWith("requires") }
-                val blockEndIndex = lines.indexOfLast { it.trim().startsWith("requires") }
 
-                if (blockStartIndex == -1) {
-                    unixStr // not a module-info.java or no 'requires'
+                // Only process module-info.java files (not package-info.java)
+                val openBraceIndex = lines.indexOfFirst { it.contains("{") }
+                val closeBraceIndex = lines.indexOfLast { it.trim().startsWith("}") }
+
+                if (
+                    openBraceIndex == -1 ||
+                        closeBraceIndex == -1 ||
+                        lines.none { it.trim().startsWith("module ") }
+                ) {
+                    unixStr
                 } else {
-                    val nonRequiresLines = mutableListOf<String>()
+                    val beforeBody = lines.subList(0, openBraceIndex + 1)
+                    val afterBody = lines.subList(closeBraceIndex, lines.size)
+                    val bodyLines = lines.subList(openBraceIndex + 1, closeBraceIndex)
 
+                    val exports = mutableListOf<List<String>>()
                     val requiresTransitive = mutableListOf<String>()
                     val requires = mutableListOf<String>()
                     val requiresStaticTransitive = mutableListOf<String>()
                     val requiresStatic = mutableListOf<String>()
+                    val others = mutableListOf<List<String>>()
 
-                    lines.subList(blockStartIndex, blockEndIndex + 1).forEach { line ->
+                    val current = mutableListOf<String>()
+
+                    fun flushCurrent() {
+                        if (current.isEmpty()) return
+                        val first = current.first().trim()
                         when {
-                            line.trim().startsWith("requires static transitive") ->
-                                requiresStaticTransitive.add(line)
-                            line.trim().startsWith("requires static") -> requiresStatic.add(line)
-                            line.trim().startsWith("requires transitive") ->
-                                requiresTransitive.add(line)
-                            line.trim().startsWith("requires") -> requires.add(line)
-                            line.isNotBlank() && !line.trim().startsWith("requires") ->
-                                nonRequiresLines.add(line)
+                            first.startsWith("exports") -> exports.add(current.toList())
+                            first.startsWith("requires static transitive") ->
+                                requiresStaticTransitive.add(current.first())
+                            first.startsWith("requires static") ->
+                                requiresStatic.add(current.first())
+                            first.startsWith("requires transitive") ->
+                                requiresTransitive.add(current.first())
+                            first.startsWith("requires") -> requires.add(current.first())
+                            else -> others.add(current.toList())
                         }
+                        current.clear()
                     }
 
-                    val comparator =
+                    for (line in bodyLines) {
+                        if (line.isBlank()) {
+                            flushCurrent()
+                            continue
+                        }
+                        current.add(line)
+                        if (line.trimEnd().endsWith(";")) {
+                            flushCurrent()
+                        }
+                    }
+                    flushCurrent()
+
+                    val requiresComparator =
                         Comparator<String> { a, b ->
                             val nameA = a.split(" ").first { it.endsWith(";") }
                             val nameB = b.split(" ").first { it.endsWith(";") }
@@ -64,22 +92,55 @@ class SortModuleInfoRequiresStep {
                             }
                         }
 
-                    requiresTransitive.sortWith(comparator)
-                    requires.sortWith(comparator)
-                    requiresStaticTransitive.sortWith(comparator)
-                    requiresStatic.sortWith(comparator)
+                    // Sort exports alphabetically by the exported package name
+                    val exportsComparator =
+                        Comparator<List<String>> { a, b ->
+                            val nameA =
+                                a.first()
+                                    .trim()
+                                    .removePrefix("exports")
+                                    .trim()
+                                    .split(Regex("[\\s;]"))
+                                    .first()
+                            val nameB =
+                                b.first()
+                                    .trim()
+                                    .removePrefix("exports")
+                                    .trim()
+                                    .split(Regex("[\\s;]"))
+                                    .first()
+                            nameA.compareTo(nameB)
+                        }
 
-                    val blockStart = lines.subList(0, blockStartIndex)
-                    val blockEnd = lines.subList(blockEndIndex + 1, lines.size)
+                    exports.sortWith(exportsComparator)
+                    requiresTransitive.sortWith(requiresComparator)
+                    requires.sortWith(requiresComparator)
+                    requiresStaticTransitive.sortWith(requiresComparator)
+                    requiresStatic.sortWith(requiresComparator)
 
-                    (blockStart +
-                            nonRequiresLines +
-                            requiresTransitive +
-                            requires +
-                            requiresStaticTransitive +
-                            requiresStatic +
-                            blockEnd)
-                        .joinToString("\n")
+                    val allRequires =
+                        requiresTransitive + requires + requiresStaticTransitive + requiresStatic
+
+                    val result = mutableListOf<String>()
+                    result.addAll(beforeBody)
+
+                    if (exports.isNotEmpty()) {
+                        exports.forEach { result.addAll(it) }
+                    }
+                    if (exports.isNotEmpty() && allRequires.isNotEmpty()) {
+                        result.add("")
+                    }
+                    if (allRequires.isNotEmpty()) {
+                        result.addAll(allRequires)
+                    }
+                    if ((exports.isNotEmpty() || allRequires.isNotEmpty()) && others.isNotEmpty()) {
+                        result.add("")
+                    }
+                    others.forEach { result.addAll(it) }
+
+                    result.addAll(afterBody)
+
+                    result.joinToString("\n")
                 }
             }
         }

@@ -107,10 +107,10 @@ class QualityGateTest {
                 """
                 // SPDX-License-Identifier: Apache-2.0
                 module org.hiero.product.module.a {
+                    exports org.hiero.product.module.a;
+
                     requires com.fasterxml.jackson.databind;
                     requires org.apache.commons.lang3;
-
-                    exports org.hiero.product.module.a;
                 }
                 """
                     .trimIndent()
