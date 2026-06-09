@@ -242,6 +242,40 @@ class QualityGateTest {
     }
 
     @Test
+    fun `spotlessApply sorts entries in moduleInfo blocks in build gradle kts files`() {
+        val p = GradleProject().withMinimalStructure()
+        val buildFile =
+            p.moduleBuildFile(
+                """
+                plugins { id("org.hiero.gradle.module.library") }
+
+                testModuleInfo {
+                    requires("org.junit.jupiter.params")
+                    requires("org.junit.jupiter.api")
+                }
+                """
+                    .trimIndent()
+            )
+
+        val result = p.run("spotlessApply")
+
+        assertThat(buildFile)
+            .hasContent(
+                """
+                // SPDX-License-Identifier: Apache-2.0
+                plugins { id("org.hiero.gradle.module.library") }
+
+                testModuleInfo {
+                    requires("org.junit.jupiter.api")
+                    requires("org.junit.jupiter.params")
+                }
+                """
+                    .trimIndent()
+            )
+        assertThat(result.task(":spotlessApply")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
     fun `spotlessApply formats rust files`() {
         val p = GradleProject().withMinimalStructure()
         p.moduleBuildFile(
