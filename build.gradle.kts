@@ -19,12 +19,12 @@ dependencies {
     api("com.gradleup.shadow:shadow-gradle-plugin:9.1.0")
 
     implementation("com.adarshr:gradle-test-logger-plugin:4.0.0")
-    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:3.11.0")
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:8.4.0")
+    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:3.14.1")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:8.5.0")
     implementation("com.github.node-gradle:gradle-node-plugin:7.1.0") // install NPM for prettier
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.10.0")
     implementation("com.gradle.publish:plugin-publish-plugin:2.1.1")
-    implementation("com.gradle:develocity-gradle-plugin:4.4.1")
+    implementation("com.gradle:develocity-gradle-plugin:4.4.2")
     implementation("com.gradleup.nmcp:nmcp:1.2.1")
     implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
     implementation("net.swiftzer.semver:semver:2.1.0")
@@ -41,7 +41,7 @@ dependencies {
     runtimeOnly("org.gradlex:reproducible-builds:1.1")
 
     testImplementation("org.assertj:assertj-core:3.27.7")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.junit-pioneer:junit-pioneer:2.3.0")
 }
