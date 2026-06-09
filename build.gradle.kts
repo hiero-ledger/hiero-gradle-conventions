@@ -20,7 +20,7 @@ dependencies {
 
     implementation("com.adarshr:gradle-test-logger-plugin:4.0.0")
     implementation("com.autonomousapps:dependency-analysis-gradle-plugin:3.14.1")
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:8.5.0")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:8.6.0")
     implementation("com.github.node-gradle:gradle-node-plugin:7.1.0") // install NPM for prettier
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.10.0")
     implementation("com.gradle.publish:plugin-publish-plugin:2.1.1")
