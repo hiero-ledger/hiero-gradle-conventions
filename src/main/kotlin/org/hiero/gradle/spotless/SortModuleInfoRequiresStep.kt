@@ -67,7 +67,11 @@ class SortModuleInfoRequiresStep {
                             continue
                         }
                         current.add(line)
-                        if (line.trimEnd().endsWith(";")) {
+                        if (
+                            line.trimEnd().endsWith(";") ||
+                                (line.contains(";") &&
+                                    line.substringAfter(";").trim().startsWith("//"))
+                        ) {
                             flushCurrent()
                         }
                     }
