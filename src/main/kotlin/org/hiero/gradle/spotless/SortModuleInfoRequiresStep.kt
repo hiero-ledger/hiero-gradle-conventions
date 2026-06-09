@@ -97,26 +97,7 @@ class SortModuleInfoRequiresStep {
                         }
 
                     // Sort exports alphabetically by the exported package name
-                    val exportsComparator =
-                        Comparator<List<String>> { a, b ->
-                            val nameA =
-                                a.first()
-                                    .trim()
-                                    .removePrefix("exports")
-                                    .trim()
-                                    .split(Regex("[\\s;]"))
-                                    .first()
-                            val nameB =
-                                b.first()
-                                    .trim()
-                                    .removePrefix("exports")
-                                    .trim()
-                                    .split(Regex("[\\s;]"))
-                                    .first()
-                            nameA.compareTo(nameB)
-                        }
-
-                    exports.sortWith(exportsComparator)
+                    exports.sortBy { it.first() }
                     requiresTransitive.sortWith(requiresComparator)
                     requires.sortWith(requiresComparator)
                     requiresStaticTransitive.sortWith(requiresComparator)
