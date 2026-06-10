@@ -7,6 +7,7 @@ import com.diffplug.spotless.FormatterStep
 class SortModuleInfoBlocksStep {
     companion object {
         private const val NAME = "SortModuleInfoBlocks"
+        private val OWN_PACKAGES = listOf("com.swirlds.", "com.hedera", "org.hiero")
 
         fun create(): FormatterStep = FormatterStep.create(NAME, State(), State::toFormatter)
     }
@@ -18,22 +19,70 @@ class SortModuleInfoBlocksStep {
             val result = mutableListOf<String>()
             var i = 0
 
+            val ownPackagesComparator =
+                Comparator<String> { a, b ->
+                    val nameA = a.trim().substringAfter("(\"").substringBefore("\")")
+                    val nameB = b.trim().substringAfter("(\"").substringBefore("\")")
+                    if (
+                        OWN_PACKAGES.any { nameA.startsWith(it) } &&
+                            OWN_PACKAGES.none { nameB.startsWith(it) }
+                    ) {
+                        -1
+                    } else if (
+                        OWN_PACKAGES.none { nameA.startsWith(it) } &&
+                            OWN_PACKAGES.any { nameB.startsWith(it) }
+                    ) {
+                        1
+                    } else {
+                        nameA.compareTo(nameB)
+                    }
+                }
+
             while (i < lines.size) {
                 val line = lines[i]
-                if (isMultiLineModuleInfoBlockStart(line)) {
+                if (line.isMultiLineModuleInfoBlockStart()) {
                     result.add(line)
                     i++
-                    val blockLines = mutableListOf<String>()
+
+                    val annotationProcessors = mutableListOf<String>()
+                    val requires = mutableListOf<String>()
+                    val requiresStatic = mutableListOf<String>()
+                    val runtimeOnly = mutableListOf<String>()
+                    val others = mutableListOf<String>()
+
                     while (i < lines.size && !lines[i].trim().startsWith("}")) {
-                        if (lines[i].isNotBlank()) {
-                            blockLines.add(lines[i])
+                        val entry = lines[i]
+                        if (entry.isNotBlank()) {
+                            val trimmed = entry.trim()
+                            when {
+                                trimmed.startsWith("annotationProcessor(") ->
+                                    annotationProcessors.add(entry)
+                                trimmed.startsWith("requiresStatic(") -> requiresStatic.add(entry)
+                                trimmed.startsWith("requires(") -> requires.add(entry)
+                                trimmed.startsWith("runtimeOnly(") -> runtimeOnly.add(entry)
+                                else -> others.add(entry) // exportsTo, opensTo
+                            }
                         }
                         i++
                     }
-                    blockLines.sortBy { it.trim() }
-                    result.addAll(blockLines)
+
+                    annotationProcessors.sortWith(ownPackagesComparator)
+                    requires.sortWith(ownPackagesComparator)
+                    requiresStatic.sortWith(ownPackagesComparator)
+                    runtimeOnly.sortWith(ownPackagesComparator)
+                    others.sortBy { it.trim() }
+
+                    val groups =
+                        listOf(annotationProcessors, requires + requiresStatic, runtimeOnly, others)
+                            .filter { it.isNotEmpty() }
+
+                    groups.forEachIndexed { idx, group ->
+                        if (idx > 0) result.add("")
+                        result.addAll(group)
+                    }
+
                     if (i < lines.size) {
-                        result.add(lines[i])
+                        result.add(lines[i]) // closing brace
                     }
                 } else {
                     result.add(line)
@@ -44,7 +93,7 @@ class SortModuleInfoBlocksStep {
             result.joinToString("\n")
         }
 
-        private fun isMultiLineModuleInfoBlockStart(line: String) =
-            Regex("""^\s*\w+ModuleInfo\s*\{""").containsMatchIn(line) && !line.contains('}')
+        private fun String.isMultiLineModuleInfoBlockStart() =
+            Regex("""^\s*\w+ModuleInfo\s*\{""").containsMatchIn(this) && !this.contains('}')
     }
 }

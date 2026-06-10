@@ -251,7 +251,9 @@ class QualityGateTest {
 
                 testModuleInfo {
                     requires("org.junit.jupiter.params")
+                    requiresStatic("org.hiero.gradle.check.spotless")
                     requires("org.junit.jupiter.api")
+                    requires("org.hiero.consensus.node.app")
                 }
                 """
                     .trimIndent()
@@ -266,8 +268,10 @@ class QualityGateTest {
                 plugins { id("org.hiero.gradle.module.library") }
 
                 testModuleInfo {
+                    requires("org.hiero.consensus.node.app")
                     requires("org.junit.jupiter.api")
                     requires("org.junit.jupiter.params")
+                    requiresStatic("org.hiero.gradle.check.spotless")
                 }
                 """
                     .trimIndent()
