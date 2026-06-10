@@ -33,6 +33,8 @@ class GradleProject(
 
     private val env = mutableMapOf<String, String>()
 
+    private var warningMode = "all"
+
     fun withMinimalStructure(): GradleProject {
         gradlePropertiesFile.writeText(
             """
@@ -82,6 +84,11 @@ class GradleProject(
     fun withEnv(env: Map<String, String>): GradleProject {
         this.env["PATH"] = System.getenv("PATH") // some plugins use low-level commands like 'uname'
         this.env.putAll(env)
+        return this
+    }
+
+    fun withWarningMode(mode: String): GradleProject {
+        this.warningMode = mode
         return this
     }
 
@@ -151,7 +158,7 @@ class GradleProject(
             .forwardOutput()
             .withPluginClasspath()
             .withProjectDir(projectDir)
-            .withArguments(args + listOf("-s", "--warning-mode=all"))
+            .withArguments(args + listOf("-s", "--warning-mode=$warningMode"))
             .withDebug(debugMode)
             .let { if (env.isEmpty() || debugMode) it else it.withEnvironment(env) }
     }
