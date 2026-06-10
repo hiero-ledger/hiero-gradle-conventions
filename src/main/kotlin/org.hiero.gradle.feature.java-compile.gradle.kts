@@ -7,8 +7,7 @@ plugins {
     id("org.gradlex.reproducible-builds")
 }
 
-@Suppress("UnstableApiUsage") val rootDir = project.isolated.rootProject.projectDirectory
-val versions = EnvAccess.toolchainVersions(rootDir, providers, objects)
+val versions = EnvAccess.toolchainVersions(layout.settingsDirectory, providers, objects)
 
 val currentJavaVersion = providers.systemProperty("java.version").get()
 val fullJavaVersion =
