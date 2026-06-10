@@ -16,8 +16,8 @@ class WarningsAndErrorsTest {
             # SPDX-License-Identifier: Apache-2.0
             org.gradle.configuration-cache=true
             org.gradle.caching=true
-            
-        """
+
+            """
                 .trimIndent()
         )
 
@@ -112,8 +112,8 @@ class WarningsAndErrorsTest {
             """
             # SPDX-License-Identifier: Apache-2.0
             jdk=17.0.99
-            
-        """
+
+            """
                 .trimIndent()
         )
 
@@ -123,5 +123,28 @@ class WarningsAndErrorsTest {
             .content()
             .contains("This project works best running with Java 17.0.99")
             .contains("'Gradle JVM' in 'Gradle Settings'")
+    }
+
+    @Test
+    fun `throws warning as error for --warning-mode=fail`() {
+        val p = GradleProject()
+        p.withMinimalStructure().withWarningMode("fail")
+
+        val out = p.failQualityCheck().output
+
+        assertThat(out)
+            .contains(
+                """
+                > Failed to apply plugin 'org.hiero.gradle.feature.build-cache'.
+                   > Build Cache Disabled
+                       Build Cache Disabled
+                         Location: gradle.properties
+
+                * Try:
+                > Add org.gradle.caching=true to gradle.properties
+                > For more information, see https://github.com/hiero-ledger/hiero-gradle-conventions#project-structure
+                """
+                    .trimIndent()
+            )
     }
 }
