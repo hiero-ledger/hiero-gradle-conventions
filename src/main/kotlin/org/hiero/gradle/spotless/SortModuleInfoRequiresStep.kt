@@ -35,28 +35,36 @@ class SortModuleInfoRequiresStep {
                     val afterBody = lines.subList(closeBraceIndex, lines.size)
                     val bodyLines = lines.subList(openBraceIndex + 1, closeBraceIndex)
 
-                    val exports = mutableListOf<List<String>>()
-                    val requiresTransitive = mutableListOf<String>()
-                    val requires = mutableListOf<String>()
-                    val requiresStaticTransitive = mutableListOf<String>()
-                    val requiresStatic = mutableListOf<String>()
-                    val others = mutableListOf<List<String>>()
+                    val generalExports = mutableListOf<List<String>>()
+                    val targetedExports = mutableListOf<List<String>>()
+                    val opens = mutableListOf<List<String>>()
+                    val requiresTransitive = mutableListOf<List<String>>()
+                    val requires = mutableListOf<List<String>>()
+                    val requiresStaticTransitive = mutableListOf<List<String>>()
+                    val requiresStatic = mutableListOf<List<String>>()
+                    val uses = mutableListOf<List<String>>()
+                    val provides = mutableListOf<List<String>>()
 
                     val current = mutableListOf<String>()
 
                     fun flushCurrent() {
                         if (current.isEmpty()) return
-                        val first = current.first().trim()
                         when {
-                            first.startsWith("exports") -> exports.add(current.toList())
-                            first.startsWith("requires static transitive") ->
-                                requiresStaticTransitive.add(current.first())
-                            first.startsWith("requires static") ->
-                                requiresStatic.add(current.first())
-                            first.startsWith("requires transitive") ->
-                                requiresTransitive.add(current.first())
-                            first.startsWith("requires") -> requires.add(current.first())
-                            else -> others.add(current.toList())
+                            current.anyLineStartsWith("exports") &&
+                                current.any { it.split(" ").contains("to") } ->
+                                targetedExports.add(current.toList())
+                            current.anyLineStartsWith("exports") ->
+                                generalExports.add(current.toList())
+                            current.anyLineStartsWith("opens") -> opens.add(current.toList())
+                            current.anyLineStartsWith("requires static transitive") ->
+                                requiresStaticTransitive.add(current.toList())
+                            current.anyLineStartsWith("requires static") ->
+                                requiresStatic.add(current.toList())
+                            current.anyLineStartsWith("requires transitive") ->
+                                requiresTransitive.add(current.toList())
+                            current.anyLineStartsWith("requires") -> requires.add(current.toList())
+                            current.anyLineStartsWith("uses") -> uses.add(current.toList())
+                            current.anyLineStartsWith("provides") -> provides.add(current.toList())
                         }
                         current.clear()
                     }
@@ -64,23 +72,25 @@ class SortModuleInfoRequiresStep {
                     for (line in bodyLines) {
                         if (line.isBlank()) {
                             flushCurrent()
-                            continue
-                        }
-                        current.add(line)
-                        if (
-                            line.trimEnd().endsWith(";") ||
-                                (line.contains(";") &&
-                                    line.substringAfter(";").trim().startsWith("//"))
-                        ) {
-                            flushCurrent()
+                        } else {
+                            current.add(line)
+                            if (line.contains(";")) {
+                                flushCurrent()
+                            }
                         }
                     }
                     flushCurrent()
 
                     val requiresComparator =
-                        Comparator<String> { a, b ->
-                            val nameA = a.split(" ").first { it.endsWith(";") }
-                            val nameB = b.split(" ").first { it.endsWith(";") }
+                        Comparator<List<String>> { a, b ->
+                            val nameA =
+                                a.first { !it.isCommentLine() }
+                                    .split(" ")
+                                    .first { it.endsWith(";") }
+                            val nameB =
+                                b.first { !it.isCommentLine() }
+                                    .split(" ")
+                                    .first { it.endsWith(";") }
                             if (
                                 OWN_PACKAGES.any { nameA.startsWith(it) } &&
                                     OWN_PACKAGES.none { nameB.startsWith(it) }
@@ -97,7 +107,11 @@ class SortModuleInfoRequiresStep {
                         }
 
                     // Sort exports alphabetically by the exported package name
-                    exports.sortBy { it.first() }
+                    generalExports.sortBy { it.first { !it.isCommentLine() } }
+                    targetedExports.sortBy { it.first { !it.isCommentLine() } }
+                    opens.sortBy { it.first { !it.isCommentLine() } }
+                    uses.sortBy { it.first { !it.isCommentLine() } }
+                    provides.sortBy { it.first { !it.isCommentLine() } }
                     requiresTransitive.sortWith(requiresComparator)
                     requires.sortWith(requiresComparator)
                     requiresStaticTransitive.sortWith(requiresComparator)
@@ -109,24 +123,46 @@ class SortModuleInfoRequiresStep {
                     val result = mutableListOf<String>()
                     result.addAll(beforeBody)
 
-                    if (exports.isNotEmpty()) {
-                        exports.forEach { result.addAll(it) }
+                    result.addBlocks(generalExports)
+                    if (
+                        targetedExports.isNotEmpty() &&
+                            !targetedExports.first().first().isCommentLine()
+                    ) {
+                        // the generic formatter does not allow a new line here if there is no
+                        // comment
+                        if (result.last() == "") {
+                            result.removeLast()
+                        }
                     }
-                    if (exports.isNotEmpty() && allRequires.isNotEmpty()) {
-                        result.add("")
+                    result.addBlocks(targetedExports)
+                    result.addBlocks(opens)
+                    result.addBlocks(allRequires)
+                    result.addBlocks(uses)
+                    result.addBlocks(provides)
+
+                    if (result.last() == "") {
+                        result.removeLast()
                     }
-                    if (allRequires.isNotEmpty()) {
-                        result.addAll(allRequires)
-                    }
-                    if ((exports.isNotEmpty() || allRequires.isNotEmpty()) && others.isNotEmpty()) {
-                        result.add("")
-                    }
-                    others.forEach { result.addAll(it) }
 
                     result.addAll(afterBody)
 
                     result.joinToString("\n")
                 }
+            }
+        }
+
+        private fun String.isCommentLine(): Boolean {
+            return trim().startsWith("/")
+        }
+
+        private fun List<String>.anyLineStartsWith(keyword: String): Boolean {
+            return any { it.trim().startsWith(keyword) }
+        }
+
+        private fun MutableList<String>.addBlocks(elements: List<List<String>>) {
+            if (elements.isNotEmpty() && elements.first().isNotEmpty()) {
+                addAll(elements.flatten())
+                add("")
             }
         }
     }

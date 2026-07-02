@@ -64,20 +64,40 @@ class QualityGateTest {
             """
             package org.hiero.product.module.a;
             public class ModuleA {
-                private com.fasterxml.jackson.databind.ObjectMapper om;
+                public com.fasterxml.jackson.databind.ObjectMapper om;
                 private org.apache.commons.lang3.CharUtils cu;
             }
             """
                 .trimIndent()
         )
+        p.file("product/module-a/src/main/java/org/hiero/product/module/b/ClassB.java")
+            .writeText(
+                """
+                package org.hiero.product.module.b;
+                public class ClassB extends com.fasterxml.jackson.databind.ObjectMapper { }
+                """
+                    .trimIndent()
+            )
 
         val moduleInfo =
             p.file(
                 "product/module-a/src/main/java/module-info.java",
                 """
                 module org.hiero.product.module.a   {    
+
+                    // a comment on top provides
+                   provides com.fasterxml.jackson.core.ObjectCodec with
+                         org.hiero.product.module.b.ClassB;
+
+
                     requires org.apache.commons.lang3;  
-                    requires    com.fasterxml.jackson.databind;
+                        /* Targeted Exports to External Libraries */
+                    exports    org.hiero.product.module.b  
+                        to    org.apache.commons.lang3;
+                    requires transitive   com.fasterxml.jackson.databind;
+                    
+                       uses com.fasterxml.jackson.core.ObjectCodec;
+                    
                     
                     exports       org.hiero.product.module.a;
                   }    
@@ -109,8 +129,18 @@ class QualityGateTest {
                 module org.hiero.product.module.a {
                     exports org.hiero.product.module.a;
 
-                    requires com.fasterxml.jackson.databind;
+                    /* Targeted Exports to External Libraries */
+                    exports org.hiero.product.module.b to
+                            org.apache.commons.lang3;
+
+                    requires transitive com.fasterxml.jackson.databind;
                     requires org.apache.commons.lang3;
+
+                    uses com.fasterxml.jackson.core.ObjectCodec;
+
+                    // a comment on top provides
+                    provides com.fasterxml.jackson.core.ObjectCodec with
+                            org.hiero.product.module.b.ClassB;
                 }
                 """
                     .trimIndent()
@@ -143,6 +173,9 @@ class QualityGateTest {
             )
 
         assertThat(result.task(":qualityGate")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+        // make sure 'qualityCheck' passes after formatting
+        p.qualityCheck()
     }
 
     @Test
