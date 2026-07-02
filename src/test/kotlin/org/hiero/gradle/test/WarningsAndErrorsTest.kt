@@ -138,11 +138,9 @@ class WarningsAndErrorsTest {
                 > Failed to apply plugin 'org.hiero.gradle.feature.build-cache'.
                    > Build Cache Disabled
                        Build Cache Disabled
+                         For more information, please refer to https://github.com/hiero-ledger/hiero-gradle-conventions#project-structure.
                          Location: gradle.properties
-
-                * Try:
-                > Add org.gradle.caching=true to gradle.properties
-                > For more information, see https://github.com/hiero-ledger/hiero-gradle-conventions#project-structure
+                         Possible solution: Add org.gradle.caching=true to gradle.properties.
                 """
                     .trimIndent()
             )
