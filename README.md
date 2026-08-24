@@ -38,7 +38,7 @@ Modules (subprojects) are located in the directory hierarchy by using the `javaM
 ```kotlin
 // settings.gradle.kts
 plugins {
-    id("org.hiero.gradle.build") version "0.7.10"
+    id("org.hiero.gradle.build") version "0.7.11"
 }
 
 // Define location of Modules (subprojects)
