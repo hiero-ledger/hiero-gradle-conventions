@@ -13,7 +13,7 @@ class JpmsPatchTest {
         val p = GradleProject().withMinimalStructure()
         val versionPatching =
             """
-            configurations.all { attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 21) }
+            configurations.all { attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25) }
             dependencies.components.withModule("com.goterl:resource-loader") { this.status = "release" }
             dependencies.components.withModule("com.goterl:lazysodium-java") { this.status = "release" }
             dependencies.components.all { if(listOf("alpha", "beta", "rc", "cr", ".m").any { id.version.lowercase().contains(it) }) status = "integration" }
@@ -30,21 +30,19 @@ class JpmsPatchTest {
             val modules = extraJavaModuleInfo.moduleSpecs.get().values.map { it.identifier }
             dependencies {
                 api(platform("io.netty:netty-bom:latest.release"))
-                api(platform("org.hyperledger.besu:bom:24.+")) // Keep Besu on 24 versions, updating to 25 requires changes to module coordinates
             }
             dependencies.constraints {
                 modules.forEach {
-                    if (!it.startsWith("org.hyperledger.besu") && !it.startsWith("com.squareup.okhttp3")) {
-                        api("${'$'}it:latest.release")
-                    }
+                    api("${'$'}it:latest.release")
                 }
                 api("com.squareup.okhttp3:okhttp:4.+!!") // Keep okhttp on 4.x as this is currently only used transitively
+                api("io.vertx:vertx-core:4.+!!") // Keep vertx-core on 4.x as this is currently only used transitively
                 api("org.jetbrains:annotations:latest.release")
                 api("org.mockito:mockito-core:latest.release")
                 api("org.mockito:mockito-junit-jupiter:latest.release")
                 api("com.google.guava:guava:latest.release")
             }
-        """
+            """
                 .trimIndent()
         )
         p.moduleBuildFile(
