@@ -56,6 +56,12 @@ jvmDependencyConflicts.patch {
         addRuntimeOnlyDependency("commons-io:commons-io")
         addRuntimeOnlyDependency("org.apache.commons:commons-lang3")
     }
+    module("org.hyperledger.besu:besu-datatypes") {
+        addCompileOnlyApiDependency("com.fasterxml.jackson.core:jackson-annotations")
+    }
+    module("org.hyperledger.besu:besu-evm") {
+        addCompileOnlyApiDependency("com.fasterxml.jackson.core:jackson-annotations")
+    }
 
     // Reduce scope of transitively added annotation libraries
     val annotationLibrariesCompileTime =
@@ -212,17 +218,9 @@ extraJavaModuleInfo {
     module("org.hyperledger.besu:arithmetic", "org.hyperledger.besu.nativelib.arithmetic")
     module("org.hyperledger.besu:blake2bf", "org.hyperledger.besu.nativelib.blake2bf")
     module("org.hyperledger.besu:bls12-381", "org.hyperledger.besu.nativelib.bls12_381")
-    module("org.hyperledger.besu:besu-datatypes", "org.hyperledger.besu.datatypes") {
-        exportAllPackages()
-        requireAllDefinedDependencies()
-        requiresStatic("com.fasterxml.jackson.annotation")
-    }
+    module("org.hyperledger.besu:besu-datatypes", "org.hyperledger.besu.datatypes")
     module("org.hyperledger.besu:besu-native-common", "org.hyperledger.besu.nativelib.common")
-    module("org.hyperledger.besu:besu-evm", "org.hyperledger.besu.evm") {
-        exportAllPackages()
-        requireAllDefinedDependencies()
-        requiresStatic("com.fasterxml.jackson.annotation")
-    }
+    module("org.hyperledger.besu:besu-evm", "org.hyperledger.besu.evm")
     module("org.hyperledger.besu:secp256k1", "org.hyperledger.besu.nativelib.secp256k1")
     module("org.hyperledger.besu:secp256r1", "org.hyperledger.besu.nativelib.secp256r1")
     module("org.hyperledger.besu:gnark", "org.hyperledger.besu.nativelib.gnark")
