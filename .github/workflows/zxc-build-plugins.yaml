@@ -14,6 +14,9 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  contents: read
+
 env:
   LC_ALL: C.UTF-8
   GRADLE_CACHE_USERNAME: ${{ secrets.gradle-cache-username }}
@@ -23,6 +26,10 @@ jobs:
   compile:
     name: Compile and Test
     runs-on: hl-gc-gradle-lin
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
