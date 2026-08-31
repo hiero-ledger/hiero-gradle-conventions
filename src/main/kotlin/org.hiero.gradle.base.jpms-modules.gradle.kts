@@ -56,6 +56,12 @@ jvmDependencyConflicts.patch {
         addRuntimeOnlyDependency("commons-io:commons-io")
         addRuntimeOnlyDependency("org.apache.commons:commons-lang3")
     }
+    module("org.hyperledger.besu:besu-datatypes") {
+        addCompileOnlyApiDependency("com.fasterxml.jackson.core:jackson-annotations")
+    }
+    module("org.hyperledger.besu:besu-evm") {
+        addCompileOnlyApiDependency("com.fasterxml.jackson.core:jackson-annotations")
+    }
 
     // Reduce scope of transitively added annotation libraries
     val annotationLibrariesCompileTime =
@@ -192,8 +198,8 @@ extraJavaModuleInfo {
         exportAllPackages()
         requires("org.connid.framework") // this is missing in POM
     }
-    module("io.tmio:tuweni-units", "tuweni.units")
-    module("io.tmio:tuweni-bytes", "tuweni.bytes")
+    module("io.consensys.tuweni:tuweni-bytes", "tuweni.bytes")
+    module("io.consensys.tuweni:tuweni-units", "tuweni.units")
     module("net.i2p.crypto:eddsa", "net.i2p.crypto.eddsa")
     module("io.minio:minio", "io.minio") {
         exportAllPackages()
@@ -202,21 +208,23 @@ extraJavaModuleInfo {
         requiresStatic("com.github.spotbugs.annotations")
     }
     module("org.antlr:antlr4-runtime", "org.antlr.antlr4.runtime")
-    module("org.hyperledger.besu.internal:algorithms", "org.hyperledger.besu.internal.crypto")
-    module("org.hyperledger.besu.internal:rlp", "org.hyperledger.besu.internal.rlp")
+    module(
+        "org.hyperledger.besu.internal:besu-crypto-algorithms",
+        "org.hyperledger.besu.internal.crypto",
+    )
+    module("org.hyperledger.besu.internal:besu-ethereum-rlp", "org.hyperledger.besu.internal.rlp")
+    module("org.hyperledger.besu.internal:besu-util", "org.hyperledger.besu.internal.util")
+    module("org.hyperledger.besu:boringssl", "org.hyperledger.besu.nativelib.boringssl")
     module("org.hyperledger.besu:arithmetic", "org.hyperledger.besu.nativelib.arithmetic")
     module("org.hyperledger.besu:blake2bf", "org.hyperledger.besu.nativelib.blake2bf")
     module("org.hyperledger.besu:bls12-381", "org.hyperledger.besu.nativelib.bls12_381")
     module("org.hyperledger.besu:besu-datatypes", "org.hyperledger.besu.datatypes")
     module("org.hyperledger.besu:besu-native-common", "org.hyperledger.besu.nativelib.common")
-    module("org.hyperledger.besu:evm", "org.hyperledger.besu.evm") {
-        exportAllPackages()
-        requireAllDefinedDependencies()
-        requiresStatic("com.fasterxml.jackson.annotation")
-    }
+    module("org.hyperledger.besu:besu-evm", "org.hyperledger.besu.evm")
     module("org.hyperledger.besu:secp256k1", "org.hyperledger.besu.nativelib.secp256k1")
     module("org.hyperledger.besu:secp256r1", "org.hyperledger.besu.nativelib.secp256r1")
     module("org.hyperledger.besu:gnark", "org.hyperledger.besu.nativelib.gnark")
+    module("io.vertx:vertx-core", "io.vertx.core")
     module("com.goterl:resource-loader", "com.goterl.resourceloader")
     module("com.goterl:lazysodium-java", "com.goterl.lazysodium")
     // 'io.consensys.protocols' replaces 'tech.pegasys' in org.hyperledger.besu:evm:25.x
