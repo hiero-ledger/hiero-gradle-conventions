@@ -68,10 +68,12 @@ abstract class GitClone : DefaultTask() {
             }
         }
         // '-f' discards previously applied patches, which may conflict with the checkout
+        val checkout =
+            if (patches.isEmpty) listOf("git", "checkout") else listOf("git", "checkout", "-f")
         if (tag.isPresent) {
             exec.exec {
                 workingDir = localClone.asFile
-                commandLine("git", "checkout", "-f", tag.get(), "-q")
+                commandLine(checkout + listOf(tag.get(), "-q"))
             }
             exec.exec {
                 workingDir = localClone.asFile
@@ -80,7 +82,7 @@ abstract class GitClone : DefaultTask() {
         } else {
             exec.exec {
                 workingDir = localClone.asFile
-                commandLine("git", "checkout", "-f", branch.get(), "-q")
+                commandLine(checkout + listOf(branch.get(), "-q"))
             }
             exec.exec {
                 workingDir = localClone.asFile

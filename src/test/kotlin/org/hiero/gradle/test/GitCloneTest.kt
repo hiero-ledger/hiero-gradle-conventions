@@ -32,6 +32,12 @@ class GitCloneTest {
         git("commit", "-q", "-a", "-m", "patch 2")
         p.file("product/module-a/patches/01.patch", git("diff", "v1.0.0", "HEAD~1"))
         p.file("product/module-a/patches/02.patch", git("diff", "HEAD~1", "HEAD"))
+
+        git("checkout", "-q", "-b", "patches-v2", "v2.0.0")
+        upstream.resolve("OTHER.txt").writeText("other\n")
+        git("add", "-A")
+        git("commit", "-q", "-m", "patch v2")
+        p.file("product/module-a/patches/v2.patch", git("diff", "v2.0.0", "HEAD"))
         git("checkout", "-q", "main")
     }
 
@@ -52,13 +58,24 @@ class GitCloneTest {
     fun `changes of previously applied patches are discarded`() {
         cloneTask(tag = "v1.0.0", patches = listOf("patches/01.patch"))
         p.run(":module-a:clone")
-        cloneTask(tag = "v2.0.0", patches = emptyList())
+        cloneTask(tag = "v2.0.0", patches = listOf("patches/v2.patch"))
 
         val result = p.run(":module-a:clone")
 
         assertThat(result.task(":module-a:clone")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         assertThat(clone.resolve("README.txt")).hasContent("v2")
         assertThat(clone.resolve("ADDED.txt")).doesNotExist()
+        assertThat(clone.resolve("OTHER.txt")).hasContent("other")
+    }
+
+    @Test
+    fun `clones without patches`() {
+        cloneTask(tag = "v2.0.0", patches = emptyList())
+
+        val result = p.run(":module-a:clone")
+
+        assertThat(result.task(":module-a:clone")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(clone.resolve("README.txt")).hasContent("v2")
     }
 
     @Test
