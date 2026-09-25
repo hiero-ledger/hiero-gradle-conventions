@@ -4,12 +4,16 @@ package org.hiero.gradle.tasks
 import javax.inject.Inject
 import org.gradle.StartParameter
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import org.gradle.work.DisableCachingByDefault
@@ -18,14 +22,30 @@ import org.gradle.work.DisableCachingByDefault
 @DisableCachingByDefault(because = "processes large amount of data")
 abstract class GitClone : DefaultTask() {
 
+    /** URL of the repository to clone. */
     @get:Input abstract val url: Property<String>
 
+    /** Tag to check out. Mutually exclusive with [branch]. */
     @get:Input @get:Optional abstract val tag: Property<String>
 
+    /**
+     * Branch to check out at the latest remote state. Mutually exclusive with [tag]. The task is
+     * never up-to-date when a branch is configured.
+     */
     @get:Input @get:Optional abstract val branch: Property<String>
 
+    /**
+     * If 'true', skips clone and fetch and only checks out the existing local clone. Defaults to
+     * Gradle's '--offline' flag.
+     */
     @get:Input abstract val offline: Property<Boolean>
 
+    /** Patch files applied, in order, with 'git apply' after the checkout. */
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val patches: ConfigurableFileCollection
+
+    /** Directory that contains the local clone of the repository. */
     @get:OutputDirectory abstract val localCloneDirectory: DirectoryProperty
 
     @get:Inject protected abstract val exec: ExecOperations
@@ -51,17 +71,20 @@ abstract class GitClone : DefaultTask() {
             exec.exec {
                 if (!localClone.dir(".git").asFile.exists()) {
                     workingDir = localClone.asFile.parentFile
-                    commandLine("git", "clone", url.get(), "-q")
+                    commandLine("git", "clone", url.get(), localClone.asFile.absolutePath, "-q")
                 } else {
                     workingDir = localClone.asFile
                     commandLine("git", "fetch", "-q")
                 }
             }
         }
+        // '-f' discards previously applied patches, which may conflict with the checkout
+        val checkout =
+            if (patches.isEmpty) listOf("git", "checkout") else listOf("git", "checkout", "-f")
         if (tag.isPresent) {
             exec.exec {
                 workingDir = localClone.asFile
-                commandLine("git", "checkout", tag.get(), "-q")
+                commandLine(checkout + listOf(tag.get(), "-q"))
             }
             exec.exec {
                 workingDir = localClone.asFile
@@ -70,11 +93,18 @@ abstract class GitClone : DefaultTask() {
         } else {
             exec.exec {
                 workingDir = localClone.asFile
-                commandLine("git", "checkout", branch.get(), "-q")
+                commandLine(checkout + listOf(branch.get(), "-q"))
             }
             exec.exec {
                 workingDir = localClone.asFile
                 commandLine("git", "reset", "--hard", "origin/${branch.get()}", "-q")
+            }
+        }
+        // '--index' stages files added by a patch, so that the next 'reset --hard' removes them
+        patches.forEach { patch ->
+            exec.exec {
+                workingDir = localClone.asFile
+                commandLine("git", "apply", "--index", patch.absolutePath)
             }
         }
     }
