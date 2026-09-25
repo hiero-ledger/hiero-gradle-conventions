@@ -22,12 +22,22 @@ import org.gradle.work.DisableCachingByDefault
 @DisableCachingByDefault(because = "processes large amount of data")
 abstract class GitClone : DefaultTask() {
 
+    /** URL of the repository to clone. */
     @get:Input abstract val url: Property<String>
 
+    /** Tag to check out. Mutually exclusive with [branch]. */
     @get:Input @get:Optional abstract val tag: Property<String>
 
+    /**
+     * Branch to check out at the latest remote state. Mutually exclusive with [tag]. The task is
+     * never up-to-date when a branch is configured.
+     */
     @get:Input @get:Optional abstract val branch: Property<String>
 
+    /**
+     * If 'true', skips clone and fetch and only checks out the existing local clone. Defaults to
+     * Gradle's '--offline' flag.
+     */
     @get:Input abstract val offline: Property<Boolean>
 
     /** Patch files applied, in order, with 'git apply' after the checkout. */
@@ -35,6 +45,7 @@ abstract class GitClone : DefaultTask() {
     @get:PathSensitive(PathSensitivity.NONE)
     abstract val patches: ConfigurableFileCollection
 
+    /** Directory that contains the local clone of the repository. */
     @get:OutputDirectory abstract val localCloneDirectory: DirectoryProperty
 
     @get:Inject protected abstract val exec: ExecOperations
