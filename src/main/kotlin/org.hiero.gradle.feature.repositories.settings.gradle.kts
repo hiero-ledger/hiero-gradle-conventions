@@ -2,6 +2,9 @@
 dependencyResolutionManagement {
     @Suppress("UnstableApiUsage")
     repositories {
+        maven("https://artifacts.hashgraph.io/artifactory/hyperledger-besu-maven-external/") {
+            content { includeGroupByRegex("org\\.hyperledger\\..*") }
+        }
         maven("https://hyperledger.jfrog.io/artifactory/besu-maven") {
             content { includeGroupByRegex("org\\.hyperledger\\..*") }
         }
@@ -18,8 +21,11 @@ dependencyResolutionManagement {
             content { includeModule("org.nodejs", "node") }
         }
 
-        mavenCentral()
-        maven("https://central.sonatype.com/repository/maven-snapshots")
+        mavenCentral {
+            // Because the 'org.nodejs' dependency has no 'pom.xml' in the repo above,
+            // Gradle would still search for it here without the following exclude.
+            content { excludeModule("org.nodejs", "node") }
+        }
     }
 
     @Suppress("UnstableApiUsage")

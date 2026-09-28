@@ -11,8 +11,10 @@ import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 
 /** Check that all versions declared in a java-platform build.gradle.kts file are actually used. */
+@DisableCachingByDefault(because = "report task")
 abstract class JavaVersionConsistencyCheck : DefaultTask() {
 
     /** The versions declared in the build.gradle.kts file. */

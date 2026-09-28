@@ -2,9 +2,8 @@
 import org.hiero.gradle.problems.ProblemReporter
 
 version =
-    @Suppress("UnstableApiUsage")
     providers
-        .fileContents(isolated.rootProject.projectDirectory.file("version.txt"))
+        .fileContents(layout.settingsDirectory.file("version.txt"))
         .asText
         .orElse(
             provider {

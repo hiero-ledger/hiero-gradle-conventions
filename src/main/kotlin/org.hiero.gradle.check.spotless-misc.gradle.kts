@@ -5,8 +5,16 @@ plugins { id("com.diffplug.spotless") }
 
 spotless {
     format("misc") {
-        target("**/*.properties")
-        targetExclude("gradle/wrapper/gradle-wrapper.properties")
+        // do not use "**/" pattern as it is not compatible with project isolation
+        target(
+            layout.projectDirectory.asFileTree.matching {
+                include("**/*.properties")
+                exclude("**/.*/**")
+                exclude("**/build/**")
+                exclude("**/node_modules/**")
+                exclude("gradle/wrapper/**")
+            }
+        )
 
         trimTrailingWhitespace()
         leadingTabsToSpaces()

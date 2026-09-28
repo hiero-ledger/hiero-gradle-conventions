@@ -41,7 +41,7 @@ class MavenCentralPortalPublishTest {
             .exists()
         assertThat(result.output)
             .contains(
-                "> Cannot upload deployment to maven central: (HTTP error 401: '{\"error\":{\"message\":\"Invalid token\"}}')}"
+                "> Cannot deploy to maven central (status='401'): {\"error\":{\"message\":\"Invalid token\"}}"
             )
         assertThat(result.task(":aggregation:nmcpZipAggregation")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)

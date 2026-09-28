@@ -33,25 +33,29 @@ class GradleProject(
 
     private val env = mutableMapOf<String, String>()
 
+    private var warningMode = "all"
+
     fun withMinimalStructure(): GradleProject {
         gradlePropertiesFile.writeText(
             """
             # SPDX-License-Identifier: Apache-2.0
             org.gradle.configuration-cache=true
-            # org.gradle.unsafe.isolated-projects=true
+            org.gradle.unsafe.isolated-projects=true
             # org.gradle.caching=true
-            
-        """
+
+            """
                 .trimIndent()
         )
         settingsFile(
             """
             plugins { id("org.hiero.gradle.build") }
-            
+
             rootProject.name = "test-project"
-            
+
             javaModules { directory("product") { group = "org.example" } }
-        """
+
+            buildCache.remote<HttpBuildCache> { isEnabled = false }
+            """
                 .trimIndent()
         )
         versionFile.writeText("1.0")
@@ -59,8 +63,8 @@ class GradleProject(
             """
             # SPDX-License-Identifier: Apache-2.0
             jdk=17.0.16
-            
-        """
+
+            """
                 .trimIndent()
         )
         descriptionTxt.writeText("A module to test hiero-gradle-conventions")
@@ -68,9 +72,9 @@ class GradleProject(
         javaSourceFile(
             """
             package org.hiero.product.module.a;
-            
+
             class ModuleA {}
-        """
+            """
                 .trimIndent()
         )
 
@@ -80,6 +84,11 @@ class GradleProject(
     fun withEnv(env: Map<String, String>): GradleProject {
         this.env["PATH"] = System.getenv("PATH") // some plugins use low-level commands like 'uname'
         this.env.putAll(env)
+        return this
+    }
+
+    fun withWarningMode(mode: String): GradleProject {
+        this.warningMode = mode
         return this
     }
 
@@ -149,7 +158,7 @@ class GradleProject(
             .forwardOutput()
             .withPluginClasspath()
             .withProjectDir(projectDir)
-            .withArguments(args + listOf("-s", "--warning-mode=all"))
+            .withArguments(args + listOf("-s", "--warning-mode=$warningMode"))
             .withDebug(debugMode)
             .let { if (env.isEmpty() || debugMode) it else it.withEnvironment(env) }
     }

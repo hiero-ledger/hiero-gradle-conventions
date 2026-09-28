@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
+import org.gradle.security.internal.gnupg.GnupgSettings
+import org.gradle.security.internal.gnupg.GnupgSignatory
+
 plugins {
     id("java")
     id("maven-publish")
@@ -15,12 +18,14 @@ java {
 val publishSigningEnabled =
     providers.gradleProperty("publishSigningEnabled").getOrElse("false").toBoolean()
 
-tasks.withType<Sign>().configureEach { enabled = publishSigningEnabled }
-
-signing {
-    sign(publishing.publications)
-    useGpgCmd()
+tasks.withType<Sign>().configureEach {
+    enabled = publishSigningEnabled
+    // the following replaces 'signing.useGpgCmd()' for project isolation compatibility
+    // https://github.com/gradle/gradle/issues/37871
+    signatory(GnupgSignatory(project, "default", GnupgSettings()))
 }
+
+signing { sign(publishing.publications) }
 
 publishing.publications.withType<MavenPublication>().configureEach {
     versionMapping {
@@ -51,23 +56,25 @@ publishing.publications.withType<MavenPublication>().configureEach {
         }
 
         @Suppress("UnstableApiUsage") val repoName = isolated.rootProject.name
+        val gitHubOrg =
+            providers.environmentVariable("GITHUB_REPOSITORY_OWNER").getOrElse("hiero-ledger")
 
         issueManagement {
             system = "GitHub"
-            url = "https://github.com/hiero-ledger/$repoName/issues"
+            url = "https://github.com/$gitHubOrg/$repoName/issues"
         }
 
         licenses {
             license {
                 name = "Apache License, Version 2.0"
-                url = "https://raw.githubusercontent.com/hiero-ledger/$repoName/main/LICENSE"
+                url = "https://raw.githubusercontent.com/$gitHubOrg/$repoName/main/LICENSE"
             }
         }
 
         scm {
-            connection = "scm:git:git://github.com/hiero-ledger/$repoName.git"
-            developerConnection = "scm:git:ssh://github.com:hiero-ledger/$repoName.git"
-            url = "https://github.com/hiero-ledger/$repoName"
+            connection = "scm:git:git://github.com/$gitHubOrg/$repoName.git"
+            developerConnection = "scm:git:ssh://github.com:$gitHubOrg/$repoName.git"
+            url = "https://github.com/$gitHubOrg/$repoName"
         }
 
         developers {

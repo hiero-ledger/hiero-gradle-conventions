@@ -21,25 +21,25 @@ class QualityGateTest {
         assertThat(flow1)
             .hasContent(
                 """
-            # SPDX-License-Identifier: Apache-2.0
-            name: Flow 1
-        """
+                # SPDX-License-Identifier: Apache-2.0
+                name: Flow 1
+                """
                     .trimIndent()
             )
         assertThat(flow2)
             .hasContent(
                 """
-            # SPDX-License-Identifier: Apache-2.0
-            name: Flow 2
-        """
+                # SPDX-License-Identifier: Apache-2.0
+                name: Flow 2
+                """
                     .trimIndent()
             )
         assertThat(bot)
             .hasContent(
                 """
-            # SPDX-License-Identifier: Apache-2.0
-            updates:
-        """
+                # SPDX-License-Identifier: Apache-2.0
+                updates:
+                """
                     .trimIndent()
             )
         assertThat(txtFile).hasContent("name: Flow 3    ") // unchanged
@@ -56,29 +56,52 @@ class QualityGateTest {
             dependencies.constraints {
                 api("com.fasterxml.jackson.core:jackson-databind:2.16.0") { because("com.fasterxml.jackson.databind") }
                 api("org.apache.commons:commons-lang3:3.14.0") { because("org.apache.commons.lang3") }
-            }"""
+            }
+            """
                 .trimIndent()
         )
         p.javaSourceFile(
             """
             package org.hiero.product.module.a;
             public class ModuleA {
-                private com.fasterxml.jackson.databind.ObjectMapper om;
+                public com.fasterxml.jackson.databind.ObjectMapper om;
                 private org.apache.commons.lang3.CharUtils cu;
-            }"""
+            }
+            """
                 .trimIndent()
         )
+        p.file("product/module-a/src/main/java/org/hiero/product/module/b/ClassB.java")
+            .writeText(
+                """
+                package org.hiero.product.module.b;
+                public class ClassB extends com.fasterxml.jackson.databind.ObjectMapper { }
+                """
+                    .trimIndent()
+            )
 
         val moduleInfo =
             p.file(
                 "product/module-a/src/main/java/module-info.java",
                 """
                 module org.hiero.product.module.a   {    
+
+                    // a comment on top provides
+                   provides com.fasterxml.jackson.core.ObjectCodec with
+                         org.hiero.product.module.b.ClassB;
+
+
                     requires org.apache.commons.lang3;  
-                    requires    com.fasterxml.jackson.databind;
+                        /* Targeted Exports to External Libraries */
+                    exports    org.hiero.product.module.b  
+                        to    org.apache.commons.lang3;
+                    requires transitive   com.fasterxml.jackson.databind;
+                    
+                       uses com.fasterxml.jackson.core.ObjectCodec;
+                    
                     
                     exports       org.hiero.product.module.a;
-                  }    """
+                  }    
+                """
                     .trimIndent(),
             )
         val packageInfoA =
@@ -102,44 +125,57 @@ class QualityGateTest {
         assertThat(moduleInfo)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            module org.hiero.product.module.a {
-                requires com.fasterxml.jackson.databind;
-                requires org.apache.commons.lang3;
-            
-                exports org.hiero.product.module.a;
-            }
-        """
+                // SPDX-License-Identifier: Apache-2.0
+                module org.hiero.product.module.a {
+                    exports org.hiero.product.module.a;
+
+                    /* Targeted Exports to External Libraries */
+                    exports org.hiero.product.module.b to
+                            org.apache.commons.lang3;
+
+                    requires transitive com.fasterxml.jackson.databind;
+                    requires org.apache.commons.lang3;
+
+                    uses com.fasterxml.jackson.core.ObjectCodec;
+
+                    // a comment on top provides
+                    provides com.fasterxml.jackson.core.ObjectCodec with
+                            org.hiero.product.module.b.ClassB;
+                }
+                """
                     .trimIndent()
             )
         assertThat(packageInfoA)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            package org.hiero.product.module.a;
-        """
+                // SPDX-License-Identifier: Apache-2.0
+                package org.hiero.product.module.a;
+                """
                     .trimIndent()
             )
         assertThat(packageInfoB)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            /** some comment */
-            package org.hiero.product.module.b;
-        """
+                // SPDX-License-Identifier: Apache-2.0
+                /** some comment */
+                package org.hiero.product.module.b;
+                """
                     .trimIndent()
             )
         assertThat(packageInfoC)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            @Deprecated
-            package org.hiero.product.module.c;
-        """
+                // SPDX-License-Identifier: Apache-2.0
+                @Deprecated
+                package org.hiero.product.module.c;
+                """
                     .trimIndent()
             )
 
         assertThat(result.task(":qualityGate")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+        // make sure 'qualityCheck' passes after formatting
+        p.qualityCheck()
     }
 
     @Test
@@ -152,9 +188,9 @@ class QualityGateTest {
         assertThat(props1)
             .hasContent(
                 """
-            # SPDX-License-Identifier: Apache-2.0
-            foo=bar
-        """
+                # SPDX-License-Identifier: Apache-2.0
+                foo=bar
+                """
                     .trimIndent()
             )
 
@@ -162,13 +198,130 @@ class QualityGateTest {
     }
 
     @Test
+    fun `qualityGate formats markdown files with frontmatter`() {
+        val p = GradleProject().withMinimalStructure()
+        val md =
+            p.file(
+                "README.md",
+                """
+                ---
+                title: Some Title
+                date: 2026-05-04
+                tags: [test, autoformat, md]
+                ---
+
+                ##     Options Table   
+                | Foo   |  Bar             |    
+                |---|
+                |     One |  `abc` |
+                | Two                 | `def`            |
+                """
+                    .trimIndent(),
+            )
+
+        val result = p.qualityGate()
+
+        assertThat(md)
+            .hasContent(
+                """
+                ---
+                title: Some Title
+                date: 2026-05-04
+                tags: [test, autoformat, md]
+                ---
+
+                ## Options Table
+
+                | Foo |  Bar  |
+                |-----|-------|
+                | One | `abc` |
+                | Two | `def` |
+                """
+                    .trimIndent()
+            )
+
+        assertThat(result.task(":qualityGate")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
+    fun `spotlessApply preserves inline comments in module-info directives`() {
+        val p = GradleProject().withMinimalStructure()
+        p.moduleBuildFile("""plugins { id("org.hiero.gradle.module.library") }""")
+        val moduleInfo =
+            p.moduleInfoFile(
+                """
+                module org.hiero.product.module.a {
+                    requires transitive javax.inject;
+                    requires transitive java.compiler; // javax.annotation.processing.Generated
+                }
+                """
+                    .trimIndent()
+            )
+
+        val result = p.run("spotlessApply")
+
+        assertThat(moduleInfo)
+            .hasContent(
+                """
+                // SPDX-License-Identifier: Apache-2.0
+                module org.hiero.product.module.a {
+                    requires transitive java.compiler; // javax.annotation.processing.Generated
+                    requires transitive javax.inject;
+                }
+                """
+                    .trimIndent()
+            )
+        assertThat(result.task(":spotlessApply")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
+    fun `spotlessApply sorts entries in moduleInfo blocks in build gradle kts files`() {
+        val p = GradleProject().withMinimalStructure()
+        val buildFile =
+            p.moduleBuildFile(
+                """
+                plugins { id("org.hiero.gradle.module.library") }
+
+                testModuleInfo {
+                    requires("org.junit.jupiter.params")
+                    requiresStatic("org.hiero.gradle.check.spotless")
+                    requires("org.junit.jupiter.api")
+                    requires("org.hiero.consensus.node.app")
+                }
+                """
+                    .trimIndent()
+            )
+
+        val result = p.run("spotlessApply")
+
+        assertThat(buildFile)
+            .hasContent(
+                """
+                // SPDX-License-Identifier: Apache-2.0
+                plugins { id("org.hiero.gradle.module.library") }
+
+                testModuleInfo {
+                    requires("org.hiero.consensus.node.app")
+                    requires("org.junit.jupiter.api")
+                    requires("org.junit.jupiter.params")
+                    requiresStatic("org.hiero.gradle.check.spotless")
+                }
+                """
+                    .trimIndent()
+            )
+        assertThat(result.task(":spotlessApply")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
     fun `spotlessApply formats rust files`() {
         val p = GradleProject().withMinimalStructure()
         p.moduleBuildFile(
-            """plugins {
-            id("org.hiero.gradle.module.library")
-            id("org.hiero.gradle.feature.rust") 
-            }"""
+            """
+            plugins {
+                        id("org.hiero.gradle.module.library")
+                        id("org.hiero.gradle.feature.rust") 
+                        }
+            """
                 .trimIndent()
         )
 
@@ -179,10 +332,10 @@ class QualityGateTest {
         assertThat(rustLib)
             .hasContent(
                 """
-            // SPDX-License-Identifier: Apache-2.0
-            
-            pub fn public_api() {}
-        """
+                // SPDX-License-Identifier: Apache-2.0
+
+                pub fn public_api() {}
+                """
                     .trimIndent()
             )
 
