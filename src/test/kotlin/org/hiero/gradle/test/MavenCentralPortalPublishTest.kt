@@ -26,7 +26,7 @@ class MavenCentralPortalPublishTest {
 
     @Test
     fun `attempts to upload a single archive for non-snapshot releases`() {
-        val result = p.runAndFail("nmcpPublishAggregationToCentralPortal")
+        val result = p.runAndFail("publishAggregationToCentralPortal")
 
         // Creates the publication zip, but fails to upload due to bad credentials
         assertThat(
@@ -41,7 +41,7 @@ class MavenCentralPortalPublishTest {
             .exists()
         assertThat(result.output)
             .contains(
-                "> Cannot deploy to maven central (status='401'): {\"error\":{\"message\":\"Invalid token\"}}"
+                "> Cannot upload deployment to maven central: (HTTP error 401: '{\"error\":{\"message\":\"Invalid token\"}}')}"
             )
         assertThat(result.task(":aggregation:nmcpZipAggregation")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
@@ -53,23 +53,20 @@ class MavenCentralPortalPublishTest {
     fun `publishes each module directly for snapshot releases`() {
         p.versionFile.writeText("1.0-SNAPSHOT")
 
-        // Required to make sure NMCP downloaded all its dependencies before running with --offline
-        p.run("cleanupDirectory")
-
         // Finishes successfully even though we did not provide credentials
-        val result = p.runAndFail("nmcpPublishAggregationToCentralPortal --offline --continue")
+        val result = p.runAndFail("publishAggregationToCentralPortal")
 
-        // Does attempt actual publishing step of 'module-a' (fails only due to --offline)
-        assertThat(p.dir("product/module-a/build/nmcp/m2")).doesNotExist()
         assertThat(result.output)
-            .contains(
-                "> No cached resource 'https://central.sonatype.com/repository/maven-snapshots/"
+            .containsPattern(
+                "Nmcp: PUT 'https://central.sonatype.com/repository/maven-snapshots/org/example/module-a/1.0-SNAPSHOT/module-a-.+' failed"
             )
         assertThat(result.task(":module-a:generateMetadataFileForMavenPublication")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
         assertThat(result.task(":module-a:generatePomFileForMavenPublication")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
-        assertThat(result.task(":module-a:publishMavenPublicationToNmcpRepository")?.outcome)
+        assertThat(
+                result.task(":aggregation:nmcpPublishAggregationToCentralPortalSnapshots")?.outcome
+            )
             .isEqualTo(TaskOutcome.FAILED)
     }
 

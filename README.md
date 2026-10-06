@@ -218,18 +218,17 @@ Before doing the publishing, you may need to update the version (version.txt fil
 
 To perform the actual publishing use one of the following:
 
-|                 Task and Parameters                 |                   Description                   |
-|-----------------------------------------------------|-------------------------------------------------|
-| `./gradlew publishAggregationToCentralPortal`       | Publish artifacts to Maven central (new Portal) |
-| `./gradlew publishPlugins --no-configuration-cache` | Publish plugin to Gradle plugin portal          |
+|              Task and Parameters              |                   Description                   |
+|-----------------------------------------------|-------------------------------------------------|
+| `./gradlew publishAggregationToCentralPortal` | Publish artifacts to Maven central (new Portal) |
+| `./gradlew publishPlugins`                    | Publish plugin to Gradle plugin portal          |
 
 The following parameters may be used to tune or test the publishing (default is `false` for all parameters).
 
-|           Task and Parameters           |                         Description                         |
-|-----------------------------------------|-------------------------------------------------------------|
-| `-PpublishSigningEnabled=<true\|false>` | Set to `true` for actual publishing                         |
-| `-PpublishTestRelease=<true\|false>`    | `false` - auto-release from staging when successful         |
-| `-Ps01SonatypeHost=<true\|false>`       | Use the `s01.oss.sonatype.org` host if required (old OSSRH) |
+|           Task and Parameters           |                     Description                     |
+|-----------------------------------------|-----------------------------------------------------|
+| `-PpublishSigningEnabled=<true\|false>` | Set to `true` for actual publishing                 |
+| `-PpublishTestRelease=<true\|false>`    | `false` - auto-release from staging when successful |
 
 The following environment variables should be populated from _secrets_ to ensure a fully functional build.
 
