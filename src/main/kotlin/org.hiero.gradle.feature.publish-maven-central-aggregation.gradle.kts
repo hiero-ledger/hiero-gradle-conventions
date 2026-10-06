@@ -10,13 +10,11 @@ plugins {
     id("com.gradleup.nmcp.aggregation")
 }
 
-// In case of SNAPSHOT, do nothing as the upload is done directly by each module individually
-val nonSnapshotRelease = !version.toString().endsWith("-SNAPSHOT")
-
+@Suppress("UnstableApiUsage")
 configurations {
     val published = dependencyScope("published")
-    this.implementation { extendsFrom(published.get()) }
-    this.nmcpAggregation { extendsFrom(published.get()) }
+    this.implementation { extendsFrom(published) }
+    this.nmcpAggregation { extendsFrom(published) }
 }
 
 nmcpAggregation {
@@ -35,7 +33,11 @@ nmcpAggregation {
     }
 }
 
-tasks.named("nmcpPublishAggregationToCentralPortal") {
-    enabled = nonSnapshotRelease
-    group = "release"
+if (version.toString().endsWith("-SNAPSHOT")) {
+    tasks.publishAggregationToCentralPortal {
+        dependsOn(tasks.nmcpPublishAggregationToCentralPortalSnapshots) // do snapshot publish
+    }
+    tasks.nmcpPublishAggregationToCentralPortal {
+        enabled = false // skip normal publish
+    }
 }
