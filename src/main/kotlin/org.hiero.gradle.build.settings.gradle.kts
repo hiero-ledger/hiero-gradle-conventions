@@ -29,7 +29,6 @@ configure<RootPluginsExtension> {
     // Global plugins, that are applied to the "root project" instead of "settings".
     // Having this here, we do not require a "build.gradle.kts" in the repository roots.
     id("org.hiero.gradle.base.lifecycle")
-    id("org.hiero.gradle.feature.rust.root")
     id("org.hiero.gradle.feature.versioning")
     id("org.hiero.gradle.check.spotless")
     id("org.hiero.gradle.check.spotless-kotlin")

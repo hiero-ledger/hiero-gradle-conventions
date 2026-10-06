@@ -242,16 +242,6 @@ The following environment variables should be populated from _secrets_ to ensure
 | `GRADLE_PUBLISH_KEY`    | Gradle plugin portal publish _username_ |
 | `GRADLE_PUBLISH_SECRET` | Gradle plugin portal publish _password_ |
 
-### Testing Rust code on multiple operating systems
-
-If `feature.rust` and `feature.test-multios` is used, you can configure a matrix pipeline to run `test` on multiple
-agents with different operating systems. In this case, you can use the following parameter to skip the rust installation
-on the test-only agents where compiled code is retrieved from the remote build cache.
-
-|                 Parameters                  |                                 Description                                 |
-|---------------------------------------------|-----------------------------------------------------------------------------|
-| `-PskipInstallRustToolchains=<true\|false>` | Skip `installRustToolchains` task if all `cargoBuild*` tasks are FROM-CACHE |
-
 <a name="modules"></a>
 
 ## Defining modules and dependencies in a project that uses these plugins
