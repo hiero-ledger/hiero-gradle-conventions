@@ -61,6 +61,3 @@ tasks.withType<JMHTask>().configureEach {
     jarArchive = jmhJarWithMergedServiceFiles.flatMap { it.archiveFile }
     jvm = javaToolchains.launcherFor(java.toolchain).map { it.executablePath }.get().asFile.path
 }
-
-// Disable module Jar patching for the JMH runtime classpath.
-extraJavaModuleInfo { deactivate(sourceSets.jmh) }
