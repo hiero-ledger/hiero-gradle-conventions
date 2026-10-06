@@ -30,6 +30,7 @@ dependencies {
     implementation("net.swiftzer.semver:semver:2.1.0")
     implementation("org.gradlex:extra-java-module-info:1.14.2")
     implementation("org.gradlex:java-module-dependencies:1.13.2")
+    implementation("org.gradlex:java-module-packaging:1.2.1")
     implementation("org.gradlex:java-module-testing:1.8.1")
     implementation("org.gradlex:jvm-dependency-conflict-resolution:2.5")
 
