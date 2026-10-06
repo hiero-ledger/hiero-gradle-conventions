@@ -6,7 +6,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.hiero.gradle.test.fixtures.GradleProject
 import org.junit.jupiter.api.Test
 
-class ShadowTest {
+class FatJarTest {
 
     @Test
     fun `can build a fatjar for an application`() {
@@ -31,7 +31,7 @@ class ShadowTest {
             """
             plugins {
                 id("org.hiero.gradle.module.application")
-                id("org.hiero.gradle.feature.shadow")
+                id("org.hiero.gradle.feature.packaging")
             }
             application {
                 mainClass = "org.hiero.product.module.a.ModuleA"
@@ -40,18 +40,18 @@ class ShadowTest {
                 .trimIndent()
         )
 
-        val result = p.run("shadowJar")
+        val result = p.run("fatModuleJar")
 
-        assertThat(result.task(":module-a:shadowJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(result.task(":module-a:fatModuleJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     }
 
     @Test
-    fun `shadowJar does not run as part of assemble when combined with application plugin`() {
+    fun `fatModuleJar does not run as part of assemble when combined with application plugin`() {
         val p = GradleProject().withMinimalStructure()
         p.moduleBuildFile(
             """
             plugins {
-                id("org.hiero.gradle.feature.shadow")
+                id("org.hiero.gradle.feature.packaging")
                 id("application")
             }
             application {
@@ -63,11 +63,11 @@ class ShadowTest {
 
         val result = p.run("assemble")
 
-        assertThat(result.task(":module-a:shadowJar")).isNull()
+        assertThat(result.task(":module-a:fatModuleJar")).isNull()
     }
 
     @Test
-    fun `shadowJar merges service files`() {
+    fun `service files with same name are all included in fat jar`() {
         val p = GradleProject().withMinimalStructure()
         p.dependencyVersionsFile(
             """
@@ -91,32 +91,42 @@ class ShadowTest {
             """
             plugins {
                 id("org.hiero.gradle.module.application")
-                id("org.hiero.gradle.feature.shadow")
+                id("org.hiero.gradle.feature.packaging")
             }
             application {
                 mainClass = "org.hiero.product.module.a.ModuleA"
             }
-            // unzip result of shadowJar for assertions in test
-            tasks.register<Copy>("unzipShadowJar") {
-                from(zipTree(tasks.shadowJar.flatMap { it.archiveFile }))
-                into(layout.buildDirectory.dir("shadowContent"))
+            // unzip result of fatModuleJar for assertions in test
+            tasks.register<Copy>("unzipfatModuleJar") {
+                from(zipTree(tasks.fatModuleJar.flatMap { it.archiveFile }))
+                into(layout.buildDirectory.dir("fatJarContent"))
             }
             """
                 .trimIndent()
         )
 
-        val result = p.run(":module-a:unzipShadowJar")
+        val result = p.run(":module-a:unzipfatModuleJar")
 
-        assertThat(result.task(":module-a:shadowJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(result.task(":module-a:fatModuleJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         assertThat(
                 p.file(
-                    "product/module-a/build/shadowContent/META-INF/services/com.fasterxml.jackson.core.JsonFactory"
+                    "product/module-a/build/fatJarContent/modulepath/jackson-core-2.20.0/META-INF/services/com.fasterxml.jackson.core.JsonFactory"
+                )
+            )
+            .hasContent(
+                """
+                com.fasterxml.jackson.core.JsonFactory
+                """
+                    .trimIndent()
+            )
+        assertThat(
+                p.file(
+                    "product/module-a/build/fatJarContent/modulepath/jackson-dataformat-yaml-2.20.0/META-INF/services/com.fasterxml.jackson.core.JsonFactory"
                 )
             )
             .hasContent(
                 """
                 com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-                com.fasterxml.jackson.core.JsonFactory
                 """
                     .trimIndent()
             )
@@ -128,9 +138,15 @@ class ShadowTest {
         p.file("product/module-a/src/main/resources/org/hiero/product/test.txt", "H")
         p.moduleBuildFile(
             """
-            plugins { id("org.hiero.gradle.feature.shadow") }
+            plugins {
+                id("org.hiero.gradle.feature.packaging")
+                id("application")
+            }
+            application {
+                mainClass = "org.hiero.product.module.a.ModuleA"
+            }
 
-            tasks.shadowJar {
+            tasks.fatModuleJar {
                 // include the same file from two different places
                 from(tasks.processResources)
                 from("src/main/resources")
@@ -139,7 +155,7 @@ class ShadowTest {
                 .trimIndent()
         )
 
-        val result = p.runAndFail("shadowJar")
-        assertThat(result.output).contains("> Cannot copy file ")
+        val result = p.runAndFail("fatModuleJar")
+        assertThat(result.output).contains("Entry org/hiero/product/test.txt is a duplicate")
     }
 }

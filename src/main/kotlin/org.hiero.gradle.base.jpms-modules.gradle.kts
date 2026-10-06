@@ -267,6 +267,14 @@ extraJavaModuleInfo {
         "io.prometheus:prometheus-metrics-tracer-otel-agent",
         "io.prometheus.metrics.tracer.otel_agent",
     )
+    module(
+        "io.prometheus:prometheus-metrics-exporter-common",
+        "io.prometheus.metrics.exporter.common",
+    )
+    module(
+        "io.prometheus:prometheus-metrics-exporter-httpserver",
+        "io.prometheus.metrics.exporter.httpserver",
+    )
     module("io.prometheus:simpleclient", "simpleclient")
     module("io.prometheus:simpleclient_common", "simpleclient.common")
     module("io.prometheus:simpleclient_httpserver", "simpleclient.httpserver") {
@@ -378,6 +386,22 @@ extraJavaModuleInfo {
         uses("org.testcontainers.utility.ImageNameSubstitutor")
     }
     module("org.testcontainers:junit-jupiter", "org.testcontainers.junit.jupiter")
+
+    // JMH
+    module("org.openjdk.jmh:jmh-core", "jmh.core") {
+        exportAllPackages()
+        requireAllDefinedDependencies()
+        requires("java.logging")
+        requires("java.management")
+        requires("jdk.unsupported")
+    }
+    module("org.openjdk.jmh:jmh-core", "jmh.core")
+    module("org.openjdk.jmh:jmh-generator-annprocess", "jmh.generator.annprocess")
+    module("org.openjdk.jmh:jmh-generator-asm", "jmh.generator.asm")
+    module("org.openjdk.jmh:jmh-generator-bytecode", "jmh.generator.bytecode")
+    module("org.openjdk.jmh:jmh-generator-reflection", "jmh.generator.reflection")
+    module("net.sf.jopt-simple:jopt-simple", "jopt.simple")
+    module("org.apache.commons:commons-math3", "commons.math3")
 }
 
 // Generate service provider configuration files in `META_INF/services` for all
