@@ -235,7 +235,7 @@ extraJavaModuleInfo {
         exportAllPackages()
         requires("java.logging")
     }
-    module("org.xerial.snappy:snappy-java", "org.xerial.snappy.java")
+    module("org.xerial.snappy:snappy-java", "org.xerial.snappy")
     module("io.prometheus:prometheus-metrics-config", "io.prometheus.metrics.config")
     module("io.prometheus:prometheus-metrics-core", "io.prometheus.metrics.core") {
         exportAllPackages()
