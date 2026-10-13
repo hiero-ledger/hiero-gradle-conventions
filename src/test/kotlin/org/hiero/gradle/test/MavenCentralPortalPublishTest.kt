@@ -6,6 +6,8 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.hiero.gradle.test.fixtures.GradleProject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class MavenCentralPortalPublishTest {
 
@@ -41,7 +43,7 @@ class MavenCentralPortalPublishTest {
             .exists()
         assertThat(result.output)
             .contains(
-                "> Cannot deploy to maven central (status='401'): {\"error\":{\"message\":\"Invalid token\"}}"
+                "> Cannot upload deployment to maven central: (HTTP error 401: '{\"error\":{\"message\":\"Invalid token\"}}')"
             )
         assertThat(result.task(":aggregation:nmcpZipAggregation")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
@@ -73,8 +75,9 @@ class MavenCentralPortalPublishTest {
             .isEqualTo(TaskOutcome.FAILED)
     }
 
-    @Test
-    fun `does not perform auto-release when publishTestRelease=true`() {
+    @ParameterizedTest
+    @ValueSource(strings = ["publishPrivateRelease", "publishTestRelease"])
+    fun `does not perform auto-release when private release is requested`(property: String) {
         // Modify some tasks to do nothing, because we cannot actually publish to Maven Central
         p.aggregationBuildFile(
             """
@@ -90,13 +93,49 @@ class MavenCentralPortalPublishTest {
             plugins { id("org.hiero.gradle.module.library") }
             """
         )
-        val result = p.run("nmcpPublishAggregationToCentralPortal -PpublishTestRelease=true")
+        val result = p.run("nmcpPublishAggregationToCentralPortal -P$property=true")
 
         assertThat(result.task(":module-a:publishMavenPublicationToNmcpRepository")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
         assertThat(result.task(":aggregation:nmcpZipAggregation")?.outcome)
             .isEqualTo(TaskOutcome.SUCCESS)
         assertThat(result.output).contains("publishingType=USER_MANAGED")
+    }
+
+    @Test
+    fun `performs auto-release by default`() {
+        p.aggregationBuildFile(
+            """
+            dependencies { published(project(":module-a")) }
+            tasks.nmcpPublishAggregationToCentralPortal {
+                actions.clear()
+                doLast { println("publishingType=" + inputs.properties["publishingType"]) }
+            }
+        """
+        )
+        val result = p.run("nmcpPublishAggregationToCentralPortal")
+
+        assertThat(result.output).contains("publishingType=AUTOMATIC")
+    }
+
+    @Test
+    fun `attempts to make an existing private release public`() {
+        val result = p.runAndFail("nmcpPublishDeployment -PnmcpDeploymentId=1234")
+
+        // Does not build or upload anything, but fails to publish due to bad credentials
+        assertThat(result.output)
+            .contains("Publishing previously uploaded deployment bundle '1234'")
+        assertThat(result.output).contains("Cannot publish deployment '1234' to maven central")
+        assertThat(result.task(":aggregation:nmcpZipAggregation")).isNull()
+        assertThat(result.task(":aggregation:nmcpPublishDeployment")?.outcome)
+            .isEqualTo(TaskOutcome.FAILED)
+    }
+
+    @Test
+    fun `making a private release public requires a deployment id`() {
+        val result = p.runAndFail("nmcpPublishDeployment")
+
+        assertThat(result.output).contains("Nmcp: deploymentId is missing")
     }
 
     @Test
