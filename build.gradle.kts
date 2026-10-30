@@ -16,7 +16,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:${embeddedKotlinVersion}"))
 
     api("com.diffplug.spotless:spotless-lib")
-    api("com.gradleup.shadow:shadow-gradle-plugin:9.1.0")
+    api("org.gradlex:java-module-packaging:1.3")
 
     implementation("com.adarshr:gradle-test-logger-plugin:4.0.0")
     implementation("com.autonomousapps:dependency-analysis-gradle-plugin:3.19.2")
