@@ -1,1 +1,0 @@
-Conventions for 'com.diffplug.spotless' for whitespace and newline formatting of rust files.
