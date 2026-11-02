@@ -26,7 +26,7 @@ dependencies {
     implementation("com.gradle.publish:plugin-publish-plugin:2.2.1")
     implementation("com.gradle:develocity-gradle-plugin:4.6.1")
     implementation("com.gradleup.nmcp:nmcp:1.6.2")
-    implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.3")
+    implementation("me.champeau.jmh:jmh-gradle-plugin:0.7.4")
     implementation("net.swiftzer.semver:semver:2.1.0")
     implementation("org.gradlex:extra-java-module-info:1.14.2")
     implementation("org.gradlex:java-module-dependencies:1.13.2")
