@@ -16,10 +16,12 @@ if (!gradle.startParameter.isBuildCacheEnabled) {
 
 buildCache {
     remote<HttpBuildCache> {
+        val remoteCacheEnabled =
+            providers.gradleProperty("org.hiero.gradle.remote-cache").getOrElse("true").toBoolean()
         url = uri("https://cache.gradle.hedera.svcs.eng.swirldslabs.io/cache/")
 
         isUseExpectContinue = true
-        isEnabled = !gradle.startParameter.isOffline
+        isEnabled = remoteCacheEnabled && !gradle.startParameter.isOffline
 
         val ci = EnvAccess.isCiServer(providers)
         val gradleCacheUsername = providers.environmentVariable("GRADLE_CACHE_USERNAME")
