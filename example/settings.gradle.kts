@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-plugins { id("org.hiero.gradle.build") version "0.7.12" }
+plugins { id("org.hiero.gradle.build") version "0.7.13" }
 
 rootProject.name = "example-repository"
 
