@@ -51,12 +51,11 @@ class BenchmarkTest {
         val result = p.run("jmh")
 
         assertThat(result.task(":module-a:jmhJar")).isNull()
-        assertThat(result.task(":module-a:jmhJarWithMergedServiceFiles")?.outcome)
-            .isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(result.task(":module-a:jmhFatModuleJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
     }
 
     @Test
-    fun `service files in jmh jar are merged`() {
+    fun `service files with same name are all included in jmh jar`() {
         p.dependencyVersionsFile(
             """
             dependencies.constraints {
@@ -86,7 +85,7 @@ class BenchmarkTest {
             }
             // unzip result of shadowJar for assertions in test
             tasks.register<Copy>("unzipJmhJar") {
-                from(zipTree(tasks.jmhJarWithMergedServiceFiles.flatMap { it.archiveFile }))
+                from(zipTree(tasks.jmhFatModuleJar.flatMap { it.archiveFile }))
                 into(layout.buildDirectory.dir("jmhContent"))
             }
             """
@@ -94,17 +93,26 @@ class BenchmarkTest {
         )
 
         val result = p.run(":module-a:unzipJmhJar")
-        assertThat(result.task(":module-a:jmhJarWithMergedServiceFiles")?.outcome)
-            .isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(result.task(":module-a:jmhFatModuleJar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         assertThat(
                 p.file(
-                    "product/module-a/build/jmhContent/META-INF/services/com.fasterxml.jackson.core.JsonFactory"
+                    "product/module-a/build/jmhContent/modulepath/jackson-core-2.20.0/META-INF/services/com.fasterxml.jackson.core.JsonFactory"
+                )
+            )
+            .hasContent(
+                """
+                com.fasterxml.jackson.core.JsonFactory
+                """
+                    .trimIndent()
+            )
+        assertThat(
+                p.file(
+                    "product/module-a/build/jmhContent/modulepath/jackson-dataformat-yaml-2.20.0/META-INF/services/com.fasterxml.jackson.core.JsonFactory"
                 )
             )
             .hasContent(
                 """
                 com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-                com.fasterxml.jackson.core.JsonFactory
                 """
                     .trimIndent()
             )
