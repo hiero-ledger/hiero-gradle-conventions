@@ -25,10 +25,11 @@ class ConventionPluginTest {
             pluginId.endsWith(".settings") ->
                 p.settingsFile("""plugins { id("${pluginId.substringBeforeLast(".settings")}") }""")
             pluginId.endsWith(".root") ->
-                p.file(
-                    "build.gradle.kts",
-                    """plugins { id("${pluginId.substringBeforeLast(".settings")}") }"""
-                )
+                p.withMinimalStructure()
+                    .file(
+                        "build.gradle.kts",
+                        """plugins { id("${pluginId.substringBeforeLast(".settings")}") }""",
+                    )
             else -> p.withMinimalStructure().moduleBuildFile("""plugins { id("$pluginId") }""")
         }
 
